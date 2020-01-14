@@ -1,6 +1,6 @@
 ---
 title: "Assignment 1: Introduction"
-author: "Student Name"
+author: "Emily McNamara"
 output: pdf_document
 geometry: margin=2.54cm
 ---
@@ -22,21 +22,21 @@ The completed exercise is due on Tuesday, January 14th at 1:00 pm.
 
 1. What are your previous experiences with data analytics, R, and Git? Include both formal and informal training.
 
-> Answer: 
+> Answer: My experience with R is quite limited. I took John Poulsen's Stats course in the fall of 2018 and have not used R since. However, I am excited to gain a deeper understanding of R because I need to analyze data from a survey that I created for my MP. I have some experience with data analytics, in general, from some of the other courses I have taken at the Nic School, but I was mostly working with data in Excel. I am not as familiar with Git, but can see how useful it can be and am looking forward to working with it more.
 
 2. Are there any components of the course about which you feel confident?
 
-> Answer: 
+> Answer: I don't remember that much from my stats course with John, but I saved all of the labs and am beginning to review them as a way to refresh my memory. I understand the general concept of coding, but can't say I feel too confident in my abilities to code right now. 
 
 3. Are there any components of the course about which you feel apprehensive?
 
-> Answer: 
+> Answer: I am apprehensive about keeping up in the course, which is why I am reviewing the material from my last course. This course is important to me and I really want to expand my understanding of cleaning and analyzing data, so I plan to do all that I can to heighten my understanding of the material and stay on track with the rest of the class.
 
 
 ## 2) GitHub
 
 Provide a link below to your forked course repository in GitHub. Make sure you have pulled all recent changes from the course repository  and that you have updated your course README file. 
 
-> Answer: 
+> Answer: https://github.com/emac2020/Environmental_Data_Analytics_2020
 
 
