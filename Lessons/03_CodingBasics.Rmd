@@ -36,22 +36,28 @@ vector2
 vector3 <- c(TRUE,TRUE,TRUE,FALSE,TRUE,FALSE) #logical vector
 vector3
 
-vector1[3] # 
+vector1[3] 
+#Line 39 is saying that the third item is 5.3. [] allow you to call up the 3rd item
+# "c" means concatenate, i.e. takes everything in parenthesis and names it. entering vector1 will allow you to call up the data points after you name it.
+# have to put parenthesis around specific character strings or R will think you have to do an operation called one. 
 
 # Matrices ----
-matrix1 <- matrix(1:20, nrow = 5,ncol = 4) # 
+#going to 2 dimensions. The ones below are functions because R knows that the word matrix means make a matrix
+matrix1 <- matrix(1:20, nrow = 5,ncol = 4) # has numbers 1-20 in it, with 5 rows and 4 columns
 matrix1
-matrix2 <- matrix(1:20, nrow = 5, ncol = 4, byrow = TRUE) #
+matrix2 <- matrix(1:20, nrow = 5, ncol = 4, byrow = TRUE) #"byrow" means responses are by rows instead of columns
 matrix2
 matrix3 <- matrix(1:20, nrow = 5, ncol = 4, byrow = TRUE, # return after comma continues the line
                   dimnames = list(c("uno", "dos", "tres", "cuatro", "cinco"), 
-                                  c("un", "deux", "trois", "cat"))) #
+                                  c("un", "deux", "trois", "cat"))) #dimnames names rows by whatever you want them to be called. this is calls the columns by french numbers 1-4 and the columns spanish numbers 1-4 
 
-matrix1[4, ] #
-matrix1[ , 3] #
-matrix1[c(12, 14)] #
-matrix1[c(12:14)] #
-matrix1[2:4, 1:3] #
+matrix1[4, ] # calls up matrix 1, row 4
+matrix1[ , 3] # calls up matrix 1, column 3
+matrix1[c(12, 14)] # calls up matrix 1, numbers 12 and 14. specifying specific objects within matrix
+matrix1[c(12:14)] # calls up matrix 1, numbers 12 through 14. specifying specific objects within matrix
+matrix1[2:4, 1:3] # calls up matrix 1, columns 2 to 4 by rows 1 to 3
+matrix3
+matrix3[c(12,14)] # get 7 and 15 because in positions 12 and 14, these are the numbers in those positions
 
 cells <- c(1, 26, 24, 68)
 rnames <- c("R1", "R2")
@@ -59,42 +65,63 @@ cnames <- c("C1", "C2")
 matrix4 <- matrix(cells, nrow = 2, ncol = 2, byrow = TRUE,
   dimnames = list(rnames, cnames)) # 
 matrix4
+#allows you to build a matrix from scratch. line 60, call up cells, a character vector named rnames and one named cnames
+# values that will go into the matrix are "cells" by 2 rows and 2 columns, and numbers arranged across rows
+# add the names by including "dimnames = list(name1, name2)"
 
 # Lists ---- 
 list1 <- list(name = "Maria", mynumbers = vector1, mymatrix = matrix1, age = 5.3); list1
 list1[[2]]
 
-# Data Frames ----
-d <- c(1, 2, 3, 4) # What type of vector?
-e <- c("red", "white", "red", NA) # What type of vector?
-f <- c(TRUE, TRUE, TRUE, FALSE) # What type of vector?
-dataframe1 <- data.frame(d,e,f) #
-names(dataframe1) <- c("ID","Color","Passed"); View(dataframe1) # 
+# list has a name called maria, a numeric vector called vector1, a matrix, and an age
+# putting in a semicolon allows you to combine the two codes so you only have to run 1 line of code
+# this list function lists out the separate elements of the same list
+# line 74 calls up the 2nd element in list 1
+# pulling from the vectors and matrices we made above. have to make those first to do the list
 
-dataframe1[1:2,] # 
-dataframe1[c("ID","Passed")] # 
-dataframe1$ID
+# Data Frames ----
+d <- c(1, 2, 3, 4) # What type of vector? numerical
+e <- c("red", "white", "red", NA) # What type of vector? character
+f <- c(TRUE, TRUE, TRUE, FALSE) # What type of vector? logical
+dataframe1 <- data.frame(d,e,f) # makes a data frame with the 3 objects called dataframe1
+# vectors show up in values section of environment and the matrices show up in data
+# R recognizes NA as its own thing, so don't need to put it in quotes
+# turns character vector into factor-type of data frame. in Env says "factor w/2 levels...1 2 1 NA"
+names(dataframe1) <- c("ID","Color","Passed"); View(dataframe1) # can rename column titles using this format
+
+dataframe1[1:2,] # 2 dimensions, but each column has a different mode included in single data frame
+# matric subsetting is always row, columns
+dataframe1[c("ID","Passed")] # calls up specific elements of data frame, i.e. "ID" and "Passed"
+dataframe1$ID # Just calls up individual column
 
 ```
 Question: How do the different types of data appear in the Environment tab?
 
-> Answer: 
+> Answer: Data frames, lists, and matrices are located in the Data tabs, whereas, the objects like cells, names of rows and columns, and vectors are under the Values tab. 
 
 Question: In the R chunk below, write "dataframe1$". Press `tab` after you type the dollar sign. What happens?
 
-> Answer: 
+> Answer: It lists the name of the columns in dataframe1 and pushing enter calls up the last object that was called up before
 
 ### Coding challenge
 
 Find a ten-day forecast of temperatures (Fahrenheit) for Durham, North Carolina. Create two vectors, one representing the high temperature on each of the ten days and one representing the low.
 
 ```{r}
-
+vectorhighf <- c (62, 45, 50, 50, 40,40, 45, 52,54, 58)
+vectorhighf
+vectorlowf <- c(31, 29, 43, 24, 23, 23, 26, 30, 42, 41)
+vectorlowf
 ```
 
 Now, create two additional vectors that include the ten-day forecast for the high and low temperatures in Celsius.
 
 ```{r}
+vectorhighc <- c(17, 7, 10, 10, 4, 4, 7, 11, 12, 14) # numeric vector
+vectorhighc
+vectorlowc <- c(-1, -1, 6, -4, -4, -5, -3, -1, 5, 5) 
+vectorlowc
+vectorhighc*(-32*(5/9))
 
 ```
 
@@ -102,12 +129,18 @@ Combine your four vectors into a data frame and add informative column names.
 
 ```{r}
 
+dataframetemps <- data.frame(vectorhighf, vectorlowf, vectorhighc, vectorlowc) 
+names(dataframetemps) <- c("High Temp F","Low Temp F","High Temp C", "Low Temp C"); View(dataframetemps) 
+
+dataframetemps[1:2,] 
+dataframetemps[c("High Temp F","High Temp C")] # calls up specific elements of data frame, i.e. "ID" and "Passed"
+dataframetemps$`High Temp F`
 ```
 
 Use the common functions `summary` and `sd` to obtain basic data summaries of the ten-day forecast. How would you call these functions differently for the entire data frame vs. a single column? Attempt to demonstrate both options below.
 
 ```{r}
-
+summary.data.frame(dataframetemps)
 ```
 
 
@@ -129,16 +162,16 @@ If a package is already installed, you will need to load it every session. You c
 
 
 ```{r}
-# We will use the packages dplyr and ggplot2 regularly. 
-#install.packages("dplyr") 
-#install.packages("ggplot2")
+
 # comment out install commands, use only when needed and re-comment
 
 library(dplyr)
 library(ggplot2)
 
+
+
 # Some packages are umbrellas under which other packages are loaded
-#install.packages("tidyverse")
+
 library(tidyverse)
 ```
 
