@@ -146,6 +146,8 @@ ten_sequence <- seq(1, 10)
 ten_sequence
 
 seq(1, 10, 2) # from, to, by
+
+median(ten_sequence)
 ```
 
 The basic form of a function is `functionname()`, and the packages we will use in this class will use these basic forms. However, there may be situations when you will want to create your own function. Below is a description of how to write functions through the metaphor of creating a recipe (credit: @IsabellaGhement on Twitter). 
