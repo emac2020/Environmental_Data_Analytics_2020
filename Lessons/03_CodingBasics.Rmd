@@ -51,6 +51,10 @@ matrix3 <- matrix(1:20, nrow = 5, ncol = 4, byrow = TRUE, # return after comma c
                   dimnames = list(c("uno", "dos", "tres", "cuatro", "cinco"), 
                                   c("un", "deux", "trois", "cat"))) #dimnames names rows by whatever you want them to be called. this is calls the columns by french numbers 1-4 and the columns spanish numbers 1-4 
 
+matrix1
+matrix2
+matrix3
+
 matrix1[4, ] # calls up matrix 1, row 4
 matrix1[ , 3] # calls up matrix 1, column 3
 matrix1[c(12, 14)] # calls up matrix 1, numbers 12 and 14. specifying specific objects within matrix
