@@ -1,0 +1,912 @@
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage[]{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\PassOptionsToPackage{hyphens}{url} % url is loaded by hyperref
+\usepackage[unicode=true]{hyperref}
+\hypersetup{
+            pdftitle={4: Data Exploration},
+            pdfauthor={Environmental Data Analytics \textbar{} Kateri Salk},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage[margin=2.54cm]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+% set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+
+
+\title{4: Data Exploration}
+\author{Environmental Data Analytics \textbar{} Kateri Salk}
+\date{Spring 2020}
+
+\begin{document}
+\maketitle
+
+\subsection{Lesson Objectives}\label{lesson-objectives}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Set up a data analysis session in RStudio
+\item
+  Import and explore datasets in R
+\item
+  Apply data exploration skills to a real-world example dataset
+\end{enumerate}
+
+\subsection{Best Practices in R}\label{best-practices-in-r}
+
+In many situations in data analytics, you may be expected to work from
+multiple computers or share projects among multiple users. A few general
+best practices will avoid common pitfalls related to collaborative work.
+
+\subsubsection{Set your working
+directory}\label{set-your-working-directory}
+
+A session in RStudio will always function by mapping to a specific
+folder in your computer, called the \emph{working directory}. All
+navigation between folders and files will happen relative to this
+working directory. When you open an R project, your working directory
+will automatically set to the folder that holds the project file. If you
+open an R script or RMarkdown document directly by double-clicking the
+file, your working directory will automatically set to the folder that
+holds that file. It is a good idea to note with a comment at the top of
+your file which working directory you intend the user to designate.
+
+In this course, we will always open the R project file for the course,
+and additional navigation of the working directory will happen from that
+folder. To check your working directory, use the following R command:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Working directory should be set to the parent folder for the Environmental Data Analytics Course, i.e., the folder that houses the R Project file.}
+
+\KeywordTok{getwd}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "/Users/emilymcnamara/Desktop/Env Data Analytics/Environmental_Data_Analytics_2020"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Asks R to tell you what it has set as your working directory }
+\end{Highlighting}
+\end{Shaded}
+
+If your working directory is not set to the folder you want, you have
+several options. The first is to directly code your working directory.
+You may do this by defining an absolute file path (below). What are the
+pitfalls of using an absolute file path?
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Absolute file path is commented out}
+\CommentTok{#setwd("/Users/katerisalk/Documents/Duke/Courses/Environmental_Data_Analytics")}
+
+\CommentTok{# This allows you to set a specific working directory as one of your choosing }
+\CommentTok{# Can also go to "session" and "set working directory" and can choose a location}
+\CommentTok{# Can comment to yourself that this script will be set to a certain file path and if it's not set to that, this is where it should be...}
+\end{Highlighting}
+\end{Shaded}
+
+You may change your working directory without coding by going to the
+Session menu in RStudio and navigating to the Set Working Directory tab.
+From there, you may select from a series of options to reset your
+working directory.
+
+Another option is to use the R package \texttt{here}. We will not be
+using this option in class, but it is growing quite popular among R
+users. A more detailed description and rationale can be found here:
+\url{https://github.com/jennybc/here_here}.
+
+\subsubsection{Load your packages}\label{load-your-packages}
+
+At the top of your R scripts, you should load any packages that need to
+be used for that R script. A common issue that arises is that packages
+will be loaded in the middle of the code, making it difficult to run
+specific chunks of code without scrolling to make sure all necessary
+packages are loaded. For example, the tidyverse package is one that we
+will use regularly in class.
+
+At the same time, you should also load your theme if you are doing any
+data visualization with ggplot. More on this later.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Load package}
+\KeywordTok{library}\NormalTok{(tidyverse)}
+
+\CommentTok{# Allows you to see which packages you've loaded and where there may be some conflicts}
+\CommentTok{# Have to write "message = FALSE" to ensure that document can be knitted so the warning messages aren't printed out}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{Import your datasets}\label{import-your-datasets}
+
+Datasets can be imported into R. Good data practices dictate that raw
+data (from yourself or others) should not be changed and re-saved within
+the spreadsheet, but rather the data should be changed with reproducible
+techniques and saved as a new file. Note: data should be saved in
+nonproprietary formats, namely .csv or .txt files rather than .xls or
+.xlsx files.
+
+We're going to be using csv files.
+
+To read in a data file, you may specify a file path with an
+\emph{absolute} or a \emph{relative} file path. As above with your
+working directory, it is a better practice to use a relative directory.
+To navigate a relative file path, use \texttt{./} followed by the tab
+key to navigate forward in the folder structure, and use \texttt{../}
+followed by the tab key to navigate back out of the folder structure.
+For example, this lesson is located in the ``Lessons'' folder, and we
+need to navigate into the ``Data'' folder. After clicking the correct
+folder, use \texttt{/} and press tab again to continue the process.
+
+You may also import datasets from the Files tab, but this is not
+recommended since this is not reproducible.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Absolute file path (not recommended)}
+\CommentTok{#read.csv("/Users/katerisalk/Documents/Duke/Courses/Environmental_Data_Analytics/Data/Raw/USGS_Site02085000_Flow_Raw.csv")}
+
+\CommentTok{# MetaData file in Data folder includes specific info for the corresponding raw data files}
+\CommentTok{# If have multiple tabs in an excel file, separate tabs and save each one as csv file to upload it}
+
+\CommentTok{# Relative file path (friendly for users regardless of machine)}
+\NormalTok{USGS.flow.data <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"./Data/Raw/USGS_Site02085000_Flow_Raw.csv"}\NormalTok{)}
+
+\CommentTok{# Because we know R is pointing to the project file that contains our data, we can have it search for a specific data file in our project}
+\CommentTok{# starting with "." means "go one folder in"}
+\CommentTok{# Do ".." to mean go out when folder and then in another folder}
+\CommentTok{# Even though working directory is sent to Project, Knit directory may not be, so have to set Knit directory to project directory (knit --> knit directory --> project directory)}
+\CommentTok{# Can also go directly to folder on desktop and copy the path name of the specific data file}
+
+\CommentTok{# What happens if we don't assign a name to our imported dataset?}
+\CommentTok{#read.csv("./Data/Raw/USGS_Site02085000_Flow_Raw.csv")}
+\NormalTok{## If it's not named, R just reads the data and tells you what it said. It won't be called up in Environment and all the data will appear in a knitted pdf}
+
+\CommentTok{# Another option is to choose with your browser}
+\CommentTok{#read.csv(file.choose())}
+\CommentTok{# pulls up finder to choose specific folder BUT not reproducible because others can't tell which folder you're pulling from }
+
+\CommentTok{# To import .txt files, use read.table rather than read.csv}
+\CommentTok{#read.table()}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{EXPLORE YOUR DATASET}\label{explore-your-dataset}
+
+Take a moment to read through the README file associated with the USGS
+dataset on discharge at the Eno River. Where can you find this file? How
+does the placement and information found in this file relate to the best
+practices for reproducible data analysis? \textgreater{} ANSWER: You
+find it under Data --\textgreater{} Metadata. It provides descriptions
+and clarity to what abbreviations and numeric codes mean. It also
+provides the source, so people can go directly to the data to navigate
+it through the main page. Shows date of access to, so if it was accessed
+on an earlier date, people can see if the data was revised more
+recently. Includes info on how to save the data in a way that is
+consistent and others can find it: Files are named according to the
+following naming convention:
+\texttt{databasename\_datatype\_details\_stage.format}, where: (see meta
+data info at bottom of doc)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{View}\NormalTok{(USGS.flow.data)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning in system2("/usr/bin/otool", c("-L", shQuote(DSO)), stdout = TRUE):
+## running command ''/usr/bin/otool' -L '/Library/Frameworks/R.framework/Resources/
+## modules/R_de.so'' had status 1
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Alternate option: click on data frame in Environment tab}
+
+\KeywordTok{class}\NormalTok{(USGS.flow.data)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "data.frame"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Tells you the class which is "data frame". This means its 2D and that it contains different modes "numeric and factors"}
+\KeywordTok{colnames}\NormalTok{(USGS.flow.data)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  [1] "agency_cd"              "site_no"                "datetime"              
+##  [4] "X165986_00060_00001"    "X165986_00060_00001_cd" "X165987_00060_00002"   
+##  [7] "X165987_00060_00002_cd" "X84936_00060_00003"     "X84936_00060_00003_cd" 
+## [10] "X84937_00065_00001"     "X84937_00065_00001_cd"  "X84938_00065_00002"    
+## [13] "X84938_00065_00002_cd"  "X84939_00065_00003"     "X84939_00065_00003_cd"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Not very informative}
+
+\CommentTok{# Rename columns}
+\KeywordTok{colnames}\NormalTok{(USGS.flow.data) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"agency_cd"}\NormalTok{, }\StringTok{"site_no"}\NormalTok{, }\StringTok{"datetime"}\NormalTok{, }
+                              \StringTok{"discharge.max"}\NormalTok{, }\StringTok{"discharge.max.approval"}\NormalTok{, }
+                              \StringTok{"discharge.min"}\NormalTok{, }\StringTok{"discharge.min.approval"}\NormalTok{, }
+                              \StringTok{"discharge.mean"}\NormalTok{, }\StringTok{"discharge.mean.approval"}\NormalTok{, }
+                              \StringTok{"gage.height.max"}\NormalTok{, }\StringTok{"gage.height.max.approval"}\NormalTok{, }
+                              \StringTok{"gage.height.min"}\NormalTok{, }\StringTok{"gage.height.min.approval"}\NormalTok{, }
+                              \StringTok{"gage.height.mean"}\NormalTok{, }\StringTok{"gage.height.mean.approval"}\NormalTok{)}
+\CommentTok{# Have to list all the column names, can't just list specific ones. Got these column names from Meta Data. By writing "c" it says: I want to concatinate a list of these names. Inserting returns gives you clarity so you can see if there's something wrong.}
+\CommentTok{# This only saves the renamed columns of dataframe in R, not in excel. Need to specifically code it to change it in excel.}
+\CommentTok{# General coding rule: Don't surpass 80 characters in a single line. Can see character count on bottom left of R script.}
+\CommentTok{# If want to specify, write: colnames(USGS.flow.data)[] and put specific names in there. You can put "3" in the brackets to name a specific column }
+
+\KeywordTok{str}\NormalTok{(USGS.flow.data)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 'data.frame':    33690 obs. of  15 variables:
+##  $ agency_cd                : Factor w/ 1 level "USGS": 1 1 1 1 1 1 1 1 1 1 ...
+##  $ site_no                  : int  2085000 2085000 2085000 2085000 2085000 2085000 2085000 2085000 2085000 2085000 ...
+##  $ datetime                 : Factor w/ 33690 levels "1/1/00","1/1/01",..: 2873 3896 4919 5198 5291 5384 5477 5570 5663 2966 ...
+##  $ discharge.max            : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ discharge.max.approval   : Factor w/ 3 levels "","A","P": 1 1 1 1 1 1 1 1 1 1 ...
+##  $ discharge.min            : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ discharge.min.approval   : Factor w/ 3 levels "","A","P": 1 1 1 1 1 1 1 1 1 1 ...
+##  $ discharge.mean           : num  39 39 39 39 39 39 39 39 39 39 ...
+##  $ discharge.mean.approval  : Factor w/ 4 levels "","A","A:e","P": 2 2 2 2 2 2 2 2 2 2 ...
+##  $ gage.height.max          : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ gage.height.max.approval : Factor w/ 3 levels "","A","P": 1 1 1 1 1 1 1 1 1 1 ...
+##  $ gage.height.min          : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ gage.height.min.approval : Factor w/ 3 levels "","A","P": 1 1 1 1 1 1 1 1 1 1 ...
+##  $ gage.height.mean         : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ gage.height.mean.approval: Factor w/ 3 levels "","A","P": 1 1 1 1 1 1 1 1 1 1 ...
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Structure of a data frame. Tells us: you have a data frame and then the size of the data frame and gives a summary of each of the columns. }
+\CommentTok{# shows some columns as N/A and some as just blanks. I.e. Discharge max is numeric so it's N/A, Discharge max approval is factors/characters that are blanked and will be retained as blanks.}
+
+\KeywordTok{dim}\NormalTok{(USGS.flow.data)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 33690    15
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Dimensions of the data frame. Can also see this info in the Environment tab and from structure.}
+
+\KeywordTok{length}\NormalTok{(USGS.flow.data)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 15
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Length gives the number of columns NOT the number of rows}
+
+\KeywordTok{nrow}\NormalTok{(USGS.flow.data)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 33690
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Gives the number of rows}
+
+\KeywordTok{head}\NormalTok{(USGS.flow.data)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   agency_cd site_no datetime discharge.max discharge.max.approval discharge.min
+## 1      USGS 2085000  10/1/27            NA                                   NA
+## 2      USGS 2085000  10/2/27            NA                                   NA
+## 3      USGS 2085000  10/3/27            NA                                   NA
+## 4      USGS 2085000  10/4/27            NA                                   NA
+## 5      USGS 2085000  10/5/27            NA                                   NA
+## 6      USGS 2085000  10/6/27            NA                                   NA
+##   discharge.min.approval discharge.mean discharge.mean.approval gage.height.max
+## 1                                    39                       A              NA
+## 2                                    39                       A              NA
+## 3                                    39                       A              NA
+## 4                                    39                       A              NA
+## 5                                    39                       A              NA
+## 6                                    39                       A              NA
+##   gage.height.max.approval gage.height.min gage.height.min.approval
+## 1                                       NA                         
+## 2                                       NA                         
+## 3                                       NA                         
+## 4                                       NA                         
+## 5                                       NA                         
+## 6                                       NA                         
+##   gage.height.mean gage.height.mean.approval
+## 1               NA                          
+## 2               NA                          
+## 3               NA                          
+## 4               NA                          
+## 5               NA                          
+## 6               NA
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Gives idea of what the first 6 rows look like}
+\KeywordTok{head}\NormalTok{(USGS.flow.data, }\DecValTok{10}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##    agency_cd site_no datetime discharge.max discharge.max.approval
+## 1       USGS 2085000  10/1/27            NA                       
+## 2       USGS 2085000  10/2/27            NA                       
+## 3       USGS 2085000  10/3/27            NA                       
+## 4       USGS 2085000  10/4/27            NA                       
+## 5       USGS 2085000  10/5/27            NA                       
+## 6       USGS 2085000  10/6/27            NA                       
+## 7       USGS 2085000  10/7/27            NA                       
+## 8       USGS 2085000  10/8/27            NA                       
+## 9       USGS 2085000  10/9/27            NA                       
+## 10      USGS 2085000 10/10/27            NA                       
+##    discharge.min discharge.min.approval discharge.mean discharge.mean.approval
+## 1             NA                                    39                       A
+## 2             NA                                    39                       A
+## 3             NA                                    39                       A
+## 4             NA                                    39                       A
+## 5             NA                                    39                       A
+## 6             NA                                    39                       A
+## 7             NA                                    39                       A
+## 8             NA                                    39                       A
+## 9             NA                                    39                       A
+## 10            NA                                    39                       A
+##    gage.height.max gage.height.max.approval gage.height.min
+## 1               NA                                       NA
+## 2               NA                                       NA
+## 3               NA                                       NA
+## 4               NA                                       NA
+## 5               NA                                       NA
+## 6               NA                                       NA
+## 7               NA                                       NA
+## 8               NA                                       NA
+## 9               NA                                       NA
+## 10              NA                                       NA
+##    gage.height.min.approval gage.height.mean gage.height.mean.approval
+## 1                                         NA                          
+## 2                                         NA                          
+## 3                                         NA                          
+## 4                                         NA                          
+## 5                                         NA                          
+## 6                                         NA                          
+## 7                                         NA                          
+## 8                                         NA                          
+## 9                                         NA                          
+## 10                                        NA
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Gives first 10 rows}
+\KeywordTok{tail}\NormalTok{(USGS.flow.data, }\DecValTok{5}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##       agency_cd site_no datetime discharge.max discharge.max.approval
+## 33686      USGS 2085000 12/22/19            NA                       
+## 33687      USGS 2085000 12/23/19            NA                       
+## 33688      USGS 2085000 12/24/19            NA                       
+## 33689      USGS 2085000 12/25/19            NA                       
+## 33690      USGS 2085000 12/26/19            NA                       
+##       discharge.min discharge.min.approval discharge.mean
+## 33686            NA                                  18.1
+## 33687            NA                                  18.6
+## 33688            NA                                  18.8
+## 33689            NA                                  16.6
+## 33690            NA                                  15.1
+##       discharge.mean.approval gage.height.max gage.height.max.approval
+## 33686                       P              NA                         
+## 33687                       P              NA                         
+## 33688                       P              NA                         
+## 33689                       P              NA                         
+## 33690                       P              NA                         
+##       gage.height.min gage.height.min.approval gage.height.mean
+## 33686              NA                                      1.93
+## 33687              NA                                      1.94
+## 33688              NA                                      1.95
+## 33689              NA                                      1.91
+## 33690              NA                                      1.88
+##       gage.height.mean.approval
+## 33686                         P
+## 33687                         P
+## 33688                         P
+## 33689                         P
+## 33690                         P
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Gives the last 5 rows}
+\NormalTok{USGS.flow.data[}\DecValTok{30000}\OperatorTok{:}\DecValTok{30005}\NormalTok{, }\KeywordTok{c}\NormalTok{(}\DecValTok{3}\NormalTok{, }\DecValTok{8}\NormalTok{, }\DecValTok{14}\NormalTok{)]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##       datetime discharge.mean gage.height.mean
+## 30000 11/18/09           27.5             1.72
+## 30001 11/19/09           31.6             1.80
+## 30002 11/20/09           37.1             1.88
+## 30003 11/21/09           32.1             1.80
+## 30004 11/22/09           23.7             1.66
+## 30005 11/23/09          337.0             3.87
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Matrix subsetting: lines 30,000 to 30,000 and specific column and row by a specific amount}
+
+\KeywordTok{class}\NormalTok{(USGS.flow.data}\OperatorTok{$}\NormalTok{datetime)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "factor"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Can ask for specific columns. I.e. specific date and time by just writing USGS.flow.data$datetime without "class"}
+\CommentTok{# Adding "class" tells you which class it is}
+\KeywordTok{class}\NormalTok{(USGS.flow.data}\OperatorTok{$}\NormalTok{discharge.mean)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "numeric"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{class}\NormalTok{(USGS.flow.data}\OperatorTok{$}\NormalTok{gage.height.mean)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "numeric"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{summary}\NormalTok{(USGS.flow.data)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  agency_cd       site_no           datetime     discharge.max    
+##  USGS:33690   Min.   :2085000   1/1/00 :    1   Min.   :   0.26  
+##               1st Qu.:2085000   1/1/01 :    1   1st Qu.:   7.23  
+##               Median :2085000   1/1/02 :    1   Median :  21.15  
+##               Mean   :2085000   1/1/03 :    1   Mean   :  88.15  
+##               3rd Qu.:2085000   1/1/04 :    1   3rd Qu.:  59.80  
+##               Max.   :2085000   1/1/05 :    1   Max.   :4730.00  
+##                                 (Other):33684   NA's   :28342    
+##  discharge.max.approval discharge.min     discharge.min.approval
+##   :28342                Min.   :   0.09    :28342               
+##  A: 5347                1st Qu.:   4.38   A: 5347               
+##  P:    1                Median :  12.60   P:    1               
+##                         Mean   :  30.46                         
+##                         3rd Qu.:  34.80                         
+##                         Max.   :1460.00                         
+##                         NA's   :28342                           
+##  discharge.mean    discharge.mean.approval gage.height.max 
+##  Min.   :   0.02      : 5108               Min.   : 0.890  
+##  1st Qu.:   9.30   A  :28265               1st Qu.: 1.490  
+##  Median :  24.00   A:e:  294               Median : 1.830  
+##  Mean   :  59.48   P  :   23               Mean   : 2.124  
+##  3rd Qu.:  54.00                           3rd Qu.: 2.310  
+##  Max.   :4600.00                           Max.   :17.020  
+##  NA's   :5108                              NA's   :28229   
+##  gage.height.max.approval gage.height.min gage.height.min.approval
+##   :28229                  Min.   :0.840    :28229                 
+##  A: 5460                  1st Qu.:1.380   A: 5460                 
+##  P:    1                  Median :1.650   P:    1                 
+##                           Mean   :1.736                           
+##                           3rd Qu.:2.030                           
+##                           Max.   :9.190                           
+##                           NA's   :28229                           
+##  gage.height.mean gage.height.mean.approval
+##  Min.   : 0.870    :24870                  
+##  1st Qu.: 1.450   A: 8797                  
+##  Median : 1.770   P:   23                  
+##  Mean   : 1.952                            
+##  3rd Qu.: 2.200                            
+##  Max.   :15.040                            
+##  NA's   :24870
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Structure can be more interprative. Factors won't appear as conveniently as numeric values}
+\end{Highlighting}
+\end{Shaded}
+
+What happened to blank cells in the spreadsheet when they were imported
+into R? \textgreater{} Answer:
+
+\subsection{Adjusting Datasets}\label{adjusting-datasets}
+
+\subsubsection{Removing NAs}\label{removing-nas}
+
+Notice in our dataset that our discharge and gage height observations
+have many NAs, meaning no measurement was recorded for a specific day.
+In some cases, it might be in our best interest to remove NAs from a
+dataset. Removing NAs or not will depend on your research question.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{summary}\NormalTok{(USGS.flow.data}\OperatorTok{$}\NormalTok{discharge.mean)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+##    0.02    9.30   24.00   59.48   54.00 4600.00    5108
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{summary}\NormalTok{(USGS.flow.data}\OperatorTok{$}\NormalTok{gage.height.mean)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+##   0.870   1.450   1.770   1.952   2.200  15.040   24870
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Gives distribution and tells you how many N/As are in the data frame. Quite a few in this case}
+\end{Highlighting}
+\end{Shaded}
+
+Question: What types of research questions might make it favorable to
+remove NAs from a dataset, and what types of research questions might
+make it favorable to retain NAs in the dataset?
+
+\begin{quote}
+Answer: Helpful to retain for future reference. Removing it can help
+when running analysis on presence data instead of presence/absence. If
+want to compare discharge mean and height mean, only want to do it where
+values are present. Also, if want to run a correlation matrix, NAs screw
+it up so need to remove it.
+\end{quote}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{USGS.flow.data.complete <-}\StringTok{ }\KeywordTok{na.omit}\NormalTok{(USGS.flow.data)}
+\CommentTok{# If making permenant changes to data frame, want to call it something else or else you have to rerun code to get back to original}
+\CommentTok{# na.omit only runs the complete datasets in your data frame}
+\KeywordTok{dim}\NormalTok{(USGS.flow.data)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 33690    15
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{dim}\NormalTok{(USGS.flow.data.complete)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 5342   15
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# A lot fewer rows without NAs}
+
+\KeywordTok{mean}\NormalTok{(USGS.flow.data.complete}\OperatorTok{$}\NormalTok{discharge.mean)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 51.08613
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{sd}\NormalTok{(USGS.flow.data.complete}\OperatorTok{$}\NormalTok{discharge.mean)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 137.2094
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{summary}\NormalTok{(USGS.flow.data.complete}\OperatorTok{$}\NormalTok{discharge.mean)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+##    0.220    5.683   16.600   51.086   44.800 3270.000
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# These are means, sd's, and summary of the complete dataset without the NAs}
+\CommentTok{# Summary doesn't show sd, so need to run that separately }
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{Formatting dates}\label{formatting-dates}
+
+R will often import dates as factors or characters rather than dates. To
+fix, this we need to tell R that it is looking at dates. We also need to
+specify the format the dates are in. By default, if you don't provide a
+format, R will attempt to use \%Y-\%m-\%d or \%Y/\%m/\%d as a default.
+Note: if you are working collaboratively in an international setting,
+using a year-month-day format in spreadsheets is the least ambiguous of
+date formats. Make sure to check whether month-day-year or
+day-month-year is used in an ambiguously formatted spreadsheet.
+
+Formatting of dates in R:
+
+\%d day as number (0-31) \%m month (00-12, can be e.g., 01 or 1) \%y
+2-digit year \%Y 4-digit year \%a abbreviated weekday \%A unabbreviated
+weekday \%b abbreviated month \%B unabbreviated month
+
+In some cases when dates are provided as integers, you may need to
+provide an origin for your dates. Beware: the ``origin'' date for Excel
+(Windows), Excel (Mac), R, and MATLAB all have different origin dates.
+Google this if it comes up. Origin will be January 1st, 1970
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{help}\NormalTok{(as.Date)}
+
+\CommentTok{# Adjust date formatting for today}
+\CommentTok{# Write code for three different date formats. }
+\CommentTok{# An example is provided to get you started.}
+\CommentTok{# (code must be uncommented)}
+\NormalTok{today <-}\StringTok{ }\KeywordTok{Sys.Date}\NormalTok{()}
+\CommentTok{# Whatever day your computer thinks it is will be the date that's called up. It shows up in the environment and is always: year-month-day}
+
+\KeywordTok{format}\NormalTok{(today, }\DataTypeTok{format =} \StringTok{"%B"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "January"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#Formats today as the month}
+
+\KeywordTok{format}\NormalTok{(today, }\DataTypeTok{format =} \StringTok{"%d"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "21"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{format}\NormalTok{(today, }\DataTypeTok{format =} \StringTok{"%b"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "Jan"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{format}\NormalTok{(today, }\DataTypeTok{format =} \StringTok{"%y"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "20"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{USGS.flow.data}\OperatorTok{$}\NormalTok{datetime <-}\StringTok{ }\KeywordTok{as.Date}\NormalTok{(USGS.flow.data}\OperatorTok{$}\NormalTok{datetime, }\DataTypeTok{format =} \StringTok{"%m/%d/%y"}\NormalTok{)}
+\CommentTok{# If want R to perceive date/time column as date, have to tell R which column, and which format exists in the data right now rather than the format we want it in}
+\CommentTok{#BUT it says it's 2027 instead of 1997 because all the dates prior to 1969 are noted in the future}
+\end{Highlighting}
+\end{Shaded}
+
+Note that for every date prior to 1969, R has assigned the date in the
+2000s rather than the 1900s. This can be fixed with an \texttt{ifelse}
+statement inside a function. Run through the code below and write what
+is happening in the comment above each line.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# }
+\NormalTok{USGS.flow.data}\OperatorTok{$}\NormalTok{datetime <-}\StringTok{ }\KeywordTok{format}\NormalTok{(USGS.flow.data}\OperatorTok{$}\NormalTok{datetime, }\StringTok{"%y%m%d"}\NormalTok{)}
+
+\CommentTok{#}
+\NormalTok{create.early.dates <-}\StringTok{ }\NormalTok{(}\ControlFlowTok{function}\NormalTok{(d) \{}
+       \KeywordTok{paste0}\NormalTok{(}\KeywordTok{ifelse}\NormalTok{(d }\OperatorTok{>}\StringTok{ }\DecValTok{181231}\NormalTok{,}\StringTok{"19"}\NormalTok{,}\StringTok{"20"}\NormalTok{),d)}
+\NormalTok{       \})}
+\CommentTok{#}
+\NormalTok{USGS.flow.data}\OperatorTok{$}\NormalTok{datetime <-}\StringTok{ }\KeywordTok{create.early.dates}\NormalTok{(USGS.flow.data}\OperatorTok{$}\NormalTok{datetime)}
+
+\CommentTok{#}
+\NormalTok{USGS.flow.data}\OperatorTok{$}\NormalTok{datetime <-}\StringTok{ }\KeywordTok{as.Date}\NormalTok{(USGS.flow.data}\OperatorTok{$}\NormalTok{datetime, }\DataTypeTok{format =} \StringTok{"%Y%m%d"}\NormalTok{) }
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{Saving datasets}\label{saving-datasets}
+
+We just edited our raw dataset into a processed form. We may want to
+return to this processed dataset later, which will be easier to do if we
+save it as a spreadsheet.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{write.csv}\NormalTok{(USGS.flow.data, }\DataTypeTok{file =} \StringTok{"./Data/Processed/USGS_Site02085000_Flow_Processed.csv"}\NormalTok{, }\DataTypeTok{row.names=}\OtherTok{FALSE}\NormalTok{)}
+
+\CommentTok{# Want to store apart from raw data file. Have to make a folder in R Data folder named "Processed" in order to save it there.}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{Tips and Tricks}\label{tips-and-tricks}
+
+\subsubsection{Knitting}\label{knitting}
+
+\begin{itemize}
+\tightlist
+\item
+  In the Knit menu in the Editor, you will need to specify whether your
+  knit directory should be the document directory or the project
+  directory. If your document is not knitting correctly, try switching
+  between the document directory and project directory as a first
+  troubleshooting option.
+\end{itemize}
+
+\subsubsection{Spreadsheets}\label{spreadsheets}
+
+*Files should be saved as .csv or .txt for easy import into R. Note that
+complex formatting, including formulas in Excel, are not saved when
+spreadsheets are converted to comma separated or text formats (i.e.,
+values alone are saved).
+
+*The first row is reserved for column headers.
+
+*A secondary row for column headers (e.g., units) should not be used if
+data are being imported into R. Incorporate units into the first row
+column headers if necessary.
+
+*Short names are preferred for column headers, to the extent they are
+informative. Additional information can be stored in comments within R
+scripts and/or in README files.
+
+*Spaces in column names will be replaced with a \texttt{.} when imported
+into R. When designing spreadsheets, avoid spaces in column headers.
+
+*Avoid symbols in column headers. This can cause issues when importing
+into R.
+
+\end{document}
