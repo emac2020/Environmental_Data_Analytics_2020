@@ -239,12 +239,14 @@ Note that for every date prior to 1969, R has assigned the date in the 2000s rat
 ```{r}
 # 
 USGS.flow.data$datetime <- format(USGS.flow.data$datetime, "%y%m%d")
+# Turns date column into stream of dates
 
 #
 create.early.dates <- (function(d) {
-       paste0(ifelse(d > 181231,"19","20"),d)
+       paste0(ifelse(d > 191231,"19","20"),d)
        })
-#
+#Then if date was above 2000, asks it to put a 20 in front of it, if after, asks it to put a 19 after it
+
 USGS.flow.data$datetime <- create.early.dates(USGS.flow.data$datetime)
 
 #
