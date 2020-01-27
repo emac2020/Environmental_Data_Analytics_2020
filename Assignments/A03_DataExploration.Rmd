@@ -1,11 +1,20 @@
 ---
-title: "Assignment 3: Data Exploration"
+title: 'Assignment 3: Data Exploration'
 author: "Emily McNamara"
-output: pdf_document
 geometry: margin=2.00cm
-editor_options: 
+output:
+  pdf_document: default
+  latex_engine: xelatex
+editor_options:
   chunk_output_type: console
 ---
+
+```{r setup, include=FALSE, messages = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+options(cli.width = 60)
+```
+
 
 ## OVERVIEW
 
@@ -28,16 +37,17 @@ The completed exercise is due on Tuesday, January 28 at 1:00 pm.
 getwd()
 
 
+
 # Load Packages
 library(tidyverse)
 
 # Datasets
 
 Neonics <- read.csv("./Data/Raw/ECOTOX_Neonicotinoids_Insects_raw.csv")
-Neonics
+
 
 Litter <- read.csv("./Data/Raw/NEON_NIWO_Litter_massdata_2018-08_raw.csv")
-Litter
+
 
 ```
 
@@ -111,15 +121,14 @@ class(Neonics$Conc.1..Author.)
 ```{r}
 
 ggplot(Neonics) +
-  geom_freqpoly(aes(x = Publication.Year), binwidth = 50) +
-  scale_x_continuous(limits = c(0, 5000))
+  geom_freqpoly(aes(x = Publication.Year), binwidth = 50)
 
 ```
 
 10. Reproduce the same graph but now add a color aesthetic so that different Test.Location are displayed as different colors.
 ```{r}
 ggplot(Neonics) +
-  geom_freqpoly(aes(x = Publication.Year, binwidth = 10, color = Test.Location))
+  geom_freqpoly(aes(x = Publication.Year, bins = 50, color = Test.Location))
 
 ```
 
