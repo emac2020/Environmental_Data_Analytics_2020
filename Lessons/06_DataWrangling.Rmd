@@ -19,17 +19,18 @@ Today we will work with a dataset from the [North Temperate Lakes Long-Term Ecol
 
 Opening discussion: why might we be interested in long-term observations of temperature, oxygen, and light in lakes?
 
-> Add notes here: 
+> Add notes here: Ecosystem health, climate change effects, range of tolerance for organisms, management techniques.
 
 ```{r, message = FALSE}
 getwd()
 library(tidyverse)
-#install.packages(lubridate)
+install.packages(lubridate)
 library(lubridate)
 NTL.phys.data <- read.csv("./Data/Raw/NTL-LTER_Lake_ChemistryPhysics_Raw.csv")
 
 colnames(NTL.phys.data)
 head(NTL.phys.data)
+# gives first 6 rows of each of the columns in that data frame
 summary(NTL.phys.data)
 str(NTL.phys.data)
 dim(NTL.phys.data)
@@ -37,6 +38,7 @@ dim(NTL.phys.data)
 class(NTL.phys.data$sampledate)
 # Format sampledate as date
 NTL.phys.data$sampledate <- as.Date(NTL.phys.data$sampledate, format = "%m/%d/%y")
+#format = current format the date is in. 
 ```
 
 ## Data Wrangling
