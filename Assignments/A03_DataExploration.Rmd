@@ -200,9 +200,7 @@ ggplot(Litter) +
 # Violin Plot
 
 ggplot(Litter) +
-  geom_violin(aes(x = functionalGroup, y = dryMass),
-              draw_quantiles = c(0.25, 0.5, 0.75), 
-              scale = "count")
+  geom_violin(aes(x = functionalGroup, y = dryMass)
 
 ```
 
