@@ -1,7 +1,7 @@
 ---
 title: 'Assignment 3: Data Exploration'
 author: "Emily McNamara"
-geometry: margin=2.00cm
+geometry: margin=2.25cm
 output:
   pdf_document: default
 editor_options:
@@ -48,20 +48,20 @@ Litter <- read.csv("./Data/Raw/NEON_NIWO_Litter_massdata_2018-08_raw.csv")
 
 2. The neonicotinoid dataset was collected from the Environmental Protection Agency's ECOTOX Knowledgebase, a database for ecotoxicology research. Neonicotinoids are a class of insecticides used widely in agriculture. The dataset that has been pulled includes all studies published on insects. Why might we be interested in the ecotoxicologoy of neonicotinoids on insects? Feel free to do a brief internet search if you feel you need more background information. 
 
-#> Answer: Neonicotinoids can accumulate in soils when used repeatedly and can remain in woody plants well after a year. Understanding the longevity of neonics and how they are absorbed in plants is important because of the affects these pesticides have on honey bees and native bees. Because the synthetic chemical is absorbed into the plant, it can be found in pollen and nectar, which has a toxic effect on pollinators that feed on them. 
+> Answer: Neonics can accumulate in soils when used repeatedly and can remain in woody plants well after a year. Understanding the longevity of neonics and how they are absorbed in plants is important because of the effects these pesticides have on honey bees and native bees. Because the synthetic chemical is absorbed into the plant, it can be found in pollen and nectar, which has a toxic effect on pollinators that feed on them.
+
 
 3. The Niwot Ridge litter and woody debris dataset was collected from the National Ecological Observatory Network, which collectively includes 81 aquatic and terrestrial sites across 20 ecoclimatic domains. 32 of these sites sample forest litter and woody debris, and we will focus on the Niwot Ridge long-term ecological research (LTER) station in Colorado. Why might we be interested in studying litter and woody debris that falls to the ground in forests? Feel free to do a brief internet search if you feel you need more background information. 
 
-#> Answer: Studying litter and woody debris that falls to the ground in forests can provide information on fire risk as well as the micro- and macroorganisms that feed on the accumulated biomass. This research can also inform scientists of the carbon sequestration occuring in the forest. 
+> Answer: Studying litter and woody debris that falls to the ground in forests can provide info on fire risk as well as the micro and macroorganisms that feed on the accumulated biomass. This research can also inform scientists of the carbon sequestration occurring in the forest. 
+
 
 4. How is litter and woody debris sampled as part of the NEON network? Read the NEON_Litterfall_UserGuide.pdf document to learn more. List three pieces of salient information about the sampling methods here: 
 
-#> Answer: 
-#* Litter and fine woody debris are collected from elevated and ground traps, respectively.
-#* Litt􏰀er and fine woody debris sampling is executed at terrestrial NEON sites that contain woody vegeta􏰁on >2m tall. Along with most of NEON’s plant produc􏰁vity measurements, sampling for this product occurs only in tower plots.
-#* In sites with forested tower airsheds, the litter sampling is targeted to take place in 20 40m x 40m plots. In sites with low-saturated vegitation, litter sampling is targeted to take place in 26 20m x 20m plots.
-#* Ground traps are sampled once per year.
-
+> Answer:
+* Litter and fine woody debris are collected from elevated and ground traps, respectively.
+* Litter and fine woody debris sampling is executed at terrestrial NEON sites that contain woody vegetation >2m tall. Along with most of NEON's plant productivity measurements, sampling for this product occurs onling in tower plots
+* In sites with forested tower airsheds, the litter sampling is targeted to take place in 20 40m x 40m plots. In sites with low-saturated vegitation, litter sampling is targeted to take place in 26 20m x 20m plots. Ground traps are sampled once per year.
 
 
 ## Obtain basic summaries of your data (Neonics)
@@ -127,7 +127,7 @@ ggplot(Neonics) +
 
 Interpret this graph. What are the most common test locations, and do they differ over time?
 
-#> Answer: The most common test locations are Lab and Field natural. Both of these test locations differ over time as the count is fewer in the 1990s and early 2000s and grows significantly from ~2008 to 2015. Both counts drop after 2015.
+> Answer: The most common test locations are Lab and Field natural. Both of these test locations differ over time as the count is fewer in the 1990s and early 2000s and grows significantly from ~2008 to 2015. Both counts drop after 2015.
 
 11. Create a bar graph of Endpoint counts. What are the two most common end points, and how are they defined? Consult the ECOTOX_CodeAppendix for more information. 
 
@@ -138,7 +138,7 @@ NeonicsBargraph <- ggplot(Neonics, aes(x = Endpoint)) +
 NeonicsBargraph
 ```
 
-#> Answer: LOEL and NOEL and the two most common end points. LOEL means Lowest-observable-effect-level and is defined as the lowest dose (concentration) producing effects that were significantly different from responses of controls. NOEL means No-observable-effect-level and is defined as the highest dose (concentration) producing effects not significantly different from responses of controls according to author's reported statistical test.
+> Answer: LOEL and NOEL and the two most common end points. LOEL means Lowest-observable-effect-level and is defined as the lowest dose (concentration) producing effects that were significantly different from responses of controls. NOEL means No-observable-effect-level and is defined as the highest dose (concentration) producing effects not significantly different from responses of controls according to author's reported statistical test.
 
 
 ## Explore your data (Litter)
@@ -201,8 +201,8 @@ ggplot(Litter) +
 
 Why is the boxplot a more effective visualization option than the violin plot in this case?
 
-#> Answer: The boxplot is more effective in this case because it allows you to see the middle 50% of the data distribution and any outliers. The violin plot doesn't tell you much because there there are many more counts of dryMass than functionalGroup so you can't really tell what the plot is signifying.
+> Answer: The boxplot is more effective in this case because it allows you to see the middle 50% of the data distribution and any outliers. The violin plot doesn't tell you much because there there are many more counts of dryMass than functionalGroup so you can't really tell what the plot is signifying.
 
 What type(s) of litter tend to have the highest biomass at these sites? 
 
-#> Answer: Needles tend to have the highest biomass at these sites. 
+> Answer: Needles tend to have the highest biomass at these sites. 
