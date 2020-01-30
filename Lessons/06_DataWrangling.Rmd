@@ -233,6 +233,10 @@ NTL.phys.data.processed <-
   select(lakename, sampledate:temperature_C) %>%
   mutate(temperature_F = (temperature_C*9/5) + 32)
   
+# If want to create a new north temperate lakes data frame, can use pipe to say "then." First take physical data set, then filter for a certain set of lakes "either peter or paul," then select different columns "lake name and sample date thru temp" and then mutate data frame to add a new column with temps in F degrees.
+# Just specify which data frame you want to pull out info from "ntl.phys.data" 
+# All operations happen at once when using pipe operator
+# Pipe operator: %>% and says use this data to filter, select, and mutate
 ```
 
 Notice that we did not place the dataset name inside the wrangling function but rather at the beginning.
@@ -241,6 +245,10 @@ Notice that we did not place the dataset name inside the wrangling function but 
 
 ```{r}
 write.csv(NTL.phys.data.PeterPaul1, row.names = FALSE, file = "./Data/Processed/NTL-LTER_Lake_ChemistryPhysics_PeterPaul_Processed.csv")
+
+# Row names = false, makes it so it doesn't create another column that just has the row numbers. Not a big deal, but cleans it up
+
+# Have to load some packages in a certain order, if this is the case, close out of R and restart with next lesson that necessitates different package
 ```
 
 ## Closing Discussion
