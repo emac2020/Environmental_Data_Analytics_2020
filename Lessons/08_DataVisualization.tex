@@ -1,0 +1,634 @@
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage[]{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\PassOptionsToPackage{hyphens}{url} % url is loaded by hyperref
+\usepackage[unicode=true]{hyperref}
+\hypersetup{
+            pdftitle={8: Data Visualization Basics},
+            pdfauthor={Environmental Data Analytics \textbar{} Kateri Salk},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage[margin=2.54cm]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+% set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+
+
+\title{8: Data Visualization Basics}
+\author{Environmental Data Analytics \textbar{} Kateri Salk}
+\date{Spring 2020}
+
+\begin{document}
+\maketitle
+
+\subsection{Objectives}\label{objectives}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Perform simple data visualizations in the R package \texttt{ggplot}
+\item
+  Develop skills to adjust aesthetics and layers in graphs
+\item
+  Apply a decision tree framework for appropriate graphing methods
+\end{enumerate}
+
+\subsection{Opening discussion}\label{opening-discussion}
+
+Effective data visualization depends on purposeful choices about graph
+types. The ideal graph type depends on the type of data and the message
+the visualizer desires to communicate. The best visualizations are clear
+and simple. My favorite resource for data visualization is
+\href{https://www.data-to-viz.com/}{Data to Viz}, which includes both a
+decision tree for visualization types and explanation pages for each
+type of data, including links to R resources to create them. Take a few
+minutes to explore this website.
+
+\subsection{Set Up}\label{set-up}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{getwd}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "/Users/emilymcnamara/Desktop/Env Data Analytics/Environmental_Data_Analytics_2020"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(tidyverse)}
+\KeywordTok{library}\NormalTok{(ggridges)}
+
+\NormalTok{PeterPaul.chem.nutrients <-}\StringTok{ }
+\StringTok{  }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"./Data/Processed/NTL-LTER_Lake_Chemistry_Nutrients_PeterPaul_Processed.csv"}\NormalTok{)}
+\NormalTok{PeterPaul.chem.nutrients.gathered <-}
+\StringTok{  }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"./Data/Processed/NTL-LTER_Lake_Nutrients_PeterPaulGathered_Processed.csv"}\NormalTok{)}
+\NormalTok{EPAair <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"./Data/Processed/EPAair_O3_PM25_NC1819_Processed.csv"}\NormalTok{)}
+
+\NormalTok{EPAair}\OperatorTok{$}\NormalTok{Date <-}\StringTok{ }\KeywordTok{as.Date}\NormalTok{(EPAair}\OperatorTok{$}\NormalTok{Date, }\DataTypeTok{format =} \StringTok{"%Y-%m-%d"}\NormalTok{)}
+\NormalTok{PeterPaul.chem.nutrients}\OperatorTok{$}\NormalTok{sampledate <-}\StringTok{ }\KeywordTok{as.Date}\NormalTok{(PeterPaul.chem.nutrients}\OperatorTok{$}\NormalTok{sampledate, }\DataTypeTok{format =} \StringTok{"%Y-%m-%d"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{ggplot}\label{ggplot}
+
+ggplot, called from the package \texttt{ggplot2}, is a graphing and
+image generation tool in R. This package is part of tidyverse. While
+base R has graphing capabilities, ggplot has the capacity for a wider
+range and more sophisticated options for graphing. ggplot has only a few
+rules:
+
+\begin{itemize}
+\tightlist
+\item
+  The first line of ggplot code always starts with \texttt{ggplot()}
+\item
+  A data frame must be specified within the \texttt{ggplot()} function.
+  Additional datasets can be specified in subsequent layers. You have to
+  tell it which data set to look for within first ggplot function.
+\item
+  Aesthetics must be specified, most commonly x and y variables but
+  including others. Aesthetics can be specified in the \texttt{ggplot()}
+  function or in subsequent layers.
+\item
+  Additional layers must be specified to fill the plot.
+\end{itemize}
+
+\subsubsection{Geoms (type of graph you are
+making)}\label{geoms-type-of-graph-you-are-making}
+
+Here are some commonly used layers for plotting in ggplot:
+
+\begin{itemize}
+\tightlist
+\item
+  geom\_bar
+\item
+  geom\_histogram
+\item
+  geom\_freqpoly
+\item
+  geom\_boxplot
+\item
+  geom\_violin
+\item
+  geom\_dotplot
+\item
+  geom\_density\_ridges
+\item
+  geom\_point
+\item
+  geom\_errorbar
+\item
+  geom\_smooth
+\item
+  geom\_line
+\item
+  geom\_area
+\item
+  geom\_abline (plus geom\_hline and geom\_vline)
+\item
+  geom\_text
+\end{itemize}
+
+\subsubsection{Aesthetics}\label{aesthetics}
+
+Here are some commonly used aesthetic types that can be manipulated in
+ggplot:
+
+\begin{itemize}
+\tightlist
+\item
+  color
+\item
+  fill
+\item
+  shape of points
+\item
+  size
+\item
+  transparency
+\end{itemize}
+
+\subsubsection{Plotting continuous variables over time: Scatterplot and
+Line
+Plot}\label{plotting-continuous-variables-over-time-scatterplot-and-line-plot}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Scatterplot}
+
+\KeywordTok{ggplot}\NormalTok{(EPAair, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ Date, }\DataTypeTok{y =}\NormalTok{ Ozone)) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{08_DataVisualization_files/figure-latex/unnamed-chunk-2-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#x and y are the column names. If run first line of code, it just makes a nice graph without any data. So, have to add which kind of plot }
+\CommentTok{# AQI values on y-axis for ozone, time on x-axis. time/date will go on x-axis}
+\CommentTok{# Not in environment, so it's not stored. Have to give it a name like example below.}
+
+\NormalTok{O3plot <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(EPAair) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ Date, }\DataTypeTok{y =}\NormalTok{ Ozone))}
+\KeywordTok{print}\NormalTok{(O3plot)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{08_DataVisualization_files/figure-latex/unnamed-chunk-2-2.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# print function will knit it when go to pdf}
+
+\CommentTok{# Fix this code}
+\NormalTok{O3plot2 <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(EPAair) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ Date, }\DataTypeTok{y =}\NormalTok{ Ozone), }\DataTypeTok{color =} \StringTok{"blue"}\NormalTok{)}
+\KeywordTok{print}\NormalTok{(O3plot2)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{08_DataVisualization_files/figure-latex/unnamed-chunk-2-3.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# The parentheses were wrong. Color shouldn't be inside the asethetic layer. Need to add a parenthesis after 'ozone' so color is in the color layer. }
+\CommentTok{# Can put your asethetics in the beginning line like in line 80 or in the the gemo_point line. Doesn't really matter.}
+
+\CommentTok{# Add additional variables}
+\NormalTok{PMplot <-}\StringTok{ }
+\StringTok{  }\KeywordTok{ggplot}\NormalTok{(EPAair, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ Month, }\DataTypeTok{y =}\NormalTok{ PM2.}\DecValTok{5}\NormalTok{, }\DataTypeTok{shape =} \KeywordTok{as.factor}\NormalTok{(Year), }
+                     \DataTypeTok{color =}\NormalTok{ Site.Name)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{()}
+\KeywordTok{print}\NormalTok{(PMplot)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{08_DataVisualization_files/figure-latex/unnamed-chunk-2-4.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Want to look at it over 'month' so make that x-axis, and then PM2.5 values will be y-axis, and what them to be different shapes. This is where we can use a color asethetic to make site names different colors}
+\CommentTok{# have to say 'as.factor(Year)' because year can be an integer like below, and need it to be a shape aesthetic but remain an integer in the actual dataframe. }
+\KeywordTok{class}\NormalTok{(EPAair}\OperatorTok{$}\NormalTok{Year)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "integer"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# PMplot looks cool, but it isn't effective because too many sites, months in integer values, and can't differentiate the shapes.}
+
+
+\CommentTok{# Separate plot with facets}
+\NormalTok{PMplot.faceted <-}
+\StringTok{  }\KeywordTok{ggplot}\NormalTok{(EPAair, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ Month, }\DataTypeTok{y =}\NormalTok{ PM2.}\DecValTok{5}\NormalTok{, }\DataTypeTok{shape =} \KeywordTok{as.factor}\NormalTok{(Year))) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{() }\OperatorTok{+}
+\StringTok{  }\KeywordTok{facet_wrap}\NormalTok{(}\KeywordTok{vars}\NormalTok{(Site.Name), }\DataTypeTok{nrow =} \DecValTok{3}\NormalTok{)}
+\KeywordTok{print}\NormalTok{(PMplot.faceted)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{08_DataVisualization_files/figure-latex/unnamed-chunk-2-5.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Want to include everything except color aesthetic. then tell it to make a geom_point. THEN say make different facets. Allows you to specify number of rows and columns and wrap the data.}
+\CommentTok{# If want them to be free can let the two different options differ rather than have them fixed. }
+\CommentTok{# Takes all 13 sites, plots them in alphabetical order and you can see differences among sites, seasonal differences, etc. As.factor year may not be best because it has them stacked on each other.}
+\CommentTok{# nrow = 3, means for all facets you want 3 rows of graphs.}
+
+\CommentTok{# Filter dataset within plot building and facet by multiple variables}
+\NormalTok{PMplot.faceted2 <-}\StringTok{ }
+\StringTok{  }\KeywordTok{ggplot}\NormalTok{(}\KeywordTok{subset}\NormalTok{(EPAair, Site.Name }\OperatorTok{==}\StringTok{ "Clemmons Middle"} \OperatorTok{|}\StringTok{ }\NormalTok{Site.Name }\OperatorTok{==}\StringTok{ "Leggett"} \OperatorTok{|}
+\StringTok{                  }\NormalTok{Site.Name }\OperatorTok{==}\StringTok{ "Bryson City"}\NormalTok{), }
+         \KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ Month, }\DataTypeTok{y =}\NormalTok{ PM2.}\DecValTok{5}\NormalTok{)) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{() }\OperatorTok{+}
+\StringTok{  }\KeywordTok{facet_grid}\NormalTok{(Site.Name }\OperatorTok{~}\StringTok{ }\NormalTok{Year) }
+\KeywordTok{print}\NormalTok{(PMplot.faceted2)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{08_DataVisualization_files/figure-latex/unnamed-chunk-2-6.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# apply whatever you would do for a filter function, but instead you're subsetting. could also do: "(EPAair, Site.Name %in% c( "Clemmons Middle", "Leggett", "Byrson City"))"}
+\CommentTok{# Then use same aesthetics. Make geom_point}
+\CommentTok{# Facet_grid allows you to facet 2 different variables instead of having years be two different shapes that you cant tell the difference. Facet_grid is very sensitive to order}
+
+\CommentTok{# Plot true time series with geom_line}
+\NormalTok{PMplot.line <-}\StringTok{ }
+\StringTok{  }\KeywordTok{ggplot}\NormalTok{(}\KeywordTok{subset}\NormalTok{(EPAair, Site.Name }\OperatorTok{==}\StringTok{ "Leggett"}\NormalTok{), }
+         \KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ Date, }\DataTypeTok{y =}\NormalTok{ PM2.}\DecValTok{5}\NormalTok{)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_line}\NormalTok{() }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{()}
+\KeywordTok{print}\NormalTok{(PMplot.line)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{08_DataVisualization_files/figure-latex/unnamed-chunk-2-7.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# time series: don't want to combine each of the sites because tracking air quality over time. have to be in same spatial construct.}
+\CommentTok{# might want to make a subset to just look at one site name. Could also change colors if want to look at more.}
+\CommentTok{# If want to add actual points, then after geom_line add geom_point}
+
+\CommentTok{# Exercise: build your own scatterplots of PeterPaul.chem.nutrients}
+
+\CommentTok{# 1. }
+\CommentTok{# Plot surface temperatures by day of  year. }
+\CommentTok{# Color your points by year, and facet by lake in two rows.}
+\NormalTok{PP.temp <-}\StringTok{ }
+\StringTok{  }\KeywordTok{ggplot}\NormalTok{(}\KeywordTok{subset}\NormalTok{(PeterPaul.chem.nutrients, depth }\OperatorTok{==}\StringTok{ }\DecValTok{0}\NormalTok{)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ daynum, }\DataTypeTok{y =}\NormalTok{ temperature_C, }\DataTypeTok{color =}\NormalTok{ year4)) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{facet_grid}\NormalTok{(}\KeywordTok{vars}\NormalTok{(lakename))}
+\KeywordTok{print}\NormalTok{(PP.temp)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{08_DataVisualization_files/figure-latex/unnamed-chunk-2-8.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# or facet_wrap(vars(lakename), nrow= 2)}
+\CommentTok{# aes are in geom_point instead of plot but would be the same. Personal preference is to put aesthetics in geom_point}
+\CommentTok{# have to do subset( depth == 0) because it asks for surface temps}
+
+\CommentTok{#2. }
+\CommentTok{# Plot temperature by date. Color your points by depth.}
+\CommentTok{# Change the size of your point to 0.5}
+
+\NormalTok{PP.temp2 <-}
+\StringTok{  }\KeywordTok{ggplot}\NormalTok{(PeterPaul.chem.nutrients) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ sampledate, }\DataTypeTok{y =}\NormalTok{ temperature_C, }\DataTypeTok{color =}\NormalTok{ depth),}
+             \DataTypeTok{size =} \FloatTok{0.5}\NormalTok{)}
+\KeywordTok{print}\NormalTok{(PP.temp2)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{08_DataVisualization_files/figure-latex/unnamed-chunk-2-9.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# this plot is not a true time series because there are two lakes and at multiple days. For true time series has to be one spot tracked over time. So have to do scatter plot instead of line graph.}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{Plotting the relationship between two continuous
+variables:
+Scatterplot}\label{plotting-the-relationship-between-two-continuous-variables-scatterplot}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Scatterplot}
+\NormalTok{lightvsDO <-}\StringTok{ }
+\StringTok{  }\KeywordTok{ggplot}\NormalTok{(PeterPaul.chem.nutrients, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ irradianceWater, }\DataTypeTok{y =}\NormalTok{ dissolvedOxygen)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{()}
+\KeywordTok{print}\NormalTok{(lightvsDO)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{08_DataVisualization_files/figure-latex/unnamed-chunk-3-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# coule flip x and y because time isn't involved }
+\CommentTok{# huge outliers in this graph. Because we know these aren't possible data points, can adjust axis}
+
+
+\CommentTok{# Adjust axes}
+\NormalTok{lightvsDOfixed <-}\StringTok{ }
+\StringTok{  }\KeywordTok{ggplot}\NormalTok{(PeterPaul.chem.nutrients, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ irradianceWater, }\DataTypeTok{y =}\NormalTok{ dissolvedOxygen)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{() }\OperatorTok{+}
+\StringTok{  }\KeywordTok{xlim}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{250}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{ylim}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{20}\NormalTok{)}
+\KeywordTok{print}\NormalTok{(lightvsDOfixed)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{08_DataVisualization_files/figure-latex/unnamed-chunk-3-2.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# This zooms in on the part of the graph that's of interest. }
+\CommentTok{# shows that across different irradiance, see a pretty similar amount of dissolved oxygen. at lower levels of radiance, see more of a spread. Could be because these points are at the bottom so respiration instead of photosynthesis. Higher oxygen concentrations closer to surface}
+
+\CommentTok{# Depth in the fields of limnology and oceanography is on a reverse scale}
+\NormalTok{tempvsdepth <-}\StringTok{ }
+\StringTok{  }\CommentTok{#ggplot(PeterPaul.chem.nutrients, aes(x = temperature_C, y = depth)) +}
+\StringTok{  }\KeywordTok{ggplot}\NormalTok{(PeterPaul.chem.nutrients, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ temperature_C, }\DataTypeTok{y =}\NormalTok{ depth, }\DataTypeTok{color =}\NormalTok{ daynum)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{() }\OperatorTok{+}
+\StringTok{  }\KeywordTok{scale_y_reverse}\NormalTok{()}
+\KeywordTok{print}\NormalTok{(tempvsdepth)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{08_DataVisualization_files/figure-latex/unnamed-chunk-3-3.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# know it's dark at greater depth, so we can flip scales, so that zero depth is at top of y-axis.}
+\CommentTok{# aes = temp and depth. then make geom_point to show data points. then use 'scale_y_reverse' to flip axis}
+\CommentTok{# shows the deeper, the colder}
+\CommentTok{# second ggplot line (line 196) shows how temp changes over days/seasons}
+
+\NormalTok{NvsP <-}
+\StringTok{  }\KeywordTok{ggplot}\NormalTok{(PeterPaul.chem.nutrients, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ tp_ug, }\DataTypeTok{y =}\NormalTok{ tn_ug, }\DataTypeTok{color =}\NormalTok{ depth)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{() }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_smooth}\NormalTok{(}\DataTypeTok{method =}\NormalTok{ lm) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_abline}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{slope =} \DecValTok{16}\NormalTok{, }\DataTypeTok{intercept =} \DecValTok{0}\NormalTok{))}
+\KeywordTok{print}\NormalTok{(NvsP)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{08_DataVisualization_files/figure-latex/unnamed-chunk-3-4.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# geom_smooth: allows u to draw a line of best fit. default method takes moving address of whatever your data look like. if want to know if linear, say 'method = lm (linear model)'}
+\CommentTok{# total P = x-axis, total N = y-axis. it's colored by depth. blue line shows linear relationship. shading around it shows confidence interval around model. if want to say "se = FALSE" you can remove the confidence interval. line of best fit (blue) appears higher than what we thought it would be (black line), meaning this system is phosphorous limited. }
+\CommentTok{#geom_abline is y = mx + b so have to provide a slope and an intercept. added 16 and 0 because it's noted that P and N should be at ratio of 16:1}
+
+\CommentTok{# Exercise: Plot relationships between air quality measurements}
+
+\CommentTok{# 1. }
+\CommentTok{# Plot AQI values for ozone by PM2.5, colored by latitude }
+\CommentTok{# Make the points 50 % transparent}
+\CommentTok{# Add a line of best fit for the linear regression of these variables.}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{Plotting continuous vs.~categorical
+variables}\label{plotting-continuous-vs.categorical-variables}
+
+A traditional way to display summary statistics of continuous variables
+is a bar plot with error bars. Let's explore why this might not be the
+most effective way to display this type of data. Navigate to the Caveats
+page on Data to Viz (\url{https://www.data-to-viz.com/caveats.html}) and
+find the page that explores barplots and error bars.
+
+What might be more effective ways to display the information? Navigate
+to the boxplots page in the Caveats section to explore further.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Box and whiskers plot}
+\NormalTok{Nutrientplot3 <-}
+\StringTok{  }\KeywordTok{ggplot}\NormalTok{(PeterPaul.chem.nutrients.gathered, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ lakename, }\DataTypeTok{y =}\NormalTok{ concentration)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_boxplot}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{color =}\NormalTok{ nutrient)) }\CommentTok{# Why didn't we use "fill"?}
+\KeywordTok{print}\NormalTok{(Nutrientplot3)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{08_DataVisualization_files/figure-latex/unnamed-chunk-4-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# plots different nutrients in lakes P and P, but want to separate by lake name. so use gathered dataset and then say x = lakename and y = concentration.}
+\CommentTok{# tell it to make geom_boxplot and can split aesthetics by saying color = nutrient}
+\CommentTok{# we didn't use fill because a lot of our concentrations are near 0, so can't actually see what that fill is and want to see what the nutrients are so use color}
+
+\CommentTok{# Dot plot}
+\NormalTok{Nutrientplot4 <-}
+\StringTok{  }\KeywordTok{ggplot}\NormalTok{(PeterPaul.chem.nutrients.gathered, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ lakename, }\DataTypeTok{y =}\NormalTok{ concentration)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_dotplot}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{color =}\NormalTok{ nutrient, }\DataTypeTok{fill =}\NormalTok{ nutrient), }\DataTypeTok{binaxis =} \StringTok{"y"}\NormalTok{, }\DataTypeTok{binwidth =} \DecValTok{1}\NormalTok{, }
+               \DataTypeTok{stackdir =} \StringTok{"center"}\NormalTok{, }\DataTypeTok{position =} \StringTok{"dodge"}\NormalTok{, }\DataTypeTok{dotsize =} \DecValTok{2}\NormalTok{) }\CommentTok{#}
+\KeywordTok{print}\NormalTok{(Nutrientplot4)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{08_DataVisualization_files/figure-latex/unnamed-chunk-4-2.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# geom_dot plot instead of geom_box plot. needs a bunch of different info. can see their meaning in "help" console}
+\CommentTok{# every measurement in dataset is plotted as a point. for data that is the same, it plots it side-by-side and makes it wider, like the points clustered around 0}
+
+\CommentTok{# Violin plot}
+\NormalTok{Nutrientplot5 <-}
+\StringTok{  }\KeywordTok{ggplot}\NormalTok{(PeterPaul.chem.nutrients.gathered, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ lakename, }\DataTypeTok{y =}\NormalTok{ concentration)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_violin}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{color =}\NormalTok{ nutrient)) }\CommentTok{#}
+\KeywordTok{print}\NormalTok{(Nutrientplot5)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{08_DataVisualization_files/figure-latex/unnamed-chunk-4-3.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# looks similar to dot plot. wider or skinnier based on how many values are centered around a point}
+
+\CommentTok{# Frequency polygons}
+\CommentTok{# Using a tidy dataset (aka not gathered) would have to add a layer for each dataset and a color outside aes for each curve}
+\NormalTok{Nutrientplot6 <-}
+\StringTok{  }\KeywordTok{ggplot}\NormalTok{(PeterPaul.chem.nutrients) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_freqpoly}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ tn_ug), }\DataTypeTok{color =} \StringTok{"darkred"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_freqpoly}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ tp_ug), }\DataTypeTok{color =} \StringTok{"darkblue"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_freqpoly}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ nh34), }\DataTypeTok{color =} \StringTok{"blue"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_freqpoly}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ no23), }\DataTypeTok{color =} \StringTok{"royalblue"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_freqpoly}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ po4), }\DataTypeTok{color =} \StringTok{"red"}\NormalTok{) }
+\KeywordTok{print}\NormalTok{(Nutrientplot6)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+\end{verbatim}
+
+\includegraphics{08_DataVisualization_files/figure-latex/unnamed-chunk-4-4.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Using a gathered dataset}
+\NormalTok{Nutrientplot7 <-}\StringTok{   }
+\StringTok{  }\KeywordTok{ggplot}\NormalTok{(PeterPaul.chem.nutrients.gathered) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_freqpoly}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ concentration, }\DataTypeTok{color =}\NormalTok{ nutrient))}
+\KeywordTok{print}\NormalTok{(Nutrientplot7)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+\end{verbatim}
+
+\includegraphics{08_DataVisualization_files/figure-latex/unnamed-chunk-4-5.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# same data as frequency polygon (line 256) but much easier and more clear}
+
+\CommentTok{# Frequency polygons have the risk of becoming spaghetti plots. }
+\CommentTok{# See https://www.data-to-viz.com/caveat/spaghetti.html for more info.}
+
+\CommentTok{# Ridgeline plot}
+\NormalTok{Nutrientplot6 <-}
+\StringTok{  }\KeywordTok{ggplot}\NormalTok{(PeterPaul.chem.nutrients.gathered, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{y =}\NormalTok{ nutrient, }\DataTypeTok{x =}\NormalTok{ concentration)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_density_ridges}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{fill =}\NormalTok{ lakename), }\DataTypeTok{alpha =} \FloatTok{0.5}\NormalTok{) }\CommentTok{#}
+\KeywordTok{print}\NormalTok{(Nutrientplot6)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Picking joint bandwidth of 10.9
+\end{verbatim}
+
+\includegraphics{08_DataVisualization_files/figure-latex/unnamed-chunk-4-6.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# alpha = transparency piece and specified outside of aesthetic}
+
+\CommentTok{# Exercise: Plot distributions of AQI values for EPAair}
+
+\CommentTok{# 1. }
+\CommentTok{# Create several types of plots depicting PM2.5, divided by year. }
+\CommentTok{# Choose which plot displays the data best and justify your choice. }
+\end{Highlighting}
+\end{Shaded}
+
+\end{document}
