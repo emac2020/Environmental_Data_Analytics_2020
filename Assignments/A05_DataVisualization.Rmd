@@ -1,6 +1,6 @@
 ---
 title: "Assignment 5: Data Visualization"
-author: "Student Name"
+author: "Emily McNamara"
 output: pdf_document
 geometry: margin=2.54cm
 editor_options: 
@@ -29,9 +29,42 @@ The completed exercise is due on Tuesday, February 11 at 1:00 pm.
 
 ```{r}
 #1
+getwd()
+library(tidyverse)
+library(cowplot)
+
+PeterPaul.chem.nutrients <- 
+  read.csv("./Data/Processed/NTL-LTER_Lake_Chemistry_Nutrients_PeterPaul_Processed.csv")
+
+PeterPaul.chem.physics <- 
+  read.csv("./Data/Processed/NTL-LTER_Lake_ChemistryPhysics_PeterPaul_Processed.csv")
+
+PeterPaul.nutrients <- 
+  read.csv("./Data/Processed/NTL-LTER_Lake_Nutrients_PeterPaul_Processed.csv")
+
+PeterPaul.chem.nutrients.gathered <-
+  read.csv("./Data/Processed/NTL-LTER_Lake_Nutrients_PeterPaulGathered_Processed.csv")
+
+NIWO.Litter <-
+  read.csv("./Data/Processed/NEON_NIWO_Litter_mass_trap_Processed.csv")
+
 
 
 #2
+class(PeterPaul.chem.nutrients$sampledate)
+PeterPaul.chem.nutrients$sampledate <- as.Date(PeterPaul.chem.nutrients$sampledate, format = "%Y-%m-%d")
+
+class(PeterPaul.chem.physics$sampledate)
+PeterPaul.chem.physics$sampledate <- as.Date(PeterPaul.chem.physics$sampledate, format = "%Y-%m-%d")
+
+class(PeterPaul.nutrients$sampledate)
+PeterPaul.nutrients$sampledate <- as.Date(PeterPaul.nutrients$sampledate, format = "%Y-%m-%d")
+
+class(PeterPaul.chem.nutrients.gathered$sampledate)
+PeterPaul.chem.nutrients.gathered$sampledate <- as.Date(PeterPaul.chem.nutrients.gathered$sampledate, format = "%Y-%m-%d")
+
+class(NIWO.Litter$collectDate)
+NIWO.Litter$collectDate <- as.Date(NIWO.Litter$collectDate, format = "%Y-%m-%d")
 
 
 ```
