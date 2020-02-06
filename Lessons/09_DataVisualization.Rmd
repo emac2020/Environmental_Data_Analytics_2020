@@ -40,15 +40,20 @@ O3plot <- ggplot(EPAair) +
   geom_point(aes(x = Date, y = Ozone)) 
 print(O3plot)
 
+
 O3plot1 <- ggplot(EPAair) +
   geom_point(aes(x = Date, y = Ozone)) +
   theme_gray()
 print(O3plot1)
 
+# GGplot comes with several pre-made themes. i.e. theme_gray
+
 O3plot2 <- ggplot(EPAair) +
   geom_point(aes(x = Date, y = Ozone)) +
   theme_bw()
 print(O3plot2)
+
+# Theme_bw includes dark line all around plot and light line to show dif. units of axis
 
 O3plot3 <- ggplot(EPAair) +
   geom_point(aes(x = Date, y = Ozone)) +
@@ -59,6 +64,9 @@ O3plot4 <- ggplot(EPAair) +
   geom_point(aes(x = Date, y = Ozone)) +
   theme_classic()
 print(O3plot4)
+
+# Kateri's favorite. just outlines axis.
+#Themes don't adjust text size, label colors, anything to due with legend (position/justification)
 ```
 
 Notice that some aspects of your graph have not been adjusted, including: 
@@ -74,18 +82,28 @@ mytheme <- theme_classic(base_size = 14) +
   theme(axis.text = element_text(color = "black"), 
         legend.position = "top") #alternative: legend.position + legend.justification
 
+# Says: start with theme_classic, make base size 14, plus change things aside from general theme like axis.test and legend (can say top, left, right, bottom or 1 and 1 to be right inside plot)
 # options: call the theme in each plot or set the theme at the start. 
+
+# Can add "my_theme" to any plot
 
 O3plot5 <- ggplot(EPAair) +
   geom_point(aes(x = Date, y = Ozone)) +
   mytheme
 print(O3plot5)  
+# colors on tickmarks are black, text is a little bigger but overall pulling from theme_classic. 
 
 theme_set(mytheme)
+# can use this to set it as theme at beginning of session and then all plots will use it so you don't have to call it up for each specific plot
 
 O3plot6 <- ggplot(EPAair) +
   geom_point(aes(x = Date, y = Ozone))
 print(O3plot6)  
+
+# so now this runs with all the elements of "my_theme" without having to write it in code
+# help function has a lot of info on different elements you can change
+# designated as "large gg" in 'Environment' because we used a theme, but shows up regular once theme is set
+# text size is a common thing to change (figure for paper vs. presentation will necessitate different font sizes)
 
 ```
 
@@ -97,7 +115,7 @@ While the theme allows us to set multiple aspects of plots, ggplot allows us to 
 O3plot7 <- ggplot(EPAair, aes(x = Date, y = Ozone)) +
   geom_hline(yintercept = 50, lty = 2) +
   geom_hline(yintercept = 100, lty = 2) +
-  geom_point(alpha = 0.5, size = 1.5) +
+  geom_point(alpha = 0.5, size = 1.5) + 
   geom_text(x = as.Date("2020-01-01"), y = 45, label = "good", hjust = 1, fontface = "bold") +
   geom_text(x = as.Date("2020-01-01"), y = 95, label = "moderate", hjust = 1, fontface = "bold") +
   geom_text(x = as.Date("2020-01-01"), y = 120, label = "unhealthy (sensitive groups)", hjust = 1, fontface = "bold") +
@@ -107,6 +125,17 @@ O3plot7 <- ggplot(EPAair, aes(x = Date, y = Ozone)) +
   theme(axis.text.x = element_text(angle = 45,  hjust = 1))
 print(O3plot7)  
 
+
+# New plot includes: Same things as before in first line of code followed by several layers
+# AQI values are set to standard scale across all different pollutants thats associated with 'good' 'healthy' 'unhealthy' etc. so want to designate where we are crossing into different zones of air quality 
+#geom_hline: lty means line type. lty = 2 means dashed line. can also adjust thickness. 
+# geom_point aesthetic added after adding horizontal line because ggplot adds things in layers so it's going to put lines first and then points so points aren't covered by line.
+# Geom_text: have to specify where you want to put it on plot (x and y coords), where label will be, font face = bold, hjust is where text will be (1 = right side, -1 = left. Y is for location of labels on y-axis, so they'll be at 45, 95, and 120 on y-axis
+#alpha = .5 means that it's 50% transparent with size 1.5
+# scale_x_date = start and end point. Makes a break every 2/3/4/etc months by saying date_breaks = '2 months'
+# date_labels: %b = 3 letter month, %B = whole month spelled out, %y = 2 digit year
+# ylab = express the units as well. anything within parenthesis will be specified as is and [3] outside of parentheses is a subscript
+# Put angle at 45 degrees and hjust = 1 makes it on right side
 ```
 
 ### Color palettes
@@ -125,12 +154,12 @@ Does your color palette communicate additional and necessary information? If the
 
 Perception is key! Choose palettes that are visually pleasing and will communicate what you are hoping your audience to perceive.
 
-RColorBrewer (package)
+RColorBrewer (package). Can choose number of data classes you have, pull specific hex codes, can pick various palettes
 
 * http://colorbrewer2.org
 * https://moderndata.plot.ly/create-colorful-graphs-in-r-with-rcolorbrewer-and-plotly/
 
-viridis and viridisLite (packages)
+viridis and viridisLite (packages). One of Kateri's favorites
 
 * https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html
 * https://ggplot2.tidyverse.org/reference/scale_viridis.html
@@ -147,12 +176,12 @@ wesanderson (package)
 
 * https://github.com/karthik/wesanderson
 
-nationalparkcolors (package)
+nationalparkcolors (package). Includes code to install color palettes
 
 * https://github.com/katiejolly/nationalparkcolors
 
 ```{r, warning = FALSE}
-# install.packages("viridis")
+install.packages("viridis")
 # install.packages("RColorBrewer")
 # install.packages("colormap")
 library(viridis)
@@ -182,6 +211,8 @@ NvsP2 <-
   theme(legend.position = "right", 
         legend.text = element_text(size = 12), legend.title = element_text(size = 12))
 print(NvsP2)
+
+# one of scale color viridis or distiller should be commented out.
 
 # change your y axis label to list concentration in micrograms per liter
 # remove your x axis label

@@ -280,6 +280,10 @@ Nutrientplot6 <-
   geom_density_ridges(aes(fill = lakename), alpha = 0.5) #
 print(Nutrientplot6)
 
+# Categories always on y-axis because they are stacked over specific concentrations on x-axis
+
+# Barplots don't work if have different sample sizes, means and sd could look different if plot all the values when looking at this data. Only use barplots for count data. Use other plots when looking at distributions
+
 # alpha = transparency piece and specified outside of aesthetic
 
 # Exercise: Plot distributions of AQI values for EPAair
