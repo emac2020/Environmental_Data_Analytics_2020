@@ -48,14 +48,17 @@ NIWO.Litter <-
 
 #2
 class(PeterPaul.chem.nutrients$sampledate)
-PeterPaul.chem.nutrients$sampledate <- as.Date(PeterPaul.chem.nutrients$sampledate, format = "%Y-%m-%d")
+PeterPaul.chem.nutrients$sampledate <- 
+  as.Date(PeterPaul.chem.nutrients$sampledate, format = "%Y-%m-%d")
 
 
 class(PeterPaul.chem.nutrients.gathered$sampledate)
-PeterPaul.chem.nutrients.gathered$sampledate <- as.Date(PeterPaul.chem.nutrients.gathered$sampledate, format = "%Y-%m-%d")
+PeterPaul.chem.nutrients.gathered$sampledate <- 
+  as.Date(PeterPaul.chem.nutrients.gathered$sampledate, format = "%Y-%m-%d")
 
 class(NIWO.Litter$collectDate)
-NIWO.Litter$collectDate <- as.Date(NIWO.Litter$collectDate, format = "%Y-%m-%d")
+NIWO.Litter$collectDate <- 
+  as.Date(NIWO.Litter$collectDate, format = "%Y-%m-%d")
 
 
 ```
@@ -141,15 +144,18 @@ print(TN.Boxplot)
 
 # 3 Graphs Combined
 
-library(gridExtra)
 
-three.plots <- plot_grid(Temp.Boxplot, TP.Boxplot, TN.Boxplot, labels = c('Temp', 'TP', 'TN'), label_size = 10, align = "vh")
+three.plots <- plot_grid(Temp.Boxplot, TP.Boxplot, TN.Boxplot, labels = c('Temp', 'TP', 'TN'), 
+                         label_size = 10, align = "vh", nrow = 2)
 
 print(three.plots)
 
 legend <- get_legend(Temp.Boxplot + theme(legend.position = "right"))
 
 plot_grid(three.plots, legend, rel_widths = c(3, .4))
+          
+          
+
 
 
 
@@ -158,7 +164,7 @@ plot_grid(three.plots, legend, rel_widths = c(3, .4))
 
 Question: What do you observe about the variables of interest over seasons and between lakes? 
 
-> Answer: 
+> Answer: In the summer, Paul Lake has slightly higher temperatures, but lower TP and TN concentrations. 
 
 6. [Niwot Ridge] Plot a subset of the litter dataset by displaying only the "Needles" functional group. Plot the dry mass of needle litter by date and separate by NLCD class with a color aesthetic. (no need to adjust the name of each land use)
 
@@ -166,10 +172,29 @@ Question: What do you observe about the variables of interest over seasons and b
 
 ```{r}
 
+# 6
 
+NIWO.needles <- 
+  ggplot(subset(NIWO.Litter, functionalGroup == "Needles"),
+         aes(x = collectDate, y = dryMass, color = nlcdClass)) +
+  geom_point() 
+
+ print(NIWO.needles)
+
+
+ 
+# 7
+ NIWO.needles.facet <- 
+   ggplot(subset(NIWO.Litter, functionalGroup == "Needles"),
+         aes(x = collectDate, y = dryMass)) +
+  geom_point() +
+   facet_wrap(vars(nlcdClass), nrow = 3)
+
+  print(NIWO.needles.facet)
+ 
 
 ```
 
 Question: Which of these plots (6 vs. 7) do you think is more effective, and why? 
 
-> Answer: 
+> Answer: Plot 7 is more effective because you are able to easily differentiate the NLCD classes whereas plot 6 displayed all the NLCD classes within each collection year so it was difficult to distinguish the dry mass and collection date of each class. 
