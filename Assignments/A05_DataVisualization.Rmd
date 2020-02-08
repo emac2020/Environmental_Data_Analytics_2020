@@ -32,15 +32,12 @@ The completed exercise is due on Tuesday, February 11 at 1:00 pm.
 getwd()
 library(tidyverse)
 library(cowplot)
+library(viridis)
+library(RColorBrewer)
+library(colormap)
 
 PeterPaul.chem.nutrients <- 
   read.csv("./Data/Processed/NTL-LTER_Lake_Chemistry_Nutrients_PeterPaul_Processed.csv")
-
-PeterPaul.chem.physics <- 
-  read.csv("./Data/Processed/NTL-LTER_Lake_ChemistryPhysics_PeterPaul_Processed.csv")
-
-PeterPaul.nutrients <- 
-  read.csv("./Data/Processed/NTL-LTER_Lake_Nutrients_PeterPaul_Processed.csv")
 
 PeterPaul.chem.nutrients.gathered <-
   read.csv("./Data/Processed/NTL-LTER_Lake_Nutrients_PeterPaulGathered_Processed.csv")
@@ -49,16 +46,10 @@ NIWO.Litter <-
   read.csv("./Data/Processed/NEON_NIWO_Litter_mass_trap_Processed.csv")
 
 
-
 #2
 class(PeterPaul.chem.nutrients$sampledate)
 PeterPaul.chem.nutrients$sampledate <- as.Date(PeterPaul.chem.nutrients$sampledate, format = "%Y-%m-%d")
 
-class(PeterPaul.chem.physics$sampledate)
-PeterPaul.chem.physics$sampledate <- as.Date(PeterPaul.chem.physics$sampledate, format = "%Y-%m-%d")
-
-class(PeterPaul.nutrients$sampledate)
-PeterPaul.nutrients$sampledate <- as.Date(PeterPaul.nutrients$sampledate, format = "%Y-%m-%d")
 
 class(PeterPaul.chem.nutrients.gathered$sampledate)
 PeterPaul.chem.nutrients.gathered$sampledate <- as.Date(PeterPaul.chem.nutrients.gathered$sampledate, format = "%Y-%m-%d")
@@ -73,6 +64,11 @@ NIWO.Litter$collectDate <- as.Date(NIWO.Litter$collectDate, format = "%Y-%m-%d")
 
 ```{r}
 
+mytheme <- theme_classic(base_size = 14) +
+  theme(axis.text = element_text(color = "black"), 
+        legend.position = "top")
+
+theme_set(mytheme)
 
 ```
 
@@ -83,6 +79,19 @@ For numbers 4-7, create ggplot graphs and adjust aesthetics to follow best pract
 
 ```{r}
 
+NTL.TP.PO4 <- 
+  ggplot(PeterPaul.chem.nutrients, aes(x = tp_ug, y = po4, color = depth, shape = lakename)) +
+  geom_point() +
+   labs(x = expression(paste("TP ( ", mu,"g/L)")),
+       y = expression(paste("Po4 ( ", mu,"g/L)")),
+      color = "Depth", shape = "Lake") +
+  scale_color_distiller(palette = "Blues", direction = 1) +
+  scale_y_continuous(limits = c(0,40)) +
+  scale_x_continuous(limits = c(0, 145)) +
+  geom_smooth(method='lm', formula= y~x, color = "black") +
+  theme(legend.position = "right", 
+        legend.text = element_text(size = 12), legend.title = element_text(size = 12))
+print(NTL.TP.PO4)  
 
 
 ```
@@ -91,6 +100,58 @@ For numbers 4-7, create ggplot graphs and adjust aesthetics to follow best pract
 5. [NTL-LTER] Make three separate boxplots of (a) temperature, (b) TP, and (c) TN, with month as the x axis and lake as a color aesthetic. Then, create a cowplot that combines the three graphs. Make sure that only one legend is present and that graph axes are aligned.
 
 ```{r}
+
+# Temperature Boxplot
+
+Temp.Boxplot <- 
+  ggplot(PeterPaul.chem.nutrients, aes(x = month, y = temperature_C, color = lakename)) +
+  geom_boxplot() +
+  labs(x = expression(paste("Month")),
+       y = expression(paste("Temperature" (degree~C))), color = "Lake") +
+  scale_y_continuous(expand = c(0,0)) + 
+  scale_color_viridis(discrete = TRUE, option = "viridis", end = 0.8) +
+  theme(legend.position = "none")
+print(Temp.Boxplot)
+
+
+# TP Boxplot
+
+TP.Boxplot <- 
+  ggplot(PeterPaul.chem.nutrients, aes(x = month, y = tp_ug, color = lakename)) +
+  geom_boxplot() +
+  labs(x = expression(paste("Month")),
+       y = expression(paste("TP"~ (mu*g / L))), color = "Lake") +
+  scale_y_continuous(expand = c(0,0)) +
+  scale_color_viridis(discrete = TRUE, option = "viridis", end = 0.8) +
+  theme(legend.position = "none")
+print(TP.Boxplot)
+
+# TN Boxplot
+
+TN.Boxplot <- 
+  ggplot(PeterPaul.chem.nutrients, aes(x = month, y = tn_ug, color = lakename)) +
+  geom_boxplot() +
+  labs(x = expression(paste("Month")),
+       y = expression(paste("TN"~ (mu*g / L))), color = "Lake") +
+   scale_y_continuous(expand = c(0,0)) +
+  scale_color_viridis(discrete = TRUE, option = "viridis", end = 0.8) +
+  theme(legend.position = "none")
+print(TN.Boxplot)
+
+
+# 3 Graphs Combined
+
+library(gridExtra)
+
+three.plots <- plot_grid(Temp.Boxplot, TP.Boxplot, TN.Boxplot, labels = c('Temp', 'TP', 'TN'), label_size = 10, align = "vh")
+
+print(three.plots)
+
+legend <- get_legend(Temp.Boxplot + theme(legend.position = "right"))
+
+plot_grid(three.plots, legend, rel_widths = c(3, .4))
+
+
 
 
 ```
