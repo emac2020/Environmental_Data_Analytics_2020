@@ -1,15 +1,15 @@
-almonds <- read.csv("MAIN SURVEY_Feb_5.csv")
+almonds <- read.csv("MAIN SURVEY_CLEANED.csv")
 
 CC.county.interest <- almonds[,c("Q5","Q8", "Q11", "Q12")]
 
 
 #,2 = proportions based on column
 
-CC.table
 
-Socal: Tulare, Kings, Kern, Fresno
-Central: Sac, San Joaquin, Stan, Merced, Madera
-North:Solano, Yolo, Sutter, Yuba, Butte, Colusa, Glenn, Tehama
+#Socal: Tulare, Kings, Kern, Fresno
+#Central: Sac, San Joaquin, Stan, Merced, Madera
+#North:Solano, Yolo, Sutter, Yuba, Butte, Colusa, Glenn, Tehama
+
 # create new variable, attach to DF
 # excluding mult. counties. Use package "stringR" to search through column and any row in column that contains text, it will ID and categorize 
 
@@ -35,6 +35,26 @@ CC.table <- prop.table(table(CC.county.interest$Region, CC.county.interest$Cover
 
 CC.table
 
-# In the north: 81% have/want cover, in South: 33% have/want cover
+# In the north: 80% have/want cover, in South: 34% have planted or are interested in planting cover cover
+
+# Interest in CC depending on who oversees pollination mgmt
+
+Pollinator.mgmt.CC <- almonds[, c("Q6", "Q8", "Q11", "Q12")]
+
+Poll.mgmt <- ifelse(Pollinator.mgmt.CC$Q6 == "Owner of the almond orchard(s)" | Pollinator.mgmt.CC$Q6 ==  "Farm manager" | 
+                      Pollinator.mgmt.CC$Q6 == "Independent PCA (not affiliated with an agricultural retailer)" |
+                      Pollinator.mgmt.CC$Q6 == "Affiliated PCA (with an agricultural retailer" |
+                      Pollinator.mgmt.CC$Q6 ==  "Pesticide applicator" | Pollinator.mgmt.CC$Q6 == "Beekeeper" |
+                      Pollinator.mgmt.CC$Q6 == "Bee broker", 1, 0)
+head(Poll.mgmt)
 
 
+poll.mgmt.Independent <- ifelse(Pollinator.mgmt.CC$Q6 == "Independent PCA (not affiliated with an agricultural retailer)", 1, 0)
+
+poll.mgmt.CC.interest <- ifelse(Pollinator.mgmt.CC$Q8 == "Yes" | Pollinator.mgmt.CC$Q11 == "Yes", 1, 0)
+
+Pollinator.mgmt.CC.table <- prop.table(table(poll.mgmt.Independent, poll.mgmt.CC.interest), 1) 
+
+Pollinator.mgmt.CC.table
+
+# 60% of people who said an independent PCA was one of the most influential people in pollinator mgmt were 
