@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019) (preloaded format=pdflatex 2020.1.27)  8 FEB 2020 16:27
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019) (preloaded format=pdflatex 2020.1.27)  9 FEB 2020 12:14
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -679,15 +679,15 @@ onmental_Data_Analytics_2020"[]
  []
 
 
-Overfull \hbox (144.49283pt too wide) in paragraph at lines 177--177
+Overfull \hbox (244.24254pt too wide) in paragraph at lines 177--177
 []\T1/lmtt/m/n/10 ## -- Attaching packages ------------------------------------
-------------------------------------- tidyverse 1.3.0 --[] 
+-------------------------------------------------------- tidyverse 1.3.0 --[] 
  []
 
 
-Overfull \hbox (144.49283pt too wide) in paragraph at lines 190--190
+Overfull \hbox (244.24254pt too wide) in paragraph at lines 190--190
 []\T1/lmtt/m/n/10 ## -- Conflicts ---------------------------------------------
-------------------------------- tidyverse_conflicts() --[] 
+-------------------------------------------------- tidyverse_conflicts() --[] 
  []
 
 [1
@@ -802,7 +802,7 @@ ist/fonts/type1/public/lm/lmr17.pfb></usr/local/texlive/2019basic/texmf-dist/fo
 nts/type1/public/lm/lmtk10.pfb></usr/local/texlive/2019basic/texmf-dist/fonts/t
 ype1/public/lm/lmtt10.pfb></usr/local/texlive/2019basic/texmf-dist/fonts/type1/
 public/lm/lmtti10.pfb>
-Output written on A05_DataVisualization.pdf (10 pages, 372844 bytes).
+Output written on A05_DataVisualization.pdf (10 pages, 372843 bytes).
 PDF statistics:
  186 PDF objects out of 1000 (max. 8388607)
  147 compressed objects within 2 object streams
