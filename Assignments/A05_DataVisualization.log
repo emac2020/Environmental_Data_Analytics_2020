@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019) (preloaded format=pdflatex 2020.1.27)  9 FEB 2020 12:14
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019) (preloaded format=pdflatex 2020.1.27)  10 FEB 2020 15:39
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -679,15 +679,15 @@ onmental_Data_Analytics_2020"[]
  []
 
 
-Overfull \hbox (244.24254pt too wide) in paragraph at lines 177--177
+Overfull \hbox (212.74263pt too wide) in paragraph at lines 177--177
 []\T1/lmtt/m/n/10 ## -- Attaching packages ------------------------------------
--------------------------------------------------------- tidyverse 1.3.0 --[] 
+-------------------------------------------------- tidyverse 1.3.0 --[] 
  []
 
 
-Overfull \hbox (244.24254pt too wide) in paragraph at lines 190--190
+Overfull \hbox (212.74263pt too wide) in paragraph at lines 190--190
 []\T1/lmtt/m/n/10 ## -- Conflicts ---------------------------------------------
--------------------------------------------------- tidyverse_conflicts() --[] 
+-------------------------------------------- tidyverse_conflicts() --[] 
  []
 
 [1
@@ -695,7 +695,7 @@ Overfull \hbox (244.24254pt too wide) in paragraph at lines 190--190
 {/usr/local/texlive/2019basic/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2
 ]
 LaTeX Font Info:    Trying to load font information for TS1+lmtt on input line 
-335.
+359.
 (/usr/local/texlive/2019basic/texmf-dist/tex/latex/lm/ts1lmtt.fd
 File: ts1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
@@ -705,91 +705,79 @@ File: "A05_DataVisualization_files/figure-latex/""unnamed-chunk-3-1".pdf Graphi
 c file (type pdf)
 <use "A05_DataVisualization_files/figure-latex/""unnamed-chunk-3-1".pdf>
 Package pdftex.def Info: "A05_DataVisualization_files/figure-latex/""unnamed-ch
-unk-3-1".pdf  used on input line 354.
+unk-3-1".pdf  used on input line 378.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[3 <./A05_DataVisualization_files/figure-latex/unnamed-chunk-3-1.pdf>]
-<"A05_DataVisualization_files/figure-latex/""unnamed-chunk-4-1".pdf, id=67, 469
+[3]
+<"A05_DataVisualization_files/figure-latex/""unnamed-chunk-4-1".pdf, id=56, 469
 .755pt x 325.215pt>
 File: "A05_DataVisualization_files/figure-latex/""unnamed-chunk-4-1".pdf Graphi
 c file (type pdf)
 <use "A05_DataVisualization_files/figure-latex/""unnamed-chunk-4-1".pdf>
 Package pdftex.def Info: "A05_DataVisualization_files/figure-latex/""unnamed-ch
-unk-4-1".pdf  used on input line 387.
+unk-4-1".pdf  used on input line 411.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-
-Underfull \vbox (badness 1460) detected at line 403
- []
-
-[4 <./A05_DataVisualization_files/figure-latex/unnamed-chunk-4-1.pdf>]
-<"A05_DataVisualization_files/figure-latex/""unnamed-chunk-4-2".pdf, id=78, 469
+[4 <./A05_DataVisualization_files/figure-latex/unnamed-chunk-3-1.pdf>]
+<"A05_DataVisualization_files/figure-latex/""unnamed-chunk-4-2".pdf, id=71, 469
 .755pt x 325.215pt>
 File: "A05_DataVisualization_files/figure-latex/""unnamed-chunk-4-2".pdf Graphi
 c file (type pdf)
 <use "A05_DataVisualization_files/figure-latex/""unnamed-chunk-4-2".pdf>
 Package pdftex.def Info: "A05_DataVisualization_files/figure-latex/""unnamed-ch
-unk-4-2".pdf  used on input line 409.
+unk-4-2".pdf  used on input line 433.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-<"A05_DataVisualization_files/figure-latex/""unnamed-chunk-4-3".pdf, id=79, 469
+[5 <./A05_DataVisualization_files/figure-latex/unnamed-chunk-4-1.pdf>]
+<"A05_DataVisualization_files/figure-latex/""unnamed-chunk-4-3".pdf, id=82, 469
 .755pt x 325.215pt>
 File: "A05_DataVisualization_files/figure-latex/""unnamed-chunk-4-3".pdf Graphi
 c file (type pdf)
 <use "A05_DataVisualization_files/figure-latex/""unnamed-chunk-4-3".pdf>
 Package pdftex.def Info: "A05_DataVisualization_files/figure-latex/""unnamed-ch
-unk-4-3".pdf  used on input line 431.
+unk-4-3".pdf  used on input line 455.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[5 <./A05_DataVisualization_files/figure-latex/unnamed-chunk-4-2.pdf>]
-<"A05_DataVisualization_files/figure-latex/""unnamed-chunk-4-4".pdf, id=90, 469
+[6 <./A05_DataVisualization_files/figure-latex/unnamed-chunk-4-2.pdf>]
+<"A05_DataVisualization_files/figure-latex/""unnamed-chunk-4-4".pdf, id=93, 469
 .755pt x 325.215pt>
 File: "A05_DataVisualization_files/figure-latex/""unnamed-chunk-4-4".pdf Graphi
 c file (type pdf)
 <use "A05_DataVisualization_files/figure-latex/""unnamed-chunk-4-4".pdf>
 Package pdftex.def Info: "A05_DataVisualization_files/figure-latex/""unnamed-ch
-unk-4-4".pdf  used on input line 461.
+unk-4-4".pdf  used on input line 489.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[6 <./A05_DataVisualization_files/figure-latex/unnamed-chunk-4-3.pdf>]
-<"A05_DataVisualization_files/figure-latex/""unnamed-chunk-4-5".pdf, id=101, 46
-9.755pt x 325.215pt>
-File: "A05_DataVisualization_files/figure-latex/""unnamed-chunk-4-5".pdf Graphi
-c file (type pdf)
-<use "A05_DataVisualization_files/figure-latex/""unnamed-chunk-4-5".pdf>
-Package pdftex.def Info: "A05_DataVisualization_files/figure-latex/""unnamed-ch
-unk-4-5".pdf  used on input line 479.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[7 <./A05_DataVisualization_files/figure-latex/unnamed-chunk-4-4.pdf>]
-<"A05_DataVisualization_files/figure-latex/""unnamed-chunk-5-1".pdf, id=114, 46
+[7 <./A05_DataVisualization_files/figure-latex/unnamed-chunk-4-3.pdf>]
+<"A05_DataVisualization_files/figure-latex/""unnamed-chunk-5-1".pdf, id=105, 46
 9.755pt x 325.215pt>
 File: "A05_DataVisualization_files/figure-latex/""unnamed-chunk-5-1".pdf Graphi
 c file (type pdf)
 <use "A05_DataVisualization_files/figure-latex/""unnamed-chunk-5-1".pdf>
 Package pdftex.def Info: "A05_DataVisualization_files/figure-latex/""unnamed-ch
-unk-5-1".pdf  used on input line 515.
+unk-5-1".pdf  used on input line 529.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[8 <./A05_DataVisualization_files/figure-latex/unnamed-chunk-4-5.pdf>]
-<"A05_DataVisualization_files/figure-latex/""unnamed-chunk-5-2".pdf, id=128, 46
+[8 <./A05_DataVisualization_files/figure-latex/unnamed-chunk-4-4.pdf>]
+<"A05_DataVisualization_files/figure-latex/""unnamed-chunk-5-2".pdf, id=119, 46
 9.755pt x 325.215pt>
 File: "A05_DataVisualization_files/figure-latex/""unnamed-chunk-5-2".pdf Graphi
 c file (type pdf)
 <use "A05_DataVisualization_files/figure-latex/""unnamed-chunk-5-2".pdf>
 Package pdftex.def Info: "A05_DataVisualization_files/figure-latex/""unnamed-ch
-unk-5-2".pdf  used on input line 530.
+unk-5-2".pdf  used on input line 545.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 [9 <./A05_DataVisualization_files/figure-latex/unnamed-chunk-5-1.pdf>]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 542.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 557.
 [10 <./A05_DataVisualization_files/figure-latex/unnamed-chunk-5-2.pdf>]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 542.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 557.
 (./A05_DataVisualization.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 542.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 542.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 557.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 557.
 Package rerunfilecheck Info: File `A05_DataVisualization.out' has not changed.
 (rerunfilecheck)             Checksum: E8620264F7A5F31D4F2D754A2324B0CA;573.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 542.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 557.
  ) 
 Here is how much of TeX's memory you used:
- 13157 strings out of 493610
- 194046 string characters out of 6159293
+ 13154 strings out of 493610
+ 193695 string characters out of 6159293
  300350 words of memory out of 5000000
- 17095 multiletter control sequences out of 15000+600000
- 34186 words of font info for 55 fonts, out of 8000000 for 9000
+ 17090 multiletter control sequences out of 15000+600000
+ 34269 words of font info for 56 fonts, out of 8000000 for 9000
  319 hyphenation exceptions out of 8191
  34i,6n,42p,984b,446s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2019basic/texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc}{/usr/
@@ -802,10 +790,10 @@ ist/fonts/type1/public/lm/lmr17.pfb></usr/local/texlive/2019basic/texmf-dist/fo
 nts/type1/public/lm/lmtk10.pfb></usr/local/texlive/2019basic/texmf-dist/fonts/t
 ype1/public/lm/lmtt10.pfb></usr/local/texlive/2019basic/texmf-dist/fonts/type1/
 public/lm/lmtti10.pfb>
-Output written on A05_DataVisualization.pdf (10 pages, 372843 bytes).
+Output written on A05_DataVisualization.pdf (10 pages, 346197 bytes).
 PDF statistics:
- 186 PDF objects out of 1000 (max. 8388607)
- 147 compressed objects within 2 object streams
+ 177 PDF objects out of 1000 (max. 8388607)
+ 141 compressed objects within 2 object streams
  28 named destinations out of 1000 (max. 500000)
- 8273 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 8268 words of extra memory for PDF output out of 10000 (max. 10000000)
 

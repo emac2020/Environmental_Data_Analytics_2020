@@ -173,7 +173,7 @@ The completed exercise is due on Tuesday, February 11 at 1:00 pm.
 \end{Shaded}
 
 \begin{verbatim}
-## -- Attaching packages -------------------------------------------------------------------------------------------- tidyverse 1.3.0 --
+## -- Attaching packages -------------------------------------------------------------------------------------- tidyverse 1.3.0 --
 \end{verbatim}
 
 \begin{verbatim}
@@ -184,7 +184,7 @@ The completed exercise is due on Tuesday, February 11 at 1:00 pm.
 \end{verbatim}
 
 \begin{verbatim}
-## -- Conflicts ----------------------------------------------------------------------------------------------- tidyverse_conflicts() --
+## -- Conflicts ----------------------------------------------------------------------------------------- tidyverse_conflicts() --
 ## x dplyr::filter() masks stats::filter()
 ## x dplyr::lag()    masks stats::lag()
 \end{verbatim}
@@ -255,8 +255,16 @@ The completed exercise is due on Tuesday, February 11 at 1:00 pm.
 \begin{Highlighting}[]
 \NormalTok{PeterPaul.chem.nutrients}\OperatorTok{$}\NormalTok{sampledate <-}\StringTok{ }
 \StringTok{  }\KeywordTok{as.Date}\NormalTok{(PeterPaul.chem.nutrients}\OperatorTok{$}\NormalTok{sampledate, }\DataTypeTok{format =} \StringTok{"%Y-%m-%d"}\NormalTok{)}
+\KeywordTok{class}\NormalTok{(PeterPaul.chem.nutrients}\OperatorTok{$}\NormalTok{sampledate)}
+\end{Highlighting}
+\end{Shaded}
 
+\begin{verbatim}
+## [1] "Date"
+\end{verbatim}
 
+\begin{Shaded}
+\begin{Highlighting}[]
 \KeywordTok{class}\NormalTok{(PeterPaul.chem.nutrients.gathered}\OperatorTok{$}\NormalTok{sampledate)}
 \end{Highlighting}
 \end{Shaded}
@@ -269,7 +277,16 @@ The completed exercise is due on Tuesday, February 11 at 1:00 pm.
 \begin{Highlighting}[]
 \NormalTok{PeterPaul.chem.nutrients.gathered}\OperatorTok{$}\NormalTok{sampledate <-}\StringTok{ }
 \StringTok{  }\KeywordTok{as.Date}\NormalTok{(PeterPaul.chem.nutrients.gathered}\OperatorTok{$}\NormalTok{sampledate, }\DataTypeTok{format =} \StringTok{"%Y-%m-%d"}\NormalTok{)}
+\KeywordTok{class}\NormalTok{(PeterPaul.chem.nutrients.gathered}\OperatorTok{$}\NormalTok{sampledate)}
+\end{Highlighting}
+\end{Shaded}
 
+\begin{verbatim}
+## [1] "Date"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
 \KeywordTok{class}\NormalTok{(NIWO.Litter}\OperatorTok{$}\NormalTok{collectDate)}
 \end{Highlighting}
 \end{Shaded}
@@ -282,8 +299,13 @@ The completed exercise is due on Tuesday, February 11 at 1:00 pm.
 \begin{Highlighting}[]
 \NormalTok{NIWO.Litter}\OperatorTok{$}\NormalTok{collectDate <-}\StringTok{ }
 \StringTok{  }\KeywordTok{as.Date}\NormalTok{(NIWO.Litter}\OperatorTok{$}\NormalTok{collectDate, }\DataTypeTok{format =} \StringTok{"%Y-%m-%d"}\NormalTok{)}
+\KeywordTok{class}\NormalTok{(NIWO.Litter}\OperatorTok{$}\NormalTok{collectDate)}
 \end{Highlighting}
 \end{Shaded}
+
+\begin{verbatim}
+## [1] "Date"
+\end{verbatim}
 
 \subsection{Define your theme}\label{define-your-theme}
 
@@ -323,13 +345,15 @@ palettes, axes, and additional aesthetics are edited accordingly.
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\CommentTok{# Graph of Total Phosphorus by Phosphate for Peter and Paul Lakes}
+
 \NormalTok{NTL.TP.PO4 <-}\StringTok{ }
-\StringTok{  }\KeywordTok{ggplot}\NormalTok{(PeterPaul.chem.nutrients, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ tp_ug, }\DataTypeTok{y =}\NormalTok{ po4, }\DataTypeTok{color =}\NormalTok{ depth, }\DataTypeTok{shape =}\NormalTok{ lakename)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{ggplot}\NormalTok{(PeterPaul.chem.nutrients, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ tp_ug, }\DataTypeTok{y =}\NormalTok{ po4, }\DataTypeTok{color =}\NormalTok{ lakename, }\DataTypeTok{shape =}\NormalTok{ lakename)) }\OperatorTok{+}
 \StringTok{  }\KeywordTok{geom_point}\NormalTok{() }\OperatorTok{+}
 \StringTok{   }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{x =} \KeywordTok{expression}\NormalTok{(}\KeywordTok{paste}\NormalTok{(}\StringTok{"TP ( "}\NormalTok{, mu,}\StringTok{"g/L)"}\NormalTok{)),}
        \DataTypeTok{y =} \KeywordTok{expression}\NormalTok{(}\KeywordTok{paste}\NormalTok{(}\StringTok{"Po4 ( "}\NormalTok{, mu,}\StringTok{"g/L)"}\NormalTok{)),}
-      \DataTypeTok{color =} \StringTok{"Depth"}\NormalTok{, }\DataTypeTok{shape =} \StringTok{"Lake"}\NormalTok{) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{scale_color_distiller}\NormalTok{(}\DataTypeTok{palette =} \StringTok{"Blues"}\NormalTok{, }\DataTypeTok{direction =} \DecValTok{1}\NormalTok{) }\OperatorTok{+}
+      \DataTypeTok{color =} \StringTok{"Lake Name"}\NormalTok{, }\DataTypeTok{shape =} \StringTok{"Lake"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{scale_color_brewer}\NormalTok{(}\DataTypeTok{palette =} \StringTok{"YlGnBu"}\NormalTok{) }\OperatorTok{+}
 \StringTok{  }\KeywordTok{scale_y_continuous}\NormalTok{(}\DataTypeTok{limits =} \KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{40}\NormalTok{)) }\OperatorTok{+}
 \StringTok{  }\KeywordTok{scale_x_continuous}\NormalTok{(}\DataTypeTok{limits =} \KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{145}\NormalTok{)) }\OperatorTok{+}
 \StringTok{  }\KeywordTok{geom_smooth}\NormalTok{(}\DataTypeTok{method=}\StringTok{'lm'}\NormalTok{, }\DataTypeTok{formula=}\NormalTok{ y}\OperatorTok{~}\NormalTok{x, }\DataTypeTok{color =} \StringTok{"black"}\NormalTok{) }\OperatorTok{+}
@@ -419,7 +443,7 @@ palettes, axes, and additional aesthetics are edited accordingly.
        \DataTypeTok{y =} \KeywordTok{expression}\NormalTok{(}\KeywordTok{paste}\NormalTok{(}\StringTok{"TN"}\OperatorTok{~}\StringTok{ }\NormalTok{(mu}\OperatorTok{*}\NormalTok{g }\OperatorTok{/}\StringTok{ }\NormalTok{L))), }\DataTypeTok{color =} \StringTok{"Lake"}\NormalTok{) }\OperatorTok{+}
 \StringTok{   }\KeywordTok{scale_y_continuous}\NormalTok{(}\DataTypeTok{expand =} \KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{0}\NormalTok{)) }\OperatorTok{+}
 \StringTok{  }\KeywordTok{scale_color_viridis}\NormalTok{(}\DataTypeTok{discrete =} \OtherTok{TRUE}\NormalTok{, }\DataTypeTok{option =} \StringTok{"viridis"}\NormalTok{, }\DataTypeTok{end =} \FloatTok{0.8}\NormalTok{) }\OperatorTok{+}
-\StringTok{  }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{legend.position =} \StringTok{"none"}\NormalTok{)}
+\StringTok{  }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{legend.position =} \StringTok{"bottom"}\NormalTok{)}
 \KeywordTok{print}\NormalTok{(TN.Boxplot)}
 \end{Highlighting}
 \end{Shaded}
@@ -434,9 +458,8 @@ palettes, axes, and additional aesthetics are edited accordingly.
 \begin{Highlighting}[]
 \CommentTok{# 3 Graphs Combined}
 
-
 \NormalTok{three.plots <-}\StringTok{ }\KeywordTok{plot_grid}\NormalTok{(Temp.Boxplot, TP.Boxplot, TN.Boxplot, }\DataTypeTok{labels =} \KeywordTok{c}\NormalTok{(}\StringTok{'Temp'}\NormalTok{, }\StringTok{'TP'}\NormalTok{, }\StringTok{'TN'}\NormalTok{), }
-                         \DataTypeTok{label_size =} \DecValTok{10}\NormalTok{, }\DataTypeTok{align =} \StringTok{"vh"}\NormalTok{, }\DataTypeTok{nrow =} \DecValTok{2}\NormalTok{)}
+                         \DataTypeTok{label_size =} \DecValTok{10}\NormalTok{, }\DataTypeTok{align =} \StringTok{"vh"}\NormalTok{, }\DataTypeTok{ncol =} \DecValTok{1}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -452,6 +475,11 @@ palettes, axes, and additional aesthetics are edited accordingly.
 ## Warning: Removed 21583 rows containing non-finite values (stat_boxplot).
 \end{verbatim}
 
+\begin{verbatim}
+## Warning: Graphs cannot be horizontally aligned unless the axis parameter is set.
+## Placing graphs unaligned.
+\end{verbatim}
+
 \begin{Shaded}
 \begin{Highlighting}[]
 \KeywordTok{print}\NormalTok{(three.plots)}
@@ -460,30 +488,16 @@ palettes, axes, and additional aesthetics are edited accordingly.
 
 \includegraphics{A05_DataVisualization_files/figure-latex/unnamed-chunk-4-4.pdf}
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{legend <-}\StringTok{ }\KeywordTok{get_legend}\NormalTok{(Temp.Boxplot }\OperatorTok{+}\StringTok{ }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{legend.position =} \StringTok{"right"}\NormalTok{))}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-## Warning: Removed 3566 rows containing non-finite values (stat_boxplot).
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{plot_grid}\NormalTok{(three.plots, legend, }\DataTypeTok{rel_widths =} \KeywordTok{c}\NormalTok{(}\DecValTok{3}\NormalTok{, .}\DecValTok{4}\NormalTok{))}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{A05_DataVisualization_files/figure-latex/unnamed-chunk-4-5.pdf}
-
 Question: What do you observe about the variables of interest over
 seasons and between lakes?
 
 \begin{quote}
 Answer: In the summer, Paul Lake has slightly higher temperatures, but
-lower TP and TN concentrations.
+lower TP and TN concentrations. The lower TP and TN concentrations in
+Paule Lake could be due to the fact that samples from Paul Lake were
+taken in between May and June when the temperature in the lake was
+higher whereas samples from Peter Lake were taken in July and August
+when the average temperature was lower than Paul Lake.
 \end{quote}
 
 \begin{enumerate}
@@ -517,6 +531,7 @@ lower TP and TN concentrations.
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{# 7}
+ 
 \NormalTok{ NIWO.needles.facet <-}\StringTok{ }
 \StringTok{   }\KeywordTok{ggplot}\NormalTok{(}\KeywordTok{subset}\NormalTok{(NIWO.Litter, functionalGroup }\OperatorTok{==}\StringTok{ "Needles"}\NormalTok{),}
          \KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ collectDate, }\DataTypeTok{y =}\NormalTok{ dryMass)) }\OperatorTok{+}
@@ -536,7 +551,7 @@ and why?
 Answer: Plot 7 is more effective because you are able to easily
 differentiate the NLCD classes whereas plot 6 displayed all the NLCD
 classes within each collection year so it was difficult to distinguish
-the dry mass and collection date of each class.
+the dry mass and collection date of each NLCD class.
 \end{quote}
 
 \end{document}

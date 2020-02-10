@@ -20,14 +20,13 @@ This exercise accompanies the lessons in Environmental Data Analytics on Data Vi
 
 The completed exercise is due on Tuesday, February 11 at 1:00 pm.
 
-
-
 ## Set up your session 
 1. Set up your session. Verify your working directory and load the tidyverse and cowplot packages. Upload the NTL-LTER processed data files for nutrients and chemistry/physics for Peter and Paul Lakes (tidy and gathered) and the processed data file for the Niwot Ridge litter dataset. 
 
 2. Make sure R is reading dates as date format; if not change the format to date.
 
 ```{r}
+
 #1
 getwd()
 library(tidyverse)
@@ -50,18 +49,21 @@ NIWO.Litter <-
 class(PeterPaul.chem.nutrients$sampledate)
 PeterPaul.chem.nutrients$sampledate <- 
   as.Date(PeterPaul.chem.nutrients$sampledate, format = "%Y-%m-%d")
-
+class(PeterPaul.chem.nutrients$sampledate)
 
 class(PeterPaul.chem.nutrients.gathered$sampledate)
 PeterPaul.chem.nutrients.gathered$sampledate <- 
   as.Date(PeterPaul.chem.nutrients.gathered$sampledate, format = "%Y-%m-%d")
+class(PeterPaul.chem.nutrients.gathered$sampledate)
 
 class(NIWO.Litter$collectDate)
 NIWO.Litter$collectDate <- 
   as.Date(NIWO.Litter$collectDate, format = "%Y-%m-%d")
-
+class(NIWO.Litter$collectDate)
 
 ```
+
+
 ## Define your theme
 3. Build a theme and set it as your default theme.
 
@@ -75,6 +77,7 @@ theme_set(mytheme)
 
 ```
 
+
 ## Create graphs
 For numbers 4-7, create ggplot graphs and adjust aesthetics to follow best practices for data visualization. Ensure your theme, color palettes, axes, and additional aesthetics are edited accordingly.
 
@@ -82,13 +85,15 @@ For numbers 4-7, create ggplot graphs and adjust aesthetics to follow best pract
 
 ```{r}
 
+# Graph of Total Phosphorus by Phosphate for Peter and Paul Lakes
+
 NTL.TP.PO4 <- 
-  ggplot(PeterPaul.chem.nutrients, aes(x = tp_ug, y = po4, color = depth, shape = lakename)) +
+  ggplot(PeterPaul.chem.nutrients, aes(x = tp_ug, y = po4, color = lakename, shape = lakename)) +
   geom_point() +
    labs(x = expression(paste("TP ( ", mu,"g/L)")),
        y = expression(paste("Po4 ( ", mu,"g/L)")),
-      color = "Depth", shape = "Lake") +
-  scale_color_distiller(palette = "Blues", direction = 1) +
+      color = "Lake Name", shape = "Lake") +
+  scale_color_brewer(palette = "YlGnBu") +
   scale_y_continuous(limits = c(0,40)) +
   scale_x_continuous(limits = c(0, 145)) +
   geom_smooth(method='lm', formula= y~x, color = "black") +
@@ -98,7 +103,6 @@ print(NTL.TP.PO4)
 
 
 ```
-
 
 5. [NTL-LTER] Make three separate boxplots of (a) temperature, (b) TP, and (c) TN, with month as the x axis and lake as a color aesthetic. Then, create a cowplot that combines the three graphs. Make sure that only one legend is present and that graph axes are aligned.
 
@@ -138,33 +142,22 @@ TN.Boxplot <-
        y = expression(paste("TN"~ (mu*g / L))), color = "Lake") +
    scale_y_continuous(expand = c(0,0)) +
   scale_color_viridis(discrete = TRUE, option = "viridis", end = 0.8) +
-  theme(legend.position = "none")
+  theme(legend.position = "bottom")
 print(TN.Boxplot)
-
 
 # 3 Graphs Combined
 
-
 three.plots <- plot_grid(Temp.Boxplot, TP.Boxplot, TN.Boxplot, labels = c('Temp', 'TP', 'TN'), 
-                         label_size = 10, align = "vh", nrow = 2)
+                         label_size = 10, align = "vh", ncol = 1)
 
 print(three.plots)
 
-legend <- get_legend(Temp.Boxplot + theme(legend.position = "right"))
-
-plot_grid(three.plots, legend, rel_widths = c(3, .4))
-          
-          
-
-
-
-
-
 ```
+
 
 Question: What do you observe about the variables of interest over seasons and between lakes? 
 
-> Answer: In the summer, Paul Lake has slightly higher temperatures, but lower TP and TN concentrations. 
+> Answer: In the summer, Paul Lake has slightly higher temperatures, but lower TP and TN concentrations. The lower TP and TN concentrations in Paule Lake could be due to the fact that samples from Paul Lake were taken in between May and June when the temperature in the lake was higher whereas samples from Peter Lake were taken in July and August when the average temperature was lower than Paul Lake. 
 
 6. [Niwot Ridge] Plot a subset of the litter dataset by displaying only the "Needles" functional group. Plot the dry mass of needle litter by date and separate by NLCD class with a color aesthetic. (no need to adjust the name of each land use)
 
@@ -182,8 +175,8 @@ NIWO.needles <-
  print(NIWO.needles)
 
 
- 
 # 7
+ 
  NIWO.needles.facet <- 
    ggplot(subset(NIWO.Litter, functionalGroup == "Needles"),
          aes(x = collectDate, y = dryMass)) +
@@ -197,4 +190,4 @@ NIWO.needles <-
 
 Question: Which of these plots (6 vs. 7) do you think is more effective, and why? 
 
-> Answer: Plot 7 is more effective because you are able to easily differentiate the NLCD classes whereas plot 6 displayed all the NLCD classes within each collection year so it was difficult to distinguish the dry mass and collection date of each class. 
+> Answer: Plot 7 is more effective because you are able to easily differentiate the NLCD classes whereas plot 6 displayed all the NLCD classes within each collection year so it was difficult to distinguish the dry mass and collection date of each NLCD class. 
