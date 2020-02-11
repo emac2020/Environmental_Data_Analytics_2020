@@ -1,9 +1,6 @@
-almonds <- read.csv("MAIN SURVEY_CLEANED.csv")
+almonds <- read.csv("Almond_Survey_CLEANED.csv")
 
 CC.county.interest <- almonds[,c("Q5","Q8", "Q11", "Q12")]
-
-
-#,2 = proportions based on column
 
 
 #Socal: Tulare, Kings, Kern, Fresno
@@ -35,7 +32,7 @@ CC.table <- prop.table(table(CC.county.interest$Region, CC.county.interest$Cover
 
 CC.table
 
-# In the north: 80% have/want cover, in South: 34% have planted or are interested in planting cover cover
+# In the north: 79.4% have/want cover, in South: 34.2% have planted or are interested in planting cover cover
 
 # Interest in CC depending on who oversees pollination mgmt
 
