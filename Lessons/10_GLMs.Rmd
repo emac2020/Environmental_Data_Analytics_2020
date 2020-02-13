@@ -201,23 +201,32 @@ Create three plots, each with appropriately formatted axes and legends. Choose a
 
 # geom_density
 
-Ozone.Density.plot <- ggplot(EPAair, aes(x = Ozone, color = as.factor(Year))) +
-  geom_density(fill = "gray", alpha = 0.5) +  
-  geom_vline(xintercept = 50, color = "#238b45", lty = 2, size = 0.9) +
-  scale_x_continuous(expand = c(0, 0)) + scale_y_continuous(expand = c(0, 0))
-print(Ozone.Density.plot)
+O3.density <- 
+  ggplot(EPAair, aes(x = Ozone, fill = as.factor(Year))) +
+  geom_density(alpha = 0.5) +
+  scale_fill_manual(values = c("darkgreen", "darkblue")) +
+  labs(x = "Ozone AQI value", y = "Density", fill = "")
+print(O3.density)
 
 # Geom_boxplot
 
-Ozone.boxplot <- ggplot(EPAair, aes(x = Ozone, y = as.factor(Year), color = "Year")) +
-  geom_boxplot() +
-  stat_summary(letters = "Year") +
- scale_color_brewer(palette = "YlGnBu")
-print(Ozone.boxplot)
+O3.boxplot <- 
+    ggplot(EPAair, aes(x = as.factor(Year), y = Ozone)) +
+      geom_boxplot() +
+      stat_summary(geom = "text", fun.y = max, vjust = -1, size = 4, 
+                   label = c("b", "a")) +
+      labs(x = "", y = "Ozone AQI value")
+print(O3.boxplot)
 
 # geom_
 
-
+O3.violin <- 
+      ggplot(EPAair, aes(x = as.factor(Year), y = Ozone)) +
+      geom_violin(draw_quantiles = 0.5) +
+      stat_summary(geom = "text", fun.y = max, vjust = -1, size = 4, 
+                   label = c("b", "a")) +
+      labs(x = "", y = "Ozone AQI value")
+print(O3.violin)
 
 
 
@@ -227,7 +236,7 @@ print(Ozone.boxplot)
 
 Now, write a summary of your findings, incorporating statistical output, reference to the figure(s), and a contextual interpretation.
 
-> 
+> Mean AQI values for ozone were 0.85 units higher in 2019 than in 2018, representing a significant increase (Figure 1; Wilcoxon test, W = 5399454, p < 0.0001). 
 
 
 
