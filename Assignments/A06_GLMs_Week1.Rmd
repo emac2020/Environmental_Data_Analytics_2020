@@ -1,6 +1,6 @@
 ---
 title: "Assignment 6: GLMs week 1 (t-test and ANOVA)"
-author: "Student Name"
+author: "Emily McNamara"
 output: pdf_document
 geometry: margin=2.54cm
 editor_options: 
@@ -29,9 +29,18 @@ The completed exercise is due on Tuesday, February 18 at 1:00 pm.
 
 ```{r, message = FALSE}
 #1
+getwd()
 
+library(tidyverse)
+library(cowplot)
+library(agricolae)
+
+PP.nutrients <- read.csv("./Data/Processed/NTL-LTER_Lake_Nutrients_PeterPaul_Processed.csv")
 
 #2
+
+PP.nutrients$sampledate <- as.Date(PP.nutrients$sampledate, format = "%Y-%m-%d")
+class(PP.nutrients$sampledate)
 
 ```
 
@@ -40,6 +49,9 @@ The completed exercise is due on Tuesday, February 18 at 1:00 pm.
 
 3. Wrangle your dataset so that it contains only surface depths and only the years 1993-1996, inclusive. Set month as a factor.
 ```{r}
+
+PP.Depths <- 
+  filter(PP.nutrients, depth == 0 & year4 > 1992 & year4 < 1997 & month == as.factor(month))
 
 
 ```
@@ -50,7 +62,7 @@ Peter Lake was manipulated with additions of nitrogen and phosphorus over the ye
 
 4. Which application of the GLM will you use (t-test, one-way ANOVA, two-way ANOVA with main effects, or two-way ANOVA with interaction effects)? Justify your choice.
 
-> Answer: 
+> Answer: Two-way ANOVA because we want to examine the effects of two categorical explanatory/predictable variables (Lakes and month) on a continuous response variable (nutrients).
 
 5. Run your test for TN. Include examination of groupings and consider interaction effects, if relevant.
 
@@ -59,10 +71,46 @@ Peter Lake was manipulated with additions of nitrogen and phosphorus over the ye
 ```{r}
 #5
 
+TN.anova.2way <- aov(data = PP.Depths, tn_ug ~ lakename + as.factor(month))
+summary(TN.anova.2way)
+
+TN.anova.2waylm <- lm(data = PP.Depths, tn_ug ~ lakename + as.factor(month))
+summary(TN.anova.2waylm)
+
+TukeyHSD(TN.anova.2way)
+
+#5.1 Interaction Effects
+
+TN.anova.2way3 <- aov(data = PP.Depths, tn_ug ~ lakename * as.factor(month))
+summary(TN.anova.2way3)
+
+TN.interaction <- with(PP.Depths, interaction(lakename, as.factor(month)))
+TN.anova.2way4 <- aov(data = PP.Depths, tn_ug ~ TN.interaction)
+
+TN.groups <- HSD.test(TN.anova.2way4, "TN.interaction", group = TRUE)
+TN.groups
+
 
 #6
 
+TP.anova.2way <- aov(data = PP.Depths, tp_ug ~ lakename + as.factor(month))
+summary(TN.anova.2way)
 
+TP.anova.2waylm <- lm(data = PP.Depths, tp_ug ~ lakename + as.factor(month))
+summary(TN.anova.2waylm)
+
+TukeyHSD(TP.anova.2way)
+
+#6.1 Interaction Effects
+
+TP.anova.2way3 <- aov(data = PP.Depths, tp_ug ~ lakename * as.factor(month))
+summary(TP.anova.2way3)
+
+TP.interaction <- with(PP.Depths, interaction(lakename, as.factor(month)))
+TP.anova.2way4 <- aov(data = PP.Depths, tp_ug ~ TP.interaction)
+
+TP.groups <- HSD.test(TP.anova.2way4, "TP.interaction", group = TRUE)
+TP.groups
 ```
 
 7. Create two plots, with TN (plot 1) or TP (plot 2) as the response variable and month and lake as the predictor variables. Hint: you may use some of the code you used for your visualization assignment. Assign groupings with letters, as determined from your tests. Adjust your axes, aesthetics, and color palettes in accordance with best data visualization practices.
@@ -72,6 +120,20 @@ Peter Lake was manipulated with additions of nitrogen and phosphorus over the ye
 ```{r}
 #7
 
+# TN Boxplot
+
+TN.boxplot <- 
+    ggplot(PP.Depths, aes(y = tn_ug, x = as.factor(month),  color = lakename)) +
+      geom_boxplot() +
+  scale_color_brewer(palette = "Dark2")
+      stat_summary(geom = "text", fun.y = max, vjust = -1, size = 4, 
+                   label = c("b", "b", "b", "b", "ab", "ab", "ab", "a", "a", "ab")) +
+      labs(x = "Month", y = "TP" ) + 
+      theme(legend.position = "right", 
+        legend.text = element_text(size = 12), legend.title = element_text(size = 12))
+print(TN.boxplot)
+
+# TP Boxplot
 
 #8
 
