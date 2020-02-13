@@ -4,8 +4,10 @@ CC.county.interest <- almonds[,c("Q5","Q8", "Q11", "Q12")]
 
 
 #Socal: Tulare, Kings, Kern, Fresno
-#Central: Sac, San Joaquin, Stan, Merced, Madera
-#North:Solano, Yolo, Sutter, Yuba, Butte, Colusa, Glenn, Tehama
+#Central: San Joaquin, Stan, Merced, Madera
+#Delta: Sac, Solano, Yolo, Yuba
+#North: Sutter, Butte, Colusa, Glenn, Tehama
+## More dependent on watershed and rainfall. Could go by Basins: Sac, Delta & Eastside streams, SJ Basin, Tulare Basin 
 
 # create new variable, attach to DF
 # excluding mult. counties. Use package "stringR" to search through column and any row in column that contains text, it will ID and categorize 
