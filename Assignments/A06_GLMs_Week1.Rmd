@@ -50,8 +50,11 @@ class(PP.nutrients$sampledate)
 3. Wrangle your dataset so that it contains only surface depths and only the years 1993-1996, inclusive. Set month as a factor.
 ```{r}
 
-PP.Depths <- 
-  filter(PP.nutrients, depth == 0 & year4 > 1992 & year4 < 1997 & month == as.factor(month))
+PP.Depths <- PP.nutrients %>%
+  filter(depth == 0 & year4 > 1992 & year4 < 1997)
+
+PP.Depths$month <- as.factor(PP.Depths$month)
+
 
 
 ```
@@ -71,42 +74,26 @@ Peter Lake was manipulated with additions of nitrogen and phosphorus over the ye
 ```{r}
 #5
 
-TN.anova.2way <- aov(data = PP.Depths, tn_ug ~ lakename + as.factor(month))
+TN.anova.2way <- aov(data = PP.Depths, tn_ug ~ lakename + month)
 summary(TN.anova.2way)
-
-TN.anova.2waylm <- lm(data = PP.Depths, tn_ug ~ lakename + as.factor(month))
-summary(TN.anova.2waylm)
 
 TukeyHSD(TN.anova.2way)
 
-#5.1 Interaction Effects
 
-TN.anova.2way3 <- aov(data = PP.Depths, tn_ug ~ lakename * as.factor(month))
-summary(TN.anova.2way3)
+#6. 
 
-TN.interaction <- with(PP.Depths, interaction(lakename, as.factor(month)))
-TN.anova.2way4 <- aov(data = PP.Depths, tn_ug ~ TN.interaction)
-
-TN.groups <- HSD.test(TN.anova.2way4, "TN.interaction", group = TRUE)
-TN.groups
-
-
-#6
-
-TP.anova.2way <- aov(data = PP.Depths, tp_ug ~ lakename + as.factor(month))
+TP.anova.2way <- aov(data = PP.Depths, tp_ug ~ lakename + month)
 summary(TN.anova.2way)
 
-TP.anova.2waylm <- lm(data = PP.Depths, tp_ug ~ lakename + as.factor(month))
-summary(TN.anova.2waylm)
 
 TukeyHSD(TP.anova.2way)
 
 #6.1 Interaction Effects
 
-TP.anova.2way3 <- aov(data = PP.Depths, tp_ug ~ lakename * as.factor(month))
+TP.anova.2way3 <- aov(data = PP.Depths, tp_ug ~ lakename * month)
 summary(TP.anova.2way3)
 
-TP.interaction <- with(PP.Depths, interaction(lakename, as.factor(month)))
+TP.interaction <- with(PP.Depths, interaction(lakename, month))
 TP.anova.2way4 <- aov(data = PP.Depths, tp_ug ~ TP.interaction)
 
 TP.groups <- HSD.test(TP.anova.2way4, "TP.interaction", group = TRUE)
@@ -125,17 +112,35 @@ TP.groups
 TN.boxplot <- 
     ggplot(PP.Depths, aes(y = tn_ug, x = as.factor(month),  color = lakename)) +
       geom_boxplot() +
-  scale_color_brewer(palette = "Dark2")
-      stat_summary(geom = "text", fun.y = max, vjust = -1, size = 4, 
-                   label = c("b", "b", "b", "b", "ab", "ab", "ab", "a", "a", "ab")) +
-      labs(x = "Month", y = "TP" ) + 
-      theme(legend.position = "right", 
-        legend.text = element_text(size = 12), legend.title = element_text(size = 12))
+   labs(x = expression(paste("Month")),
+       y = expression(paste("TN"~ (mu*g / L)))) +
+  scale_color_brewer(palette = "Dark2") +
+  ylim(0,2500) +
+      stat_summary(geom = "text", fun.y = max, vjust = -1, size = 4, position = position_dodge(.7),
+                   label = c("a", "b", "a", "b", "a", "b", "a", "b", "a", "b")) +
+      theme(legend.position = "none")
 print(TN.boxplot)
 
 # TP Boxplot
+TP.boxplot <- 
+    ggplot(PP.Depths, aes(y = tp_ug, x = as.factor(month),  color = lakename)) +
+      geom_boxplot() +
+  labs(x = expression(paste("Month")),
+       y = expression(paste("TP"~ (mu*g / L)))) +
+  scale_color_brewer(palette = "Dark2") +
+  ylim(0,80) +
+      stat_summary(geom = "text", fun.y = max, vjust = -1, size = 4, position = position_dodge(.7),
+                   label = c("bcd", "cd", "d", "ab", "a", "d", "abc", "d", "abcd", "cd")) +
+      theme(legend.position = "bottom", 
+        legend.text = element_text(size = 12), legend.title = element_text(size = 12))
+print(TP.boxplot)
 
 #8
+
+TNTP.plots <- plot_grid(TN.boxplot, TP.boxplot, 
+                        align = "vh", ncol = 1)
+
+print(TNTP.plots)
 
 ```
 
