@@ -136,6 +136,18 @@ locoplot<- ggplot(almonds, aes(x = Q2, color = Q2)) +
 print(locoplot)
 
 
+
+
+
+RoleCCgrown.plot <- ggplot(almonds, aes(x = Q1, color = Q6)) +
+  geom_bar() +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  scale_color_manual(values = c("#7fcdbb", "#41b6c4", "#1d91c0")) +
+  labs(x = "Role in Operation", y = "Count") +
+  theme(legend.position = "right", 
+        legend.text = element_text(size = 7), legend.title = element_text(size = 8))
+print(RoleCCgrown.plot)
  
 
 
