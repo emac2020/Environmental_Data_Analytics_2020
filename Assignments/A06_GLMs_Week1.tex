@@ -290,6 +290,24 @@ continuous response variable (nutrients).
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\NormalTok{TN.anova.2way3 <-}\StringTok{ }\KeywordTok{aov}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ PP.Depths, tn_ug }\OperatorTok{~}\StringTok{ }\NormalTok{lakename }\OperatorTok{*}\StringTok{ }\NormalTok{month)}
+\KeywordTok{summary}\NormalTok{(TN.anova.2way3)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                Df  Sum Sq Mean Sq F value   Pr(>F)    
+## lakename        1 2468595 2468595  36.414 2.91e-08 ***
+## month           4  459542  114885   1.695    0.157    
+## lakename:month  4  288272   72068   1.063    0.379    
+## Residuals      97 6575834   67792                     
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 23 observations deleted due to missingness
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
 \CommentTok{#6. }
 
 \NormalTok{TP.anova.2way <-}\StringTok{ }\KeywordTok{aov}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ PP.Depths, tp_ug }\OperatorTok{~}\StringTok{ }\NormalTok{lakename }\OperatorTok{+}\StringTok{ }\NormalTok{month)}
@@ -339,8 +357,6 @@ continuous response variable (nutrients).
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{#6.1 Interaction Effects}
-
 \NormalTok{TP.anova.2way3 <-}\StringTok{ }\KeywordTok{aov}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ PP.Depths, tp_ug }\OperatorTok{~}\StringTok{ }\NormalTok{lakename }\OperatorTok{*}\StringTok{ }\NormalTok{month)}
 \KeywordTok{summary}\NormalTok{(TP.anova.2way3)}
 \end{Highlighting}
@@ -359,6 +375,8 @@ continuous response variable (nutrients).
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\CommentTok{#6.1 Interaction Effects}
+
 \NormalTok{TP.interaction <-}\StringTok{ }\KeywordTok{with}\NormalTok{(PP.Depths, }\KeywordTok{interaction}\NormalTok{(lakename, month))}
 \NormalTok{TP.anova.2way4 <-}\StringTok{ }\KeywordTok{aov}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ PP.Depths, tp_ug }\OperatorTok{~}\StringTok{ }\NormalTok{TP.interaction)}
 

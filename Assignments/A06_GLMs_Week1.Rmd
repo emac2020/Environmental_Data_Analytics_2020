@@ -79,19 +79,20 @@ summary(TN.anova.2way)
 
 TukeyHSD(TN.anova.2way)
 
+TN.anova.2way3 <- aov(data = PP.Depths, tn_ug ~ lakename * month)
+summary(TN.anova.2way3)
 
 #6. 
 
 TP.anova.2way <- aov(data = PP.Depths, tp_ug ~ lakename + month)
 summary(TN.anova.2way)
 
-
 TukeyHSD(TP.anova.2way)
-
-#6.1 Interaction Effects
 
 TP.anova.2way3 <- aov(data = PP.Depths, tp_ug ~ lakename * month)
 summary(TP.anova.2way3)
+
+#6.1 Interaction Effects
 
 TP.interaction <- with(PP.Depths, interaction(lakename, month))
 TP.anova.2way4 <- aov(data = PP.Depths, tp_ug ~ TP.interaction)
