@@ -1,6 +1,8 @@
 library(lme4)
+library(ggplot2)
+library(cowplot)
 
-almonds <- read.csv("Almond_Survey_Cleaned.csv")
+almonds <- read.csv("Almond_Survey_Cleaned_Official.csv")
 
 
 # How does location affect whether or not people have grown cover crop? 
@@ -134,10 +136,55 @@ Age.grown.plot <- ggplot(age.CC, aes(x = alm.Q31, y = Freq, fill = alm.Q6)) +
   geom_bar(stat = "identity", position = position_dodge()) +
   theme_classic() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  scale_fill_brewer(palette = "Set1")
+  ylim(0, 60) +
+  scale_fill_brewer(palette = "Set1") +
+labs(x = "Age", y = "Count") +
+  theme(legend.position = "right")
+print(Age.grown.plot)
+#scale_color_manual(values = c("#FF1234", "#41b6c4", "#1d91c0")) +
+#+ theme(legend.position = "right", 
+        #legend.text = element_text(size = 7), legend.title = element_text(size = 8))
+
+
+# Age and INTEREST in growing cover crop (Shows that perople ages 25-34 are most interested in growing cc?)
+
+alm= almonds[almonds$Q31 != " " ,]
+
+alm.age= alm[alm$Q9 != "." ,]
+
+age.interestCC <- data.frame(table(data.frame(alm.age$Q31, alm.age$Q9)))
+
+age.interestCC
+
+Age.interest.plot <- ggplot(age.interestCC, aes(x = alm.age.Q31, y = Freq, fill = alm.age.Q9)) +
+  geom_bar(stat = "identity", position = position_dodge()) +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  ylim(0,23) +
+  scale_fill_brewer(palette = "Set1") +
 #scale_color_manual(values = c("#FF1234", "#41b6c4", "#1d91c0")) +
 labs(x = "Age", y = "Count") +
   theme(legend.position = "right", 
         legend.text = element_text(size = 7), legend.title = element_text(size = 8))
-print(Age.grown.plot)
+print(Age.interest.plot)
+
+
+# Plot: Age: have grown and are interested in growing CC
+
+CC.age.plots <- plot_grid(Age.grown.plot, Age.interest.plot, 
+                        align = "h", ncol = 1)
+
+print(CC.age.plots)
+
+
+# How do I make it so it includes all the times "Availability of water" was mentioned?
+
+almonds$Q10 <- as.factor(almonds$Q10)
+
+
+CC.water.county.plot <- ggplot(subset(almonds, Q10 == "Availability of water"),
+                        aes(x = Counties, color = Q9)) +
+                         geom_bar() 
+      print(CC.water.county.plot)
+
 
