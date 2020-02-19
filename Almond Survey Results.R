@@ -1,4 +1,4 @@
-almonds <- read.csv("Almond_Survey_Cleaned_NoColumnTitles.csv")
+almonds <- read.csv("Almond_Survey_Cleaned.csv")
 almonds2 <- read.csv("Survey_numeric_answers_CLEANED_Feb5.csv")
 
 CC.county.interest <- almonds[,c("Q2","Q6", "Q8", "Q9")]
