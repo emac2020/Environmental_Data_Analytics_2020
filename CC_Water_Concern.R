@@ -1,14 +1,6 @@
 almonds2 <- read.csv("Survey_numeric_answers_CLEANED_Feb5.csv")
 
 # Concerns for Cover Crop 
-# I want to do this with other concerns. Should I just use qualtrics to identify which concerns were the highest?
-# How do I make a table of all the concerns for CC that appear (all Q12 variables)
-# table: categorize all the concerns (water, time, labor, interference, etc.). table with different categorize
-# treat concern as a factor and it will give a number to each concern. 
-# What were the factors that made someone think labor was the most important (use: multinomial)
-# Write down questions, and how I'm gonna deal with it (bar, glm, multinomial)
-
-# Water makes a difference in concerns people have in growing CC. 
 
 # Does increased water price make it more likely that certain concerns are present?
 
@@ -27,7 +19,7 @@ table(almonds2$ConcernCC_WaterAvailability)
 str(almonds2$HighestWaterPrice)
 summary(almonds2$HighestWaterPrice)
 
-# Remove water price outliers (over 1000)
+# Remove water price outliers (over 1200)
 
 almonds2$HighestWaterPrice <- ifelse(almonds2$HighestWaterPrice > 1200, NA, almonds2$HighestWaterPrice)
 

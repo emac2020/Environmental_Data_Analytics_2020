@@ -1,6 +1,20 @@
 almonds <- read.csv("Almond_Survey_Cleaned.csv")
 almonds2 <- read.csv("Survey_numeric_answers_CLEANED_Feb5.csv")
 
+#Logistic regression: can use any time you have yes or no question and include random effect county
+# what are the variables you want 
+# glm with binomial family ()
+# change to multiple counties 
+# random effect (farmers within the same county may have similar views) 
+# how much variation there is among different counties. if people from similar counties have similar views, then their responses will be more correlated
+# use package lme4 for adding random effect. and function glmer
+# Independent: 
+# willingness to participate: whether or not they've grown it before and has an interection with farm size 
+
+
+
+# Have grown or are Interested in growing CC by Region 
+
 CC.county.interest <- almonds[,c("Q2","Q6", "Q8", "Q9")]
 
 
@@ -46,18 +60,6 @@ CC.table
 # Delta: 72.5%
 # North: 72.2% 
 # South: 34.7% 
-
-
-
-#Logistic regression: can use any time you have yes or no question and include random effect county
-# what are the variables you want 
-# glm with binomial family ()
-# change to multiple counties 
-# random effect (farmers within the same county may have similar views) 
-# how much variation there is among different counties. if people from similar counties have similar views, then their responses will be more correlated
-# use package lme4 for adding random effect. and function glmer
-# Independent: 
-# willingness to participate: whether or not they've grown it before and has an interection with farm size 
 
 # Interest in Permanent Pollinator Habitat by Region
 
@@ -118,67 +120,21 @@ table(almonds2$CC_Interest)
 # Out of the 200 people who have not grown cover crop in the last 5 years, 52 people are interested, 63 people are not, 85 unsure
 
 
-# I want to see how concerns could affect those that are unsure or say they have not planted cover crop
 
-# I want to create a graph that shows how region affects whether people have grown CC or are interested
-# also for PPH
+#Gender: 
+  table(almonds$Q32)
 
-
-# Respondent Location
-library(ggplot2)
-library(tidyverse)
-countylocation <- filter(almonds, almonds$Q2 %in% c("Butte", "Colusa", "Glenn", "Tehama", "Sacramento", "Solano", "Yolo"
-                                            , "Yuba", "San Joaquin", "Stanislaus", "Merced", "Madera", "Tulare"
-                                            , "Kings", "Kern", "Fresno", "Stanislaus,Merced", "Fresno,Kings", 
-                                            "San Joaquin,Madera,Fresno,Kings,Tulare", "Fresno,Tulare",  "Stanislaus,Madera",
-                                            "Solano,Merced", "San Joaquin,Stanislaus", "Stanislaus,Fresno", "Yolo,Stanislaus,Fresno",
-                                            "Tehama,Butte,Glenn,Colusa", "San Joaquin, Kerman", "Madera,Fresno,Kings,Tulare,Kern",
-                                            "San Joaquin,Stanislaus,Merced", "San Joaquin,Madera,Fresno", "Madera,Fresno", "Yolo,Solano",
-                                            "Glenn,Stanislaus"))
-
-
-countylocation2 <- select(almonds2, Tehama:Sacramento) 
-
-almonds2$EndDate <- as.Date(almonds2$EndDate, format= "%m/%d/%y" )
-class(almonds2$EndDate)
-
-
-# Plot of respondent location 
-
-locoplot<- ggplot(almonds, aes(x = Q2, color = Q2)) +
-  geom_bar() +
-  theme_classic() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  labs(x = "County", y = "Count") +
-  theme(legend.position = "bottom", 
-        legend.text = element_text(size = 7), legend.title = element_text(size = 8))
-  
-print(locoplot)
+#Age: 
+  table(almonds$Q31)
 
 
 
-# Plot of respondents' role in operation and whether or not they've grown CC
-
-# table with x = each of roles and y = 
-# Put "." in the cells without info 
-
-alm= almonds[almonds$Q1 != " " ,]
-  
-role.count <- data.frame(table(data.frame(alm$Q1, alm$Q6)))
-
-role.count
 
 
 
-RoleCCgrown.plot <- ggplot(role.count, aes(x = Q1, y = Freq, color = Q6)) +
-  geom_bar() +
-  theme_classic() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  scale_color_manual(values = c("#41b6c4", "#1d91c0")) +
-  labs(x = "Role in Operation", y = "Count") +
-  theme(legend.position = "right", 
-        legend.text = element_text(size = 7), legend.title = element_text(size = 8))
-print(RoleCCgrown.plot)
+
+
+
  
 
 

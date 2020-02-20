@@ -20,7 +20,7 @@ locoplot<- ggplot(almonds, aes(x = Counties, fill = Counties)) +
 print(locoplot)
 
 
-# 2. How does Role in Operation affect whether or not a person has grown cover crop?
+# 2. How does Role in Operation affect whether or not a person has GROWN cover crop?
 
 Role.Operation.CCgrown <- glm(Q1 ~ Q6, almonds, family = binomial)
 
@@ -29,7 +29,7 @@ summary(Role.Operation.CCgrown)
 exp(coef(Role.Operation.CCgrown)[2])
 
 
-# 2.plot of Role in operation and whether or not a person has grown cover crop 
+# 2.plot Role in operation and whether or not a person has GROWN cover crop 
 
 alm= almonds[almonds$Q1 != " " ,]
 
@@ -47,7 +47,7 @@ Role.CCgrown.plot <- ggplot(role.count, aes(x = alm.Q1, y = Freq, fill = alm.Q6)
         legend.text = element_text(size = 7), legend.title = element_text(size = 8))
 print(Role.CCgrown.plot)
 
-# 3. How does the respondent's role in the operation affect interest in growing cover crop?
+# 3. How does a person's role in the operation affect whether they are INTERESTED in growing cover crop?
 
 Role.Operation.CCinterest <- glm(Q1 ~ Q9, almonds, family = binomial)
 
@@ -82,7 +82,7 @@ print(CC.Role.plots)
 
 
 
-# 5. How does location affect whether or not a person has grown cover crop?
+# 5. How does location affect whether or not a person has GROWN cover crop?
 
 Location.GrownCC <- glm(Counties ~ Q6, almonds, family = binomial)
 summary(Location.GrownCC)
@@ -122,7 +122,7 @@ print(Location.CCgrown.plot)
 
 
 
-# 6: How does location affect whether or not a person is Interested in growing cover crop?
+# 6: How does location affect whether or not a person is INTERESTED in growing cover crop?
 
 Location.InterestCC <- glm(Counties ~ Q9, almonds, family = binomial)
 summary(Location.InterestCC)
@@ -156,28 +156,100 @@ CC.Location.plots <- plot_grid(Location.CCgrown.plot, Location.InterestCC.plot,
 
 print(CC.Location.plots)
 
-# 8: How does age affect whether or not a person has grown CC? 
 
 
-# 8.plot: Age and CC Grown
+# 8: How does age affect whether or not a person has GROWN CC? 
+
+Age.CCgrown <- glm(Q6~Q31, almonds, family = binomial)
+
+summary(Age.CCgrown)
+
+exp(coef(Age.CCgrown)[2])
 
 
-# 9: How does age affect whether or not a person is interested in growing CC?
 
 
-# 8.plot: Age and Interest in Growing CC
+# 8.plot: Age and CC Grown *****ARE these plots skewed because 25-34 was most prevalent age group?
+
+alm.Age= almonds[almonds$Q31 != " " ,]
+
+age.CCgrown <- data.frame(table(data.frame(alm.Age$Q31, alm.Age$Q6)))
+
+age.CCgrown
+
+Age.grown.plot <- ggplot(age.CCgrown, aes(x = alm.Age.Q31, y = Freq, fill = alm.Age.Q6)) +
+  geom_bar(stat = "identity", position = position_dodge()) +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  ylim(0, 60) +
+  scale_fill_brewer(palette = "Set1") +
+  labs(x = "Age", y = "Count", fill = "Grown CC") +
+  theme(legend.position = "right", 
+        legend.text = element_text(size = 7), legend.title = element_text(size = 8))
+print(Age.grown.plot)
 
 
 
-# How does size of operation affect whether or not people have grown cover crop?
+# 9: How does age affect whether or not a person is INTERESTED in growing CC?
+
+Age.CCinterested <- glm(Q15~Q31, almonds, family = binomial)
+
+summary(Age.CCinterested)
+
+exp(coef(Age.CCinterested)[2])
+
+
+# 9.plot: Age and Interest in Growing CC 
+
+alm.Age= almonds[almonds$Q31 != " " ,]
+
+age.CCinterest <- data.frame(table(data.frame(alm.Age$Q31, alm.Age$Q9)))
+
+age.CCinterest
+
+Age.interest.plot <- ggplot(age.CCinterest, aes(x = alm.Age.Q31, y = Freq, fill = alm.Age.Q9)) +
+  geom_bar(stat = "identity", position = position_dodge()) +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  ylim(0,23) +
+  scale_fill_brewer(palette = "Set1") +
+  labs(x = "Age", y = "Count", fill = "Interest in Growing CC") +
+  theme(legend.position = "right", 
+        legend.text = element_text(size = 7), legend.title = element_text(size = 8))
+print(Age.interest.plot)
+
+# 10.Cowplot: Age and Grown CC vs. Interested in CC
+
+CC.age.plots <- plot_grid(Age.grown.plot, Age.interest.plot, 
+                          align = "h", ncol = 1)
+
+print(CC.age.plots)
+
+
+# 11: How does size of operation affect whether or not people have grown cover crop?
 
 farmsize.GrownCC <- glm(Q3_1 ~ Q6, almonds, family = binomial)
 summary(farmsize.GrownCC)
 
-# (Intercept)   4.1846     0.5817   7.193 6.32e-13 ***
-# Q6Yes        -0.9962     0.7738  -1.287    0.198 
+exp(coef(farmsize.GrownCC)[2])
 
 
+# 11.Plot: Operation size and Grown CC
+
+
+# 12: How does size of operation affect whether or not people are interested in growing cover crop?
+
+
+
+# 12.Plot: Operation Size and Interested in Growing CC
+
+
+
+# 13.Cowplot: Operation Size and Grown CC vs. Interested in Growing CC
+
+
+
+# 14: How do concerns about cover crop differ by location? Region? 
 
 # Concerns for Cover Crop 
 # How do I make a table of all the concerns for CC that appear (all Q12 variables)
@@ -192,31 +264,23 @@ CCconcernTable <- table(almonds$Q10)
 view(CCconcernTable) # This just shows all the combos of concerns
 
 
-# How does Role of Respondent (Owner, Owner/Operator, Farm Manager) affect the concerns they have for cover crop?
-CC.concern <- glm(as.factor(Q10) ~ Q1, almonds, family = binomial)
-summary(CC.concern)
-
-
 
 # What factors influenced people's decision to chose "Availability of water" as a factor in growing CC?
+# Use multinomial 
 
 Availability.water.CCconcern <- lm(subset(almonds, Q10 = "Availability of water"),
                                    Q3_1~Q1)
 
 
-# How does respondent's age affect whether or not they have grown cover crop?
-CCgrown.age <- glm(Q6~Q31, almonds, family = binomial)
-
-summary(CCgrown.age)
-
-
-
-# Plot 1: How does location affect whether or not respondent has grown CC?
 
 
 
 
-# Plot 2: How does location affect whether or not respondent has grown PPH?
+### MORE PLOTS BELOW
+
+
+
+# Plot PPHgrown_Role: How does Role in Operation affect whether or not a person has grown PPH?
 
 alm= almonds[almonds$Q1 != " " ,]
 
@@ -228,81 +292,34 @@ RolePPH.grown.plot <- ggplot(role.PPH, aes(x = alm.Q1, y = Freq, fill = alm.Q12)
   geom_bar(stat = "identity", position = position_dodge()) +
   theme_classic() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  scale_fill_brewer(palette = "Set1")
-  #scale_color_manual(values = c("#FF1234", "#41b6c4", "#1d91c0")) +
-  labs(x = "Role in Operation", y = "Count") +
+  scale_fill_brewer(palette = "Set1") +
+  labs(x = "Role in Operation", y = "Count", fill = "Grown PPH") +
   theme(legend.position = "right", 
         legend.text = element_text(size = 7), legend.title = element_text(size = 8))
 print(RolePPH.grown.plot)
 
-# Plot 3: How does location affect whether or not respondent has adopted AB Bee BMPs?
+
+# Plot Location_BMPs: How does location affect whether or not respondent has adopted AB Bee BMPs?
 alm= almonds[almonds$Q1 != " " ,]
 
-role.BMPs <- data.frame(table(data.frame(alm$Q1, alm$Q18_1:Q18_6)))
+BMPs <- almonds %>%
+  select(Q18_1:Q18_6)
+
+role.BMPs <- data.frame(table(data.frame(alm$Q1, BMPs)))
 
 role.BMPs
 
-RolePPH.grown.plot <- ggplot(role.PPH, aes(x = alm.Q1, y = Freq, fill = alm.Q12)) +
+Location.BMPs.plot <- ggplot(role.BMPs, aes(x = alm.Q1, y = Freq, fill = BMPs)) +
   geom_bar(stat = "identity", position = position_dodge()) +
   theme_classic() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  scale_fill_brewer(palette = "Set1")
-#scale_color_manual(values = c("#FF1234", "#41b6c4", "#1d91c0")) +
+  scale_fill_brewer(palette = "Set1") +
 labs(x = "Role in Operation", y = "Count") +
   theme(legend.position = "right", 
         legend.text = element_text(size = 7), legend.title = element_text(size = 8))
-print(RolePPH.grown.plot)
-
-#Plot 4: How does age affect whether or not respondent has adopted cover crop?
-alm= almonds[almonds$Q31 != " " ,]
-
-age.CC <- data.frame(table(data.frame(alm$Q31, alm$Q6)))
-
-age.CC
-
-Age.grown.plot <- ggplot(age.CC, aes(x = alm.Q31, y = Freq, fill = alm.Q6)) +
-  geom_bar(stat = "identity", position = position_dodge()) +
-  theme_classic() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  ylim(0, 60) +
-  scale_fill_brewer(palette = "Set1") +
-labs(x = "Age", y = "Count") +
-  theme(legend.position = "right")
-print(Age.grown.plot)
-#scale_color_manual(values = c("#FF1234", "#41b6c4", "#1d91c0")) +
-#+ theme(legend.position = "right", 
-        #legend.text = element_text(size = 7), legend.title = element_text(size = 8))
+print(Location.BMPs.plot)
 
 
-# Age and INTEREST in growing cover crop (Shows that people ages 25-34 are most interested in growing cc?)
-
-alm= almonds[almonds$Q31 != " " ,]
-
-alm.age= alm[alm$Q9 != "." ,]
-
-age.interestCC <- data.frame(table(data.frame(alm.age$Q31, alm.age$Q9)))
-
-age.interestCC
-
-Age.interest.plot <- ggplot(age.interestCC, aes(x = alm.age.Q31, y = Freq, fill = alm.age.Q9)) +
-  geom_bar(stat = "identity", position = position_dodge()) +
-  theme_classic() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  ylim(0,23) +
-  scale_fill_brewer(palette = "Set1") +
-#scale_color_manual(values = c("#FF1234", "#41b6c4", "#1d91c0")) +
-labs(x = "Age", y = "Count") +
-  theme(legend.position = "right", 
-        legend.text = element_text(size = 7), legend.title = element_text(size = 8))
-print(Age.interest.plot)
-
-
-# Plot: Age: have grown and are interested in growing CC
-
-CC.age.plots <- plot_grid(Age.grown.plot, Age.interest.plot, 
-                        align = "h", ncol = 1)
-
-print(CC.age.plots)
 
 
 # How do I make it so it includes all the times "Availability of water" was mentioned?
@@ -311,7 +328,7 @@ almonds$Q10 <- as.factor(almonds$Q10)
 
 
 CC.water.county.plot <- ggplot(subset(almonds, Q10 == "Availability of water"),
-                        aes(x = Counties, color = Q9)) +
+                        aes(x = Counties, fill = Q9)) +
                          geom_bar() 
       print(CC.water.county.plot)
 
