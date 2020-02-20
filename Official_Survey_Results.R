@@ -102,6 +102,14 @@ summary(region.GrownCC.multiple)
 exp(coef(region.GrownCC.multiple)[2])
 
 
+
+Location.GrownCC.mixed <- lme(data = almonds,
+                      Counties ~ Q6, 
+                      random = 1|multiple) 
+summary(Location.GrownCC.mixed)
+rsquared(Location.GrownCC.mixed)
+
+
 # 5.plot: Location and Grown CC
 
 alm.loco= almonds[almonds$Counties != " ." ,]
@@ -239,10 +247,20 @@ exp(coef(farmsize.GrownCC)[2])
 
 # 12: How does size of operation affect whether or not people are interested in growing cover crop?
 
+farmsize.InterestCC <- lm(almonds, Q9 + Q3_1)
+summary(farmsize.InterestCC)
+
+exp(coef(farmsize.InterestCC)[2])
 
 
+TNancova.main <- lm(data = PeterPaul.chem.nutrients, tn_ug ~ lakename + depth)
 # 12.Plot: Operation Size and Interested in Growing CC
 
+Size.InterestCC.plot <-
+  ggplot(almonds, aes(x = Q9, y = Q3_1, color = Counties)) +
+  geom_point() +
+  scale_color_viridis_d()
+print(Size.InterestCC.plot)
 
 
 # 13.Cowplot: Operation Size and Grown CC vs. Interested in Growing CC
@@ -261,14 +279,14 @@ almonds$Q10 <- as.factor(almonds$Q10)
 
 CCconcernTable <- table(almonds$Q10)
 
-view(CCconcernTable) # This just shows all the combos of concerns
+CCconcernTable # This just shows all the combos of concerns
 
-
+# 14.Plot: Concerns by location
 
 # What factors influenced people's decision to chose "Availability of water" as a factor in growing CC?
 # Use multinomial 
 
-Availability.water.CCconcern <- lm(subset(almonds, Q10 = "Availability of water"),
+Availability.water.CCconcern <- lm(almonds, Q10 = "Availability of water",
                                    Q3_1~Q1)
 
 
