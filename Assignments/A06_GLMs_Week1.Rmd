@@ -77,7 +77,7 @@ Peter Lake was manipulated with additions of nitrogen and phosphorus over the ye
 TN.anova.2way <- aov(data = PP.Depths, tn_ug ~ lakename + month)
 summary(TN.anova.2way)
 
-TukeyHSD(TN.anova.2way)
+TukeyHSD(TN.anova.2way) # Run to find pairwise. In Tukey: Only use to interpret main effects OR interaction, never both. If see interaction from aov, run Tukey to interpret main effects of only the interactions.
 
 TN.anova.2way3 <- aov(data = PP.Depths, tn_ug ~ lakename * month)
 summary(TN.anova.2way3)
