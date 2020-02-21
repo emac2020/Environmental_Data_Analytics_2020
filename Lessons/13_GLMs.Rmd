@@ -155,7 +155,7 @@ anova(TempTest.mixed, TempTest.fixed)
 NTL.tempmodel <-
 ggplot(NTL.summertemp, aes(x = year4, y = temperature_C, color = lakename)) +
   geom_point() +
-  scale_color_viridis_d() +
+  scale_color_viridis() +
   geom_abline(intercept = -97.72, slope = 0.06) + # Exact coeffs of that mixed effects model
   # make it look better
   labs(x = "", y = expression("Temperature " ( degree~C)), color = "") +
