@@ -55,9 +55,11 @@ CC.table <- prop.table(table(CC.county.interest$Region, CC.county.interest$Cover
 
 CC.table
 
+chisq.test(CC.table)
+
 
 # Central: 47.5% have or are interested in CC
-# Delta: 72.5%
+# Delta: 80.4%
 # North: 72.2% 
 # South: 34.7% 
 

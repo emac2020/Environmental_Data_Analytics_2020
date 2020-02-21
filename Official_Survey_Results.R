@@ -4,27 +4,38 @@ library(cowplot)
 library(corrplot)
 library(tidyverse)
 library(viridis)
+library(nlme)
+library(nnet)
+
 
 almonds <- read.csv("Almond_Survey_Cleaned_Official.csv")
 
-# 1. Plot: Respondent Location (how do i change the color?)
+almonds2 <- read.csv("Survey_numeric_answers_CLEANED_Feb5.csv")
 
-locoplot<- ggplot(almonds, aes(x = Counties, fill = Counties)) +
-  geom_bar() +
+# 1. Plot: Respondent Location
+
+locoplot<- ggplot(almonds, aes(x = Counties)) +
+  geom_bar(fill = "blue") +
   theme_classic() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   labs(x = "County", y = "Count") +
   theme(legend.position = "bottom", 
-        legend.text = element_text(size = 7), legend.title = element_text(size = 8))
+        legend.text = element_text(size = 10), 
+        legend.title = element_text( face = "bold",size = 10))
+
 
 print(locoplot)
 
 
+
 # 2. How does Role in Operation affect whether or not a person has GROWN cover crop?
 
-Role.Operation.CCgrown <- glm(Q1 ~ Q6, almonds, family = binomial)
+Role.Operation.CCgrown <- glm(Q6~ Q1, almonds, family = binomial)
 
 summary(Role.Operation.CCgrown)
+# y on left, x on right
+# look up: how to interpret logistic regression 
+# showing nothing special 
 
 exp(coef(Role.Operation.CCgrown)[2])
 
@@ -41,21 +52,23 @@ Role.CCgrown.plot <- ggplot(role.count, aes(x = alm.Q1, y = Freq, fill = alm.Q6)
   geom_bar(stat = "identity", position = position_dodge()) +
   theme_classic() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  scale_fill_brewer(palette = "Set1") +
+  scale_fill_brewer(palette = "Paired") +
   labs(x = "Role in Operation", y = "Count", fill = "Grown Cover Crop") +
   theme(legend.position = "right", 
-        legend.text = element_text(size = 7), legend.title = element_text(size = 8))
+        legend.text = element_text(size = 7), legend.title = element_text(size = 10))
 print(Role.CCgrown.plot)
 
 # 3. How does a person's role in the operation affect whether they are INTERESTED in growing cover crop?
 
-Role.Operation.CCinterest <- glm(Q1 ~ Q9, almonds, family = binomial)
+Role.Operation.CCinterest <- glm(Q9 ~ Q1, almonds, family = binomial)
 
 summary(Role.Operation.CCinterest)
 
 exp(coef(Role.Operation.CCinterest)[2])
 
-# 3.plot: Role in Operation and Interest in Growing CC
+#Look into Chi Square
+
+# 3.plot: Role in Operation and Interest in Growing CC 
 alm= almonds[almonds$Q1 != " " ,]
 
 role.interest.count <- data.frame(table(data.frame(alm$Q1, alm$Q9)))
@@ -66,48 +79,48 @@ Role.CCinterest.plot <-
   ggplot(role.interest.count, aes(x = alm.Q1, y = Freq, fill = alm.Q9)) +
   geom_bar(stat = "identity", position = position_dodge()) +
   theme_classic() +
-  #scale_color_manual(values = c("#FF1234", "#41b6c4", "#1d91c0")) +
-  labs(x = "Role in Operation", y = "Interest in Growing Cover Crop", fill = "Interest in Cover Crop") +
-  scale_fill_brewer(palette = "Set1") +
+  labs(x = "Role in Operation", y = "Count", fill = "Interest in Cover Crop") +
+  scale_fill_manual(values = c("darkblue", "#E69F00", "#009E73", "#CC79A7"))  +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   theme(legend.position = "right")
 print(Role.CCinterest.plot)
 
 #4.Cowplot: Role in Operation and Grown CC vs. Interested in Growing CC
 
-CC.Role.plots <- plot_grid(Role.CCgrown.plot, Role.Operation.CCinterest.plot, 
+CC.Role.plots <- plot_grid(Role.CCgrown.plot, Role.CCinterest.plot, 
                           align = "h", ncol = 1)
 
 print(CC.Role.plots)
 
 
 
-# 5. How does location affect whether or not a person has GROWN cover crop?
+# 5. How does location affect whether or not a person has GROWN cover crop? (NEITHER of these work)
 
+## Atempt 1
 Location.GrownCC <- glm(Counties ~ Q6, almonds, family = binomial)
 summary(Location.GrownCC)
 
-
-#             Estimate Std. Error z value Pr(>|z|)    
-#(Intercept)    5.293      1.003   5.280 1.29e-07 ***
-#Q6Yes         17.273   4795.696   0.004    0.997 
-
+exp(coef(Location.GrownCC)[2])
 
 multiple = almonds[almonds$Counties == "Multiple",]
 
-region.GrownCC.multiple <- glmer(data = almonds, Counties ~ Q6 + (1|multiple), family = binomial)
+Location.GrownCC.multiple <- glmer(data = almonds, Counties ~ Q6 + (1|multiple), family = binomial)
 
-summary(region.GrownCC.multiple)
+summary(Location.GrownCC.multiple)
 
-exp(coef(region.GrownCC.multiple)[2])
+exp(coef(Location.GrownCC.multiple)[2])
 
+## Attempt 2
+Location.GrownCC.Select <- 
+  almonds %>%
+  select(Counties, Q6)
 
-
-Location.GrownCC.mixed <- lme(data = almonds,
+Location.GrownCC.random <- lme(data = Location.GrownCC.Select,
                       Counties ~ Q6, 
-                      random = 1|multiple) 
-summary(Location.GrownCC.mixed)
-rsquared(Location.GrownCC.mixed)
+                      random = ~1|multiple) 
+summary(Location.GrownCC.random)
+rsquared(Location.GrownCC.random)
+
 
 
 # 5.plot: Location and Grown CC
@@ -122,7 +135,7 @@ Location.CCgrown.plot <- ggplot(Location.CC, aes(x = alm.loco.Counties, y = Freq
   geom_bar(stat = "identity", position = position_dodge()) +
   theme_classic() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  scale_fill_brewer(palette = "Set1") +
+  scale_fill_manual(values = c("darkblue", "#E69F00")) +
 labs(x = "Location", y = "Count", fill = "Grown CC") +
   theme(legend.position = "right", 
         legend.text = element_text(size = 7), legend.title = element_text(size = 8))
@@ -138,7 +151,7 @@ summary(Location.InterestCC)
 exp(coef(Location.InterestCC)[2])
 
 
-# 6.plot: Location and Interest in Growing CC
+# 6.plot: Location and Interest in Growing CC 
 
 alm.loco= almonds[almonds$Counties != " ." ,]
 
@@ -173,7 +186,6 @@ Age.CCgrown <- glm(Q6~Q31, almonds, family = binomial)
 summary(Age.CCgrown)
 
 exp(coef(Age.CCgrown)[2])
-
 
 
 
@@ -236,29 +248,42 @@ print(CC.age.plots)
 
 # 11: How does size of operation affect whether or not people have grown cover crop?
 
-farmsize.GrownCC <- glm(Q3_1 ~ Q6, almonds, family = binomial)
+farmsize.GrownCC <- glm(Q6 ~ Q3_1, almonds, family = binomial)
 summary(farmsize.GrownCC)
 
 exp(coef(farmsize.GrownCC)[2])
 
 
-# 11.Plot: Operation size and Grown CC
+# 11.Plot: Operation size and Grown CC (HOW DO I PLOT THIS??)
+
+
+FarmSize.GrownCC.plot <- ggplot(almonds, aes(x = Q6, y = Q3_1, fill = Counties)) +
+  geom_point() +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  ylim(0,23) +
+  #scale_fill_brewer(palette = "Set1") +
+  scale_color_gradient(low="blue", high="red") +
+  labs(x = "Farm Size", y = "Count", fill = "Grown CC") +
+  theme(legend.position = "right", 
+        legend.text = element_text(size = 7), legend.title = element_text(size = 8))
+print(FarmSize.GrownCC.plot)
 
 
 # 12: How does size of operation affect whether or not people are interested in growing cover crop?
 
-farmsize.InterestCC <- lm(almonds, Q9 + Q3_1)
+farmsize.InterestCC <- glm(Q9~Q3_1 , almonds, family = binomial)
 summary(farmsize.InterestCC)
 
 exp(coef(farmsize.InterestCC)[2])
 
 
-TNancova.main <- lm(data = PeterPaul.chem.nutrients, tn_ug ~ lakename + depth)
+
 # 12.Plot: Operation Size and Interested in Growing CC
 
 Size.InterestCC.plot <-
-  ggplot(almonds, aes(x = Q9, y = Q3_1, color = Counties)) +
-  geom_point() +
+  ggplot(almonds, aes(x = Q9, y = Q3_1, color = Q9)) +
+  geom_bar(stat = "identity", position = position_dodge()) +
   scale_color_viridis_d()
 print(Size.InterestCC.plot)
 
@@ -285,14 +310,18 @@ CCconcernTable # This just shows all the combos of concerns
 
 # What factors influenced people's decision to chose "Availability of water" as a factor in growing CC?
 # Use multinomial 
-
-Availability.water.CCconcern <- lm(almonds, Q10 = "Availability of water",
-                                   Q3_1~Q1)
-
+# Make columns with different concerns. Set NA to zero in almonds2 and set the column to as.factor
+#water concern ~ region + operation size 
 
 
+alm.H20.Avail= almonds[almonds$Q10 == "Availability of water" ,]
 
+H20.Avail.CCconcern <- data.frame(table(data.frame(alm.H20.Avail$Q10, alm.H20.Avail$Q6)))
 
+H20.Avail.CCconcern
+
+Availability.water.CCconcern <- multinom(alm.H20.Avail.Q6 ~ alm.H20.Avail.Q10 + alm.H20.Avail, 
+                                         data = H20.Avail.CCconcern)
 
 ### MORE PLOTS BELOW
 
