@@ -12,6 +12,12 @@ almonds <- read.csv("Almond_Survey_Cleaned_Official.csv")
 
 almonds2 <- read.csv("Survey_numeric_answers_CLEANED_Feb5.csv")
 
+
+summary(almonds$Q31)
+summary(almonds$Q30_1)
+summary(almonds$Q3_1)
+
+
 # 1. Plot: Respondent Location
 
 locoplot<- ggplot(almonds, aes(x = Counties)) +
@@ -33,9 +39,7 @@ print(locoplot)
 Role.Operation.CCgrown <- glm(Q6~ Q1, almonds, family = binomial)
 
 summary(Role.Operation.CCgrown)
-# y on left, x on right
-# look up: how to interpret logistic regression 
-# showing nothing special 
+
 
 exp(coef(Role.Operation.CCgrown)[2])
 
@@ -51,8 +55,9 @@ role.count
 Role.CCgrown.plot <- ggplot(role.count, aes(x = alm.Q1, y = Freq, fill = alm.Q6)) +
   geom_bar(stat = "identity", position = position_dodge()) +
   theme_classic() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  scale_fill_brewer(palette = "Paired") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, face = "bold", size = 12)) +
+  #scale_fill_brewer(palette = "Paired") +
+  scale_fill_manual(values = c("darkblue", "#009E73")) +
   labs(x = "Role in Operation", y = "Count", fill = "Grown Cover Crop") +
   theme(legend.position = "right", 
         legend.text = element_text(size = 7), legend.title = element_text(size = 10))
@@ -81,7 +86,7 @@ Role.CCinterest.plot <-
   theme_classic() +
   labs(x = "Role in Operation", y = "Count", fill = "Interest in Cover Crop") +
   scale_fill_manual(values = c("darkblue", "#E69F00", "#009E73", "#CC79A7"))  +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, face = "bold", size = 12)) +
   theme(legend.position = "right")
 print(Role.CCinterest.plot)
 
@@ -322,6 +327,99 @@ H20.Avail.CCconcern
 
 Availability.water.CCconcern <- multinom(alm.H20.Avail.Q6 ~ alm.H20.Avail.Q10 + alm.H20.Avail, 
                                          data = H20.Avail.CCconcern)
+
+
+### Permanent Pollinator Habitat Section
+
+# 1. How does Role in Operation affect whether or not a person has planted PPH?
+
+Role.Operation.PPHplanted <- glm(Q12~ Q1, almonds, family = binomial)
+
+summary(Role.Operation.PPHplanted)
+
+
+exp(coef(Role.Operation.PPHplanted)[2])
+
+
+
+# Plot: Role in Operation and PPH GROWN
+alm= almonds[almonds$Q1 != " " ,]
+
+role.grownPPH.count <- data.frame(table(data.frame(alm$Q1, alm$Q12)))
+
+role.grownPPH.count
+
+Role.PPHgrown.plot <- 
+  ggplot(role.grownPPH.count, aes(x = alm.Q1, y = Freq, fill = alm.Q12)) +
+  geom_bar(stat = "identity", position = position_dodge()) +
+  theme_classic() +
+  labs(x = "Role in Operation", y = "Count", fill = "Grown Permenant Habitat") +
+  scale_fill_manual(values = c("darkblue", "#E69F00", "#009E73", "#CC79A7"))  +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, face = "bold", size = 12)) +
+  theme(legend.position = "right")
+print(Role.PPHgrown.plot)
+
+
+# 2. How does Role in Operation affect whether or not a person is interested in planting PPH?
+
+Role.Operation.PPHinterest <- glm(Q15~ Q1, almonds, family = binomial)
+
+summary(Role.Operation.PPHinterest)
+
+
+exp(coef(Role.Operation.PPHinterest)[2])
+
+
+
+# 3. How does location affect whether or not a person has planted PPH? 
+
+# 4. How does location affect whether or not a person is interested in planting PPH? 
+
+
+# 5: How does age affect whether or not a person has planted PPH? 
+
+Age.PPHgrown <- glm(Q12~Q31, almonds, family = binomial)
+
+summary(Age.PPHgrown)
+
+exp(coef(Age.PPHgrown)[2])
+
+
+# 6: How does age affect whether or not a person is interested in planting PPH? 
+
+Age.PPHinterest <- glm(Q15~Q31, almonds, family = binomial)
+
+summary(Age.PPHinterest)
+
+exp(coef(Age.PPHinterest)[2])
+
+
+# 7: How does size of operation affect whether or not people have planted PPH?
+
+farmsize.PPHgrown <- glm(Q12 ~ Q3_1, almonds, family = binomial)
+summary(farmsize.PPHgrown)
+
+exp(coef(farmsize.PPHgrown)[2])
+
+
+# 8: How does size of operation affect whether or not people are interested in planting PPH?
+
+
+farmsize.PPHinterest <- glm(Q15 ~ Q3_1, almonds, family = binomial)
+summary(farmsize.PPHinterest)
+
+exp(coef(farmsize.PPHinterest)[2])
+
+
+# 9: How do concerns about PPH differ by location? Region? 
+
+
+
+
+
+
+
+
 
 ### MORE PLOTS BELOW
 
