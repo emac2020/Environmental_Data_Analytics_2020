@@ -58,9 +58,24 @@ Research question: What is the best set of predictors for lake temperatures in J
 
 ```{r}
 #3
-
+NTL.chem.physics.wrangle <- PeterPaul.chem.physics.processed %>%
+  filter(daynum > 181 & daynum < 213) %>%
+  select(lakename:daynum, depth, temperature_C ) %>%
+  na.exclude()
 
 #4
+Temp.chem.physics.mixed <- lme(data = NTL.chem.physics.wrangle,
+                     temperature_C ~ year4 + daynum + depth,
+                     random = ~1|lakename) 
+summary(Temp.chem.physics.mixed)
+rsquared(Temp.chem.physics.mixed)
+
+
+Temp.chem.physics.fixed <- gls(data = NTL.chem.physics.wrangle,
+                      temperature_C ~ year4+ daynum + depth)
+summary(Temp.chem.physics.fixed)
+
+anova(Temp.chem.physics.mixed, Temp.chem.physics.fixed)
 
 ```
 
