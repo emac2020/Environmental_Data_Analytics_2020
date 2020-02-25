@@ -19,7 +19,7 @@ CC.county.interest <- almonds[,c("Q2","Q6", "Q8", "Q9")]
 
 
 #North: Butte, Colusa, Glenn, Tehama
-#Delta: Sac, Solano, Yolo, Yuba
+#Delta: Sac, Solano, Yolo, Yuba, Sutter
 #Central: San Joaquin, Stan, Merced, Madera
 #Socal: Tulare, Kings, Kern, Fresno
 

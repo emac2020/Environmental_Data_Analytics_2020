@@ -12,6 +12,7 @@ almonds <- read.csv("Almond_Survey_Cleaned_Official.csv")
 
 almonds2 <- read.csv("Survey_numeric_answers_CLEANED_Feb5.csv")
 
+summary(almonds$Q1)
 
 summary(almonds$Q31)
 summary(almonds$Q30_1)
