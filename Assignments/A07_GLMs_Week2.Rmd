@@ -34,7 +34,7 @@ library(piecewiseSEM)
 
 PeterPaul.chem.physics.raw <- read.csv("./Data/Raw/NTL-LTER_Lake_ChemistryPhysics_Raw.csv")
 
-PeterPaul.chem.physics.processed <- read.csv("./Data/Processed/NTL-LTER_Lake_ChemistryPhysics_PeterPaul_Processed.csv")
+Litter <- read.csv("./Data/Processed/NEON_NIWO_Litter_mass_trap_Processed.csv")
 
 #2
 mytheme <- theme_classic(base_size = 14) +
@@ -58,46 +58,60 @@ Research question: What is the best set of predictors for lake temperatures in J
 
 ```{r}
 #3
-NTL.chem.physics.wrangle <- PeterPaul.chem.physics.processed %>%
+NTL.chem.physics.wrangle <- PeterPaul.chem.physics.raw %>%
   filter(daynum > 181 & daynum < 213) %>%
-  select(lakename:daynum, depth, temperature_C ) %>%
-  na.exclude()
+  select(lakename, year4, daynum, depth, temperature_C ) %>%
+  na.omit()
 
 #4
-Temp.chem.physics.mixed <- lme(data = NTL.chem.physics.wrangle,
-                     temperature_C ~ year4 + daynum + depth,
-                     random = ~1|lakename) 
-summary(Temp.chem.physics.mixed)
-rsquared(Temp.chem.physics.mixed)
+
+Temp.chem.physics.AIC <- lm(data = NTL.chem.physics.wrangle, temperature_C ~ year4 + daynum + depth)
+
+step(Temp.chem.physics.AIC) 
 
 
-Temp.chem.physics.fixed <- gls(data = NTL.chem.physics.wrangle,
-                      temperature_C ~ year4+ daynum + depth)
-summary(Temp.chem.physics.fixed)
+Temp.chem.physics.Model <- lm(data = NTL.chem.physics.wrangle, temperature_C ~ year4 + daynum + depth)
 
-anova(Temp.chem.physics.mixed, Temp.chem.physics.fixed)
+summary(Temp.chem.physics.Model)
+
+
 
 ```
 
 5. What is the final set of explanatory variables that predict temperature from your multiple regression? How much of the observed variance does this model explain?
 
-> Answer: 
+> Answer: The final set of explanatory variables that predict temperature is the set that contains year4, daynum, and depth, because it has the lowest AIC (26016.31). This model explains 74.17% of the variance.
 
 6. Run an interaction effects ANCOVA to predict temperature based on depth and lakename from the same wrangled dataset.
 
 ```{r}
 #6
 
+Temp.ANCOVA.Interaction <- lm( data = NTL.chem.physics.wrangle, temperature_C ~ depth * lakename)
+
+summary(Temp.ANCOVA.Interaction)
+
 ```
 
 7. Is there a significant interaction between depth and lakename? How much variance in the temperature observations does this explain?
 
-> Answer: 
+> Answer: Yes, there is a significant interaction between depth and lakename. This interaction explains 78.57% of the variance in the temperature observations. 
 
 8. Create a graph that depicts temperature by depth, with a separate color for each lake. Add a geom_smooth (method = "lm", se = FALSE) for each lake. Make your points 50 % transparent. Adjust your y axis limits to go from 0 to 35 degrees. Clean up your graph to make it pretty. 
 
 ```{r}
 #8
+
+TempDepth.Graph <- 
+  ggplot(NTL.chem.physics.wrangle, aes(x = depth, y = temperature_C, color = lakename)) +
+  geom_point(alpha = .5) +
+  scale_color_brewer(palette = "Set1", direction = 1) +
+  ylim(0,35) +
+  labs(x = "Depth (m)", y = expression("Temperature " ( degree~C))) +
+  geom_smooth(method = 'lm', se = FALSE)
+
+print(TempDepth.Graph)
+
 
 ```
 
@@ -107,7 +121,15 @@ a. Build and run a mixed effects model.
 b. Check the difference between the marginal and conditional R2 of the model. 
 
 ```{r}
+# a. 
 
+Litter.mixed <- lme(data = Litter,
+                     dryMass ~ nlcdClass * functionalGroup,  
+                     random = ~1|plotID) 
+summary(Litter.mixed)
+
+#b.
+rsquared(Litter.mixed)
 
 ```
 
@@ -118,10 +140,19 @@ b. continued... How much more variance is explained by adding the random effect 
 c. Run the same model without the random effect.
 d. Run an anova on the two tests. 
 ```{r}
- 
+
+# c. 
+
+Litter.fixed <- gls(data = Litter,
+                      dryMass ~ nlcdClass * functionalGroup)
+summary(Litter.fixed)
+rsquared(Litter.fixed)
+
+#d. 
+anova(Litter.mixed, Litter.fixed)
 
 ```
 
 d. continued... Is the mixed effects model a better model than the fixed effects model? How do you know?
 
-> Answer: 
+> Answer: The mixed effects model is better than the fixed effects model because it has the lower AIC (9038.575).
