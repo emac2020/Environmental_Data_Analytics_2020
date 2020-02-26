@@ -35,6 +35,8 @@ print(locoplot)
 
 
 
+
+
 # 2. How does Role in Operation affect whether or not a person has GROWN cover crop?
 
 Role.Operation.CCgrown <- glm(Q6~ Q1, almonds, family = binomial)
@@ -44,6 +46,17 @@ summary(Role.Operation.CCgrown)
 
 exp(coef(Role.Operation.CCgrown)[2])
 
+# Chi-square
+
+almonds2$RoleOperation <- as.factor(almonds2$RoleOperation)
+almonds2$GrownCC <- as.factor(almonds2$GrownCC)
+
+library(MASS) 
+
+Role.GrownCC.tbl = table(almonds2$RoleOperation, almonds2$GrownCC) 
+Role.GrownCC.tbl
+
+chisq.test(Role.GrownCC.tbl)
 
 # 2.plot Role in operation and whether or not a person has GROWN cover crop 
 
@@ -72,7 +85,12 @@ summary(Role.Operation.CCinterest)
 
 exp(coef(Role.Operation.CCinterest)[2])
 
-#Look into Chi Square
+# Chi-square: Role in Operation vs. Interest in CC
+
+Role.InterestCC.tbl = table(almonds2$RoleOperation, almonds2$CC_Interest) 
+Role.InterestCC.tbl
+
+chisq.test(Role.InterestCC.tbl)
 
 # 3.plot: Role in Operation and Interest in Growing CC 
 alm= almonds[almonds$Q1 != " " ,]
@@ -101,6 +119,16 @@ print(CC.Role.plots)
 
 
 # 5. How does location affect whether or not a person has GROWN cover crop? (NEITHER of these work)
+
+
+# Chi-square: Location vs. Grown CC
+
+almonds$Regions <- as.factor(almonds$Regions)
+
+Location.GrownCC.tbl = table(almonds$Regions, almonds$Q6) 
+Location.GrownCC.tbl
+
+chisq.test(Location.GrownCC.tbl)
 
 ## Atempt 1
 Location.GrownCC <- glm(Counties ~ Q6, almonds, family = binomial)
@@ -193,6 +221,16 @@ summary(Age.CCgrown)
 
 exp(coef(Age.CCgrown)[2])
 
+almonds2$Q50 <- as.factor(almonds2$Q50)
+
+# Chi-Square
+
+
+Age.GrownCC.tbl = table(almonds2$Q50, almonds2$GrownCC) 
+Age.GrownCC.tbl
+
+chisq.test(Age.GrownCC.tbl)
+
 
 
 # 8.plot: Age and CC Grown *****ARE these plots skewed because 25-34 was most prevalent age group?
@@ -223,6 +261,13 @@ Age.CCinterested <- glm(Q15~Q31, almonds, family = binomial)
 summary(Age.CCinterested)
 
 exp(coef(Age.CCinterested)[2])
+
+# Chi-square
+
+Age.InterestCC.tbl = table(almonds2$Q50, almonds2$GrownCC) 
+Age.InterestCC.tbl
+
+chisq.test(Age.InterestCC.tbl)
 
 
 # 9.plot: Age and Interest in Growing CC 
@@ -258,6 +303,16 @@ farmsize.GrownCC <- glm(Q6 ~ Q3_1, almonds, family = binomial)
 summary(farmsize.GrownCC)
 
 exp(coef(farmsize.GrownCC)[2])
+
+
+# Chi-square
+
+almonds2$TotalYieldBearing <- as.factor(almonds2$TotalYieldBearing)
+
+Size.GrownCC.tbl = table(almonds2$TotalYieldBearing, almonds2$GrownCC) 
+Size.GrownCC.tbl
+
+chisq.test(Size.GrownCC.tbl)
 
 
 # 11.Plot: Operation size and Grown CC (HOW DO I PLOT THIS??)
@@ -340,6 +395,8 @@ summary(Role.Operation.PPHplanted)
 
 
 exp(coef(Role.Operation.PPHplanted)[2])
+
+
 
 
 
