@@ -6,6 +6,7 @@ library(tidyverse)
 library(viridis)
 library(nlme)
 library(nnet)
+library(MASS) 
 
 
 almonds <- read.csv("Almond_Survey_Cleaned_Official.csv")
@@ -17,6 +18,7 @@ summary(almonds$Q1)
 summary(almonds$Q31)
 summary(almonds$Q30_1)
 summary(almonds$Q3_1)
+
 
 
 # 1. Plot: Respondent Location
@@ -51,12 +53,14 @@ exp(coef(Role.Operation.CCgrown)[2])
 almonds2$RoleOperation <- as.factor(almonds2$RoleOperation)
 almonds2$GrownCC <- as.factor(almonds2$GrownCC)
 
-library(MASS) 
+
 
 Role.GrownCC.tbl = table(almonds2$RoleOperation, almonds2$GrownCC) 
 Role.GrownCC.tbl
 
 chisq.test(Role.GrownCC.tbl)
+
+
 
 # 2.plot Role in operation and whether or not a person has GROWN cover crop 
 
@@ -74,7 +78,7 @@ Role.CCgrown.plot <- ggplot(role.count, aes(x = alm.Q1, y = Freq, fill = alm.Q6)
   scale_fill_manual(values = c("darkblue", "#009E73")) +
   labs(x = "Role in Operation", y = "Count", fill = "Grown Cover Crop") +
   theme(legend.position = "right", 
-        legend.text = element_text(size = 7), legend.title = element_text(size = 10))
+        legend.text = element_text(size = 12), legend.title = element_text(size = 12))
 print(Role.CCgrown.plot)
 
 # 3. How does a person's role in the operation affect whether they are INTERESTED in growing cover crop?
@@ -106,7 +110,8 @@ Role.CCinterest.plot <-
   labs(x = "Role in Operation", y = "Count", fill = "Interest in Cover Crop") +
   scale_fill_manual(values = c("darkblue", "#E69F00", "#009E73", "#CC79A7"))  +
   theme(axis.text.x = element_text(angle = 45, hjust = 1, face = "bold", size = 12)) +
-  theme(legend.position = "right")
+  theme(legend.position = "right", 
+        legend.text = element_text(size = 12), legend.title = element_text(size = 12))
 print(Role.CCinterest.plot)
 
 #4.Cowplot: Role in Operation and Grown CC vs. Interested in Growing CC
@@ -264,7 +269,7 @@ exp(coef(Age.CCinterested)[2])
 
 # Chi-square
 
-Age.InterestCC.tbl = table(almonds2$Q50, almonds2$GrownCC) 
+Age.InterestCC.tbl = table(almonds2$Q50, almonds2$CC_Interest) 
 Age.InterestCC.tbl
 
 chisq.test(Age.InterestCC.tbl)
@@ -305,11 +310,13 @@ summary(farmsize.GrownCC)
 exp(coef(farmsize.GrownCC)[2])
 
 
+
 # Chi-square
 
-almonds2$TotalYieldBearing <- as.factor(almonds2$TotalYieldBearing)
+almonds$Acre.Ranges <- as.factor(almonds$Acre.Ranges)
+almonds$Q6 <- as.factor(almonds$Q6)
 
-Size.GrownCC.tbl = table(almonds2$TotalYieldBearing, almonds2$GrownCC) 
+Size.GrownCC.tbl = table(almonds$Acre.Ranges, almonds$Q6) 
 Size.GrownCC.tbl
 
 chisq.test(Size.GrownCC.tbl)
@@ -317,15 +324,20 @@ chisq.test(Size.GrownCC.tbl)
 
 # 11.Plot: Operation size and Grown CC (HOW DO I PLOT THIS??)
 
+alm.Size= almonds[almonds$Acre.Ranges != "NA" ,]
 
-FarmSize.GrownCC.plot <- ggplot(almonds, aes(x = Q6, y = Q3_1, fill = Counties)) +
-  geom_point() +
+Size.CCgrown <- data.frame(table(data.frame(alm.Size$Acre.Ranges, alm.Size$Q6)))
+
+Size.CCgrown
+
+FarmSize.GrownCC.plot <- 
+  ggplot(Size.CCgrown, aes(x = alm.Size.Acre.Ranges, y = Freq, fill = alm.Size.Q6)) +
+  geom_bar(stat = "identity", position = position_dodge()) +
   theme_classic() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   ylim(0,23) +
-  #scale_fill_brewer(palette = "Set1") +
-  scale_color_gradient(low="blue", high="red") +
-  labs(x = "Farm Size", y = "Count", fill = "Grown CC") +
+  scale_fill_brewer(palette = "Set1") +
+  labs(x = "Farm Size", y = "Count", fill = "alm.Size.Q6") +
   theme(legend.position = "right", 
         legend.text = element_text(size = 7), legend.title = element_text(size = 8))
 print(FarmSize.GrownCC.plot)
@@ -333,12 +345,17 @@ print(FarmSize.GrownCC.plot)
 
 # 12: How does size of operation affect whether or not people are interested in growing cover crop?
 
-farmsize.InterestCC <- glm(Q9~Q3_1 , almonds, family = binomial)
+farmsize.InterestCC <- glm(Q9~Acre.Ranges , almonds, family = binomial)
 summary(farmsize.InterestCC)
 
 exp(coef(farmsize.InterestCC)[2])
 
+almonds$Q9 <- as.factor(almonds$Q9)
 
+Size.InterestCC.tbl = table(almonds$Acre.Ranges, almonds$Q9) 
+Size.InterestCC.tbl
+
+chisq.test(Size.InterestCC.tbl)
 
 # 12.Plot: Operation Size and Interested in Growing CC
 
@@ -353,7 +370,16 @@ print(Size.InterestCC.plot)
 
 
 
+
 # 14: How do concerns about cover crop differ by location? Region? 
+
+almonds$Q10 <- as.factor(almonds$Q10)
+
+CCconcerns.Region.tbl = table(almonds$Regions, almonds$Q10)
+
+CCconcerns.Region.tbl
+
+chisq.test(CCconcerns.Region.tbl)
 
 # Concerns for Cover Crop 
 # How do I make a table of all the concerns for CC that appear (all Q12 variables)
@@ -397,7 +423,17 @@ summary(Role.Operation.PPHplanted)
 exp(coef(Role.Operation.PPHplanted)[2])
 
 
+# Chi-Square
 
+almonds2$RoleOperation <- as.factor(almonds2$RoleOperation)
+almonds2$GrownPPH <- as.factor(almonds2$GrownPPH)
+
+
+
+Role.GrownPPH.tbl = table(almonds2$RoleOperation, almonds2$GrownPPH) 
+Role.GrownPPH.tbl
+
+chisq.test(Role.GrownPPH.tbl)
 
 
 # Plot: Role in Operation and PPH GROWN
@@ -427,12 +463,35 @@ summary(Role.Operation.PPHinterest)
 
 exp(coef(Role.Operation.PPHinterest)[2])
 
+# Chi-Square
 
+almonds$PPHInterest <- as.factor(almonds2$PPHInterest)
+
+
+
+Role.InterestPPH.tbl = table(almonds2$RoleOperation, almonds2$PPHInterest) 
+Role.InterestPPH.tbl
+
+chisq.test(Role.InterestPPH.tbl)
 
 # 3. How does location affect whether or not a person has planted PPH? 
 
+almonds$Q12 <- as.factor(almonds$Q12)
+
+Region.GrownPPH.tbl = table(almonds$Regions, almonds$Q12) 
+Region.GrownPPH.tbl
+
+chisq.test(Region.GrownPPH.tbl)
+
 # 4. How does location affect whether or not a person is interested in planting PPH? 
 
+almonds$Q15 <- as.factor(almonds$Q15)
+almonds$Regions <- as.factor(almonds$Regions)
+
+Region.InterestPPH.tbl = table(almonds$Regions, almonds$Q15) 
+Region.InterestPPH.tbl
+
+chisq.test(Region.InterestPPH.tbl)
 
 # 5: How does age affect whether or not a person has planted PPH? 
 
