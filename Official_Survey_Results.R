@@ -474,6 +474,24 @@ Role.InterestPPH.tbl
 
 chisq.test(Role.InterestPPH.tbl)
 
+
+# Plot: Role in Operation and INTERESTED in planting PPH
+alm= almonds[almonds$Q1 != " " ,]
+
+role.interestPPH.count <- data.frame(table(data.frame(alm$Q1, alm$Q15)))
+
+role.interestPPH.count
+
+Role.PPHinterest.plot <- 
+  ggplot(role.interestPPH.count, aes(x = alm.Q1, y = Freq, fill = alm.Q15)) +
+  geom_bar(stat = "identity", position = position_dodge()) +
+  theme_classic() +
+  labs(x = "Role in Operation", y = "Count", fill = "Interest in Growing PPH") +
+  scale_fill_manual(values = c("darkblue", "#E69F00", "#009E73", "#CC79A7"))  +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, face = "bold", size = 12)) +
+  theme(legend.position = "right")
+print(Role.PPHinterest.plot)
+
 # 3. How does location affect whether or not a person has planted PPH? 
 
 almonds$Q12 <- as.factor(almonds$Q12)
