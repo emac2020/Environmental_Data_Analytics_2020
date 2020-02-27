@@ -135,6 +135,15 @@ Location.GrownCC.tbl
 
 chisq.test(Location.GrownCC.tbl)
 
+
+
+regions.CCgrown.glm <- glm(Q6 ~  + Region.North + Region.Delta + Region.Central, 
+                           data = almonds, family = binomial )
+
+summary(regions.CCgrown.glm)
+
+exp(coef(regions.CCgrown.glm)[2])
+
 ## Atempt 1
 Location.GrownCC <- glm(Counties ~ Q6, almonds, family = binomial)
 summary(Location.GrownCC)
@@ -184,10 +193,26 @@ print(Location.CCgrown.plot)
 
 # 6: How does location affect whether or not a person is INTERESTED in growing cover crop?
 
-Location.InterestCC <- glm(Counties ~ Q9, almonds, family = binomial)
+Location.InterestCC <- glm(Q9 ~ Counties.with..multiple., almonds, family = binomial)
 summary(Location.InterestCC)
 
-exp(coef(Location.InterestCC)[2])
+exp(coef(Location.InterestCC)[2]) ## Nothing sig
+
+Regions.InterestCC.glm <- glm(Q9 ~ Region.North + Region.South + Region.Delta, 
+                              almonds, family = binomial)
+
+summary(Regions.InterestCC.glm) # Significant?
+
+
+# Chi-Square
+
+almonds$Q9 <- as.factor(almonds$Q9)
+
+Location.InterestCC.tbl = table(almonds$Regions, almonds$Q9) 
+
+Location.InterestCC.tbl
+
+chisq.test(Location.InterstCC.tbl) #####LOOK INTO THIS
 
 
 # 6.plot: Location and Interest in Growing CC 
@@ -381,6 +406,13 @@ CCconcerns.Region.tbl
 
 chisq.test(CCconcerns.Region.tbl)
 
+
+
+ConcernsCC.Regions.glm <- glm(Q10 ~ Region.South + Region.Delta + Region.Central, 
+                              almonds, family = binomial)
+
+summary(ConcernsCC.Regions.glm)
+
 # Concerns for Cover Crop 
 # How do I make a table of all the concerns for CC that appear (all Q12 variables)
 # table: categorize all the concerns (water, time, labor, interference, etc.). table with different categorize
@@ -501,6 +533,12 @@ Region.GrownPPH.tbl
 
 chisq.test(Region.GrownPPH.tbl)
 
+# Region glm: PPH GROWN
+
+Region.GrownPPH.glm <- glm(Q12 ~ Region.North + Region.Delta + Region.Central,
+                           almonds, family = binomial)
+summary(Region.GrownPPH.glm)
+
 # 4. How does location affect whether or not a person is interested in planting PPH? 
 
 almonds$Q15 <- as.factor(almonds$Q15)
@@ -510,6 +548,14 @@ Region.InterestPPH.tbl = table(almonds$Regions, almonds$Q15)
 Region.InterestPPH.tbl
 
 chisq.test(Region.InterestPPH.tbl)
+
+# Region glm: PPH INTEREST 
+
+Region.InterestPPH.glm <- glm(Q15 ~ Region.North + Region.Delta + Region.Central,
+                           almonds, family = binomial)
+summary(Region.InterestPPH.glm)
+
+
 
 # 5: How does age affect whether or not a person has planted PPH? 
 
@@ -536,6 +582,14 @@ summary(farmsize.PPHgrown)
 
 exp(coef(farmsize.PPHgrown)[2])
 
+
+# Chi-square
+
+
+Size.PPHgrown.tbl = table(almonds$Regions, almonds$Q12)
+Size.PPHgrown.tbl
+
+chisq.test(Size.PPHgrown.tbl)
 
 # 8: How does size of operation affect whether or not people are interested in planting PPH?
 
