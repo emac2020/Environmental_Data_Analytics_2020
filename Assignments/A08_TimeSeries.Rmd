@@ -67,14 +67,24 @@ GaringerOzone2019 <- read.csv("./Data/Raw/Ozone_TimeSeries/EPAair_O3_GaringerNC2
 ```{r}
 # 2 
 
+GaringerOzone <- rbind(GaringerOzone2010, GaringerOzone2011, GaringerOzone2012, GaringerOzone2013, GaringerOzone2014, GaringerOzone2015, GaringerOzone2016, GaringerOzone2017, GaringerOzone2018, GaringerOzone2019)
 
 # 3
 
+GaringerOzone$Date <- as.Date(GaringerOzone$Date, format = "%m/%d/%Y")
+class(GaringerOzone$Date)
 
-# 4
+
+# 4 
+
+GaringerOzone.wrangle <- GaringerOzone %>%
+  select(Date, Daily.Max.8.hour.Ozone.Concentration, DAILY_AQI_VALUE)
 
 
 # 5
+
+GaringerOzone.wrangle$Days <- 
+  as.data.frame(seq(GaringerOzone.wrangle$Date, from = 2010, to = 2019)) ###HOW do i do this??
 
 
 # 6
