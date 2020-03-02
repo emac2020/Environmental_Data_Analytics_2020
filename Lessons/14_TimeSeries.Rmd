@@ -363,7 +363,7 @@ If covariates (another predictor variable) are included in the dataset, addition
 
 Remember that we noticed in the decomposition that the Eno River discharge data has a seasonal cycle (despite high random variability). We might be interested in knowing how (if) discharge has changed over the course of measurement while incorporating the seasonal component. In this case, we will use a Seasonal Mann-Kendall test to figure out whether a monotonic trend exists. We will use the late dataset again.
 - assumptions of no seasonality are not fulfilled so going with Mann-Kendall
-- know with have temp auto, cuz daily discharge introduces temporal auto issues (if storm, know discharge will be stronger for those few days)
+- know we have temp auto, cuz daily discharge introduces temporal auto issues (if storm, know discharge will be stronger for those few days)
 
 The Seasonal Mann-Kendall assumes no temporal autocorrelation, but we know that daily data is prone to temporal autocorrelation. In this case, we may want to collapse our data down into monthly data so that we can (1) reduce temporal autocorrelation and (2) break down the potential seasonal trend into more interpretable components. 
 - aggregate data
@@ -409,7 +409,7 @@ EnoDischarge.late.trend <- smk.test(EnoDischarge.late.monthly.ts)
 EnoDischarge.late.trend
 # gives us: is there a monotonic trend over time? if there is, is it pos or neg? that's what this shows
 # this tells us that there is not a signficant trend b/c p-value and z-score close to 0, meaning we can't discern a sig trend. slightly decreasing trend (-0.13967) but not sig from no trend at all
-# - 1.96 or post 1.96 will indicate a positive or neg trend
+# - 1.96 or pos 1.96 will indicate a positive or neg trend
 # null: no sig trend over time
 # alt.: there is a sig trend. true S is not equal to 0
 summary(EnoDischarge.late.trend)
