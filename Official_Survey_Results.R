@@ -212,7 +212,7 @@ Location.InterestCC.tbl = table(almonds$Regions, almonds$Q9)
 
 Location.InterestCC.tbl
 
-chisq.test(Location.InterstCC.tbl) #####LOOK INTO THIS
+chisq.test(Location.InterestCC.tbl) #####LOOK INTO THIS
 
 
 # 6.plot: Location and Interest in Growing CC 
