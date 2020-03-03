@@ -189,6 +189,6 @@ print(GaringerOzone.monthly.Plot)
 
 14. To accompany your graph, summarize your results in context of the research question. Include output from the statistical test in parentheses at the end of your sentence. Feel free to use multiple sentences in your interpretation.
 
-> Answer: Overall, there is a significant, negative monotonic trend in mean monthly ozone concentrations over the 2010s at Garinger Station (SMK, z = -1.963, p-value < .05). Mean monthly ozone concentrations are slightly decreasing from 2010 - 2020 (sea.sens.slope = -0.002). However, there is no significant seasonal difference in concentrations from month to month. 
+> Answer: Overall, there is a significant, negative monotonic trend in mean monthly ozone concentrations over the 2010s at Garinger Station (SMK, z = -1.963, p-value < .05). Mean monthly ozone concentrations are slightly decreasing from 2010 - 2020 (sea.sens.slope = -0.002). However, there is no significant seasonal difference in concentrations for individual months. 
 
 
