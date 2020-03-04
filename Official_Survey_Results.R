@@ -7,7 +7,7 @@ library(viridis)
 library(nlme)
 library(nnet)
 library(MASS) 
-
+library(boot)
 
 almonds <- read.csv("Almond_Survey_Cleaned_Official.csv")
 
@@ -37,7 +37,37 @@ print(locoplot)
 
 
 
+# What affects whether or not theyve grown CC?
 
+GrownCC <- glm(Q6 ~ as.factor(Regions) + as.factor(Q1) + as.factor(Q31)
+               + as.factor(Acre.Ranges), almonds, family = binomial )
+
+summary(GrownCC)
+
+
+GrownCC.2 <- glm(GrownCC ~  as.factor(Regions) + as.factor(RoleOperation) + as.factor(Q50) +
+                as.factor(TotalYieldBearing), almonds2, family = binomial )
+
+# What affects whether or not they are interested in growing CC?
+
+InterestCC <- glm(Q9 ~ as.factor(Regions) + as.factor(Q1) + as.factor(Q31)
+                  + as.factor(Acre.Ranges), almonds, family = binomial )
+
+summary(InterestCC)
+
+# What affects whether or not they've grown PPH?
+
+GrownPPH <- glm(Q12 ~ as.factor(Regions) + as.factor(Q1) + as.factor(Q31)
+                + as.factor(Acre.Ranges), almonds, family = binomial )
+
+summary(GrownPPH)
+
+# What affects whether or not they are interested in growing PPH?
+
+InterestPPH <- glm(Q15 ~ as.factor(Regions) + as.factor(Q1) + as.factor(Q31)
+                   + as.factor(Acre.Ranges), almonds, family = binomial )
+
+summary(InterestPPH)
 
 # 2. How does Role in Operation affect whether or not a person has GROWN cover crop?
 
@@ -137,37 +167,25 @@ chisq.test(Location.GrownCC.tbl)
 
 
 
-regions.CCgrown.glm <- glm(Q6 ~  + Region.North + Region.Delta + Region.Central, 
+regions.CCgrown.glm <- glm(Q6 ~  Region.North + Region.Delta + Region.Central, 
                            data = almonds, family = binomial )
 
 summary(regions.CCgrown.glm)
 
+
+
+# just says which region has sig effect on cover
+
 exp(coef(regions.CCgrown.glm)[2])
 
-## Atempt 1
-Location.GrownCC <- glm(Counties ~ Q6, almonds, family = binomial)
-summary(Location.GrownCC)
+#inv.logit in boot package***
 
-exp(coef(Location.GrownCC)[2])
+# Region North
+inv.logit(1.6854) # 0.84***What does this mean...
 
-multiple = almonds[almonds$Counties == "Multiple",]
+regions.CCgrown.glm2 <- glm(Q6 ~ Regions, data=almonds, family = binomial)
 
-Location.GrownCC.multiple <- glmer(data = almonds, Counties ~ Q6 + (1|multiple), family = binomial)
-
-summary(Location.GrownCC.multiple)
-
-exp(coef(Location.GrownCC.multiple)[2])
-
-## Attempt 2
-Location.GrownCC.Select <- 
-  almonds %>%
-  select(Counties, Q6)
-
-Location.GrownCC.random <- lme(data = Location.GrownCC.Select,
-                      Counties ~ Q6, 
-                      random = ~1|multiple) 
-summary(Location.GrownCC.random)
-rsquared(Location.GrownCC.random)
+summary(regions.CCgrown.glm2) # comparing everything to Central. D and N have sig higher log odds to CC than Cental and South has sig lower
 
 
 
@@ -260,6 +278,7 @@ Age.GrownCC.tbl = table(almonds2$Q50, almonds2$GrownCC)
 Age.GrownCC.tbl
 
 chisq.test(Age.GrownCC.tbl)
+
 
 
 
@@ -394,6 +413,9 @@ print(Size.InterestCC.plot)
 # 13.Cowplot: Operation Size and Grown CC vs. Interested in Growing CC
 
 
+
+# COncerns:
+# column with concerns numbered 1 - 12 as response variable. 
 
 
 # 14: How do concerns about cover crop differ by location? Region? 
