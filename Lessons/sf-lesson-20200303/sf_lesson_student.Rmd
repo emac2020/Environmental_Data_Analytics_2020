@@ -365,9 +365,9 @@ st_crs(southeast_state_bounds_raw)
 
 Now that you've checked the CRSs of your spatial data, you can either set or project them so they are compatible with one another.
 
-When *setting* a CRS, you're labeling the spatial data with a CRS it already has but is not showing up when you load the data into R. Setting also includes defining a missing ESPG or proj4 string; when one is complete but the other is not. Have CRS but not showing up when u load it in.
+When *setting* a CRS, you're labeling the spatial data with a CRS it already has but is not showing up when you load the data into R. Setting also includes defining a missing ESPG or proj4 string; when one is complete but the other is not. Have CRS but not showing up when u load it in. You have a CRS, i know you have it, but you don't know you have it, so we have to define it.** use st_set_crs command. gives warning to show you you're just setting and not projecting (changing)
 
-When *projecting* a CRS, you're converting the spatial data from one CRS to another. For the sf package, transform is used interchangeably with project. If have different EPSG codes or proj4 strings, can make them the same using project or transform
+When *projecting* a CRS, you're converting the spatial data from one CRS to another. For the sf package, transform is used interchangeably with project. If have different EPSG codes or proj4 strings, can make them the same using project or transform. If CRS exists and you want to change it to interpret the spatial data a different way (e.g., focus on area instead of shape)
 
 It's **very** important know the difference between setting and projecting!
 
@@ -406,7 +406,7 @@ my_epsg <- 5070
 # setting projections
 # set the proj4 string first and then set the EPSG code (because proj4 will over-ride EPSG if you set EPSG first)
 # add your code here
-st_crs(basins_nf_seplains_raw) <- my_proj4
+st_crs(basins_nf_seplains_raw) <- my_proj4 
 st_crs(basins_nf_seplains_raw) <- my_epsg
 
 st_crs(gages_raw) <- my_proj4
@@ -426,12 +426,20 @@ southeast_state_bounds <- southeast_state_bounds_raw
 
 # projecting to North America Albers Equal Area Conic
 # add your code here
-na_albers_proj4 <- 
-na_albers_epsg <- 
+  na_albers_proj4 <- "+proj=aea +lat_1=20 +lat_2=60 +lat_0=40 +lon_0=-96 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs"
+na_albers_epsg <- 102008
 # set the proj4 string first and then set the EPSG code (because proj4 will over-ride EPSG if you set EPSG first)
+
+southeast_state_bounds_na_albers <-  sf::st_transform(southeast_state_bounds, crs = na_albers_proj4) %>%
+  st_set_crs(na_albers_epsg)
 
 # check CRSs
 # add your code here
+
+st_crs(basins_nf_seplains)
+st_crs(gages)
+st_crs(southeast_state_bounds)
+st_crs(southeast_state_bounds_na_albers) # USGS version of data
 ```
 
 ### 2.6 Converting sp Objects to sf Objects and Vice Versa
@@ -536,16 +544,22 @@ class(southeast_state_bounds_tabular)
 
 #### 3.1.2 Common Spatial (Geometric/Geometry) "Operations"
 
-Some common sf spatial operation commands might include (in no special order):
+** May want to buffer, summarize, merge/combine, calculate the area of polygons or the length of something (geometry)
+
+Some common sf spatial operation commands might include (in no special order): (look at cheatsheet for more options)
 
 1. st_transform() - We've seen this before. Projects from one CRS to another.
 2. st_area() - Calculates the area of a polygon.
-3. st_centroid() - Finds the centroid (x-y coordinate) of a polygon or combined geometry.
+3. st_centroid() - Finds the centroid (x-y coordinate) of a polygon or combined geometry. i.e., if you want to show data at centroid of watershed instead of outlet, you can show the centroid point and color it by rainfall or something 
+
 4. st_difference() - Removes overlapping spatial data between two datasets.
-5. st_intersection() - Finds overlapping spatial data between two datasets where output is an sf object that's clipped to the boundary of the intersected dataset.
+
+5. st_intersection() - Finds overlapping spatial data between two datasets where output is an sf object that's clipped to the boundary of the intersected dataset. **Think of as "clip" from ArcGIS can use this to clip the gauges that are in NC. 
+
 6. st_simplify() - Makes a simpler version of a geometry based on a given tolerance. This helps reduce file size and speed up visualization loading.
 7. st_snap() - Snaps points or nodes to a second spatial dataset.
-8. st_buffer() - Creates a polygon extending from a geometry within a given distance.
+8. st_buffer() - Creates a polygon extending from a geometry within a given distance. **May want to look at % landcover around 10m buffer around a stream
+
 9. st_boundary() - Finds a polygon that encompasses the full extent of the geometry.
 10. st_crop() - Makes a geometry that intersects a specified rectangle, where the rectangle can be the greatest rectangular boundary of the dataset provided
 11. so many others...See cheat sheet for more details*****
@@ -553,6 +567,10 @@ Some common sf spatial operation commands might include (in no special order):
 I'm distinguishing these from Spatial (Geometric) "Confirmations" which are similar operations but the output is a list object rather than a sf object. For example, st_intersects() and st_within(). See the sf cheatsheet for more information on this.
 
 Also, sometimes the differences between these operations can be confusing/not obvious so what I tend to do is try them out and then plot the result to make sure it's doing what I think it's doing. If it's not, then you can trouble-shoot from there.
+
+Geometric operations: results will be spatial dataset to make into a shape file. this will be the actual gauge and attribute info
+
+Geometric Confirmation: list of true and false values. R is confirming whether or not a gauge is in a watershed you're intersecting
 
 **Activity**
 
@@ -564,23 +582,65 @@ Bonus: What are some other spatial operations (or confirmations) that you could 
 # select a state, here I'm choosing North Carolina (NC)
 # add your code here
 
-NC <- southeast_state_bounds %>%
-  select(NAME == "North Carolina")
+nc_state_bounds_geom <- southeast_state_bounds %>%
+  filter(NAME == "North Carolina") %>%
+  st_geometry() # this will drop the attribute data so it only has the geometry data without columns (dataframe). if look at class, it will now be different. no longer a data frame and instead a "sfc_MULTIPOLYGON" "sfc" these are subclasses of "sf"
+
+# for virginia
+
+va_state_bounds_geom <- southeast_state_bounds %>%
+  filter(NAME == "Virginia") %>%
+  st_geometry()
 
 # check
 # add your code here
+
+head(nc_state_bounds_geom)
+
+head(va_state_bounds_geom) # can see the data has same projection and proj4 string as before and is a multipolygon with XY dimension
 
 # select watersheds that intersect with NC bounds
 # add your code here
+nc_basins_nf_seplains <- basins_nf_seplains %>%
+  st_intersection(nc_state_bounds_geom)
+
+va_basins_nf_seplains <- basins_nf_seplains %>%
+  st_intersection(va_state_bounds_geom) #intersection is the same as "clip." cutting out all the basins inside virginia
 
 # check
 # add your code here
+head(nc_basins_nf_seplains)
+
+head(va_basins_nf_seplains) #Shows the watershed gauge ID associated with that watershed and the area and the perimeter
+
 
 # select gages that fall within NC bounds
 # add your code here
+nc_gages <- gages %>%
+  st_intersection(nc_state_bounds_geom) #gauges = cookie dough, state bounds = cookie cutter
+
+va_gages <- gages %>%
+  st_intersection(va_state_bounds_geom)
 
 # bonus
 # add your code here
+nc_area <- st_area(nc_state_bounds_geom) # find the area of NC
+
+va_area <- st_area(va_state_bounds_geom) # shows area in meters squared (105598646413m^2)
+
+nc_centroid <- st_centroid(nc_state_bounds_geom) # find the centroid of the NC
+
+va_centroid <- st_centroid(va_state_bounds_geom) # can use this as a spatial dataset to plot
+
+nc_gages_buffer_100m <- st_buffer(nc_gages, dist = 100) # make a buffer around the stream gages in NC
+
+va_gages_buffer_100m <- st_buffer(va_gages, dist = 100) # make a buffer with a 100m buffer
+
+not_nc_gages <- st_difference(gages, nc_state_bounds_geom) # find stream gages not in NC
+
+not_va_gages <- st_difference(gages, va_state_bounds_geom) # shows all the gauges that are not in virginia
+
+# can run these lines of code but don't know if they're working until we can actually see the data. so should plot the result to make sure
 ```
 
 It's really helpful to actually plot these results before moving forward with your work. That way you an make sure the sf commands are doing what you expect. We'll talk about plotting next...
@@ -594,6 +654,9 @@ An import part of spatial data analysis is to *check your work* and also *share 
 Usually, I (Sheila) use RStudio to visualize all of my plots but since spatial data often has a large file size, it can take a while to load in the built-in RStudio plotting window. Until the folks at RStudio and sf package developers deal with this, I recommend exporting your spatial visualizations to PDF files in a dedicated folder. Here, we'll practice exporting our plots to the "outputs" folder. Make sure you run all lines of code starting from pdf() to dev.off(). The pdf() will write and open a new empty PDF file and dev.off() will close it. It's ok to get a "null device" message here. R is just telling you that it closed the pdf file it created.
 
 ```{r basic.sf.plotting}
+# where we define data depends on where we want ggplot to set the base to. So leave ggplot() blank and add layers below
+# then add the type of plot you want to make (i.e., scatter/point). here we're doing geom_sf and showing the boundaries as the bottom layer (geom_sf(data = bounds, aes(...))) or first layer and can set aes to this. then want points as the second layer after that (geom_sf(data = points))
+
 # basic plot
 pdf(here("outputs", "southeast_state_bounds.pdf"), width = 11, height = 8.5)
 ggplot() +
@@ -605,16 +668,26 @@ dev.off()
 pdf(here("outputs", "southeast_state_bounds_with_labs.pdf"), width = 11, height = 8.5)
 ggplot(data = southeast_state_bounds) + # moved this up here so I don't have to keep calling it
   geom_sf() +
-  geom_sf_text(aes(label = NAME), color = "black") +
+  geom_sf_text(aes(label = NAME), color = "black") + # want label to be name column in black
   theme_bw()
 dev.off()
 
 # adding fill by a second variable
 pdf(here("outputs", "southeast_state_bounds_by_area.pdf"), width = 11, height = 8.5)
 ggplot(data = southeast_state_bounds) +
-  geom_sf(aes(fill = Shape_Area)) +
-  geom_sf_text(aes(label = NAME), color = "white") +
+  geom_sf(aes(fill = Shape_Area)) + #add color to the shapes (states in this case)
+  geom_sf_text(aes(label = NAME), color = "white") + # want name to stand out so change it to white
   theme_bw()
+dev.off()
+
+
+# Just Virginia boundary to see if our VA boundary code from above actually worked 
+
+# basic plot
+pdf(here("outputs", "va_state_bounds.pdf"), width = 11, height = 8.5)
+ggplot() +
+  geom_sf(data = va_state_bounds_geom) + # you can add color = "blue" to change outline color to blue or lwd = 2 to change the width of the lines
+  theme_bw() # add this to make the background white and not grey
 dev.off()
 ```
 
@@ -625,42 +698,52 @@ Let's check your operations from the 3.1.2 activity. You are trying for somethin
 ```{r activity.checking.operations}
 # plot NC watershed boundardies from 3.1.2
 pdf(here("outputs", "spatial_operations_test_fig.pdf"), width = 11, height = 8.5)
-# add your code here
+ggplot() +
+geom_sf(data = va_state_bounds_geom) +
+  geom_sf(data = va_basins_nf_seplains, fill = "pink", alpha = 0.25) + # deeper pink = more watershed on top of each other
+  geom_sf(data = va_gages, color = "black") 
 dev.off()
+
+
+
 ```
 
 Notice a few things about Figure 1a: (1) the watersheds are nested (there are smaller ones inside bigger ones), (2) the larger watersheds are cut by the NC state boundaries, and (3) there are some gages that are outside the watershed bounds (i.e., we don't have watershed basins or tabular data for them).
 
 #### 3.2.2 Adding Base-Maps
 
-Basemaps are available to help you give more context to your maps. This is made possible using the ggmap package.
+Basemaps are available to help you give more context to your maps. This is made possible using the ggmap package. 
 
 ```{r adding.basemaps}
-# select North Carolina (NC)
+# select North Carolina (NC) 
 nc_state_bounds_geom <- southeast_state_bounds %>%
-  filter(NAME == "North Carolina") %>%
+  filter(NAME == "North Carolina") %>% # drop the geometry 
   st_geometry()
 
-# get data bounding box
+# get data bounding box: makes base map that shows more than just NC. buffer it by 150000m
 nc_bbox <- nc_state_bounds_geom %>%
   st_buffer(dist = 150000) %>% # this value is very arbitrary just wanting to make a large buffer around geometry
-  st_transform(4326) %>% # WGS84 (for lat and long)
-  st_bbox()
+  st_transform(4326) %>% # WGS84 (for lat and long). translates it from albers back to lat and long
+  st_bbox() # finds the bounding box edges' coordinates
 nc_bbox # check
 
-# fix bounding box columns so they match what is needed for the ggmap::get_map() function
+# have to change the nc_bbox coordinates into a setting that the map function likes
+
+# fix bounding box columns so they match what is needed for the ggmap::get_map() function. has to have left, bottom, right, and top entry
+
 nc_bbox_fix <- c(left = nc_bbox[[1]], bottom = nc_bbox[[2]], right = nc_bbox[[3]], top = nc_bbox[[4]])
 
-# check result
+# check result. changed the labels 
 nc_bbox_fix
 
 # get basemap
-nc_basemap <- get_map(nc_bbox_fix, maptype = 'terrain-background', source = 'stamen', zoom = 8)
-class(nc_basemap)
+nc_basemap <- get_map(nc_bbox_fix, maptype = 'terrain-background', source = 'stamen', zoom = 8) # set map type (i.e. terrain-background, but can be different) and get the stamen basemap. other options like google base map, etc. and then zoom (can zoom from 3 [continent] to 20 [building] scale and defaults to 10 [city])
+
+class(nc_basemap) # ggmap and raster
 st_crs(nc_basemap)
 # you'll have to trust me that this will have a CRS = WGS84
 
-# convert nc_state_bounds_geom to WGS84 so it matches nc_basemap
+# convert (change/transform) nc_state_bounds_geom to WGS84 (lat/long) so it matches nc_basemap
 nc_state_bounds_geom_wsg84 <- nc_state_bounds_geom %>%
   st_transform(4326)
 
@@ -675,14 +758,14 @@ ggplot() +
 dev.off()
 
 # plot with basemap
-# windows version?
+
 pdf(here("outputs", "nc_with_basemap.pdf"), width = 11, height = 8.5)
-ggmap(nc_basemap) +
+ggmap(nc_basemap) + #using ggmap and setting to the basemap dataset
   geom_sf(data = nc_state_bounds_geom_wsg84, fill = NA, lwd = 1, inherit.aes = FALSE)
 dev.off()
 
 # bonus
-# try chaning the zoom on get_map() and see what happens
+# try changing the zoom on get_map() and see what happens
 # look at the help menu for more information on the zoom range
 ```
 
@@ -695,7 +778,7 @@ Can you reproduce Figure 1b?
 # add your code here
 
 # make figure 1b
-# find watersheds that overlap with NC (want the whole watershed, not just the part of the watershe that's inside the NC bounds)
+# find watersheds that overlap with NC (want the whole watershed, not just the part of the watershe that's inside the NC bounds) *hint: different spatial operation than intsection or whatever was used for figure 1a
 # add your code here
 
 # look at result
@@ -741,6 +824,11 @@ The sf and tidyverse packages work together very well to wrangle spatial and tab
 Let's try an example. Here we'll select all the gages in NC, join them with one of the GAGES-II tabular datasets, and create a map that colors these gage locations by a particular variable in the tabular dataset. We might want to do this as the start of spatial trend analysis.
 
 ```{r joining.gage.data}
+
+# gages data = meta data for gages and then have gages variable data (tabular dataset), so we have to spatial join the data to preserve spatial locations while adding another variable
+
+#after join gages, can use that to plot and color by
+
 # Use the NC state boundary we used earlier to select all the stream gages in NC
 nc_gages <- gages %>%
   st_intersection(nc_state_bounds_geom)
@@ -751,14 +839,17 @@ names(nc_gages)
 # we see there are some variables we could color by but the tabular data has many more
 
 # take a look at my_tabular_data_raw
-names(my_tabular_data_raw)
+names(my_tabular_data_raw) #basin info, climate, hydrology, geology, etc. can change the name of text file depending on what data u want to add
+
+
+
 # In this example, we choose the climate data and use the WD_SITE variable. This is the "Site average of annual number of days (days) of measurable precipitation, derived from 30 years of record (1961-1990), 2km PRISM.". This description comes from the gagesII_sept30_2011_var_desc.xlsx file in the tabular data directory.
 
 # check column names of nc_gages to look for joining key
 names(nc_gages)
 # use "STAID"
 
-# join the tabular data to nc_gages
+# join the tabular data to nc_gages. have to mutate it to make it the same type
 nc_gages_climate <- nc_gages %>%
   left_join(my_tabular_data_raw, by = "STAID")
 
