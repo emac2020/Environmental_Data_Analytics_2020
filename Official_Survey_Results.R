@@ -48,6 +48,8 @@ summary(GrownCC)
 GrownCC.2 <- glm(GrownCC ~  as.factor(Regions) + as.factor(RoleOperation) + as.factor(Q50) +
                 as.factor(TotalYieldBearing), almonds2, family = binomial )
 
+summary(GrownCC.2)
+
 # What affects whether or not they are interested in growing CC?
 
 InterestCC <- glm(Q9 ~ as.factor(Regions) + as.factor(Q1) + as.factor(Q31)
@@ -153,7 +155,7 @@ print(CC.Role.plots)
 
 
 
-# 5. How does location affect whether or not a person has GROWN cover crop? (NEITHER of these work)
+# 5. How does location affect whether or not a person has GROWN cover crop? 
 
 
 # Chi-square: Location vs. Grown CC
@@ -172,17 +174,24 @@ regions.CCgrown.glm <- glm(Q6 ~  Region.North + Region.Delta + Region.Central,
 
 summary(regions.CCgrown.glm)
 
+exp(coef(regions.CCgrown.glm)[2])
+
 
 
 # just says which region has sig effect on cover
 
-exp(coef(regions.CCgrown.glm)[2])
+exp(1.6854)
+
+exp(1.9136)
+
+exp( 0.2083 )
 
 #inv.logit in boot package***
 
 # Region North
 inv.logit(1.6854) # 0.84***What does this mean...
 
+# Glm with just "Regions"
 regions.CCgrown.glm2 <- glm(Q6 ~ Regions, data=almonds, family = binomial)
 
 summary(regions.CCgrown.glm2) # comparing everything to Central. D and N have sig higher log odds to CC than Cental and South has sig lower
@@ -220,6 +229,16 @@ Regions.InterestCC.glm <- glm(Q9 ~ Region.North + Region.South + Region.Delta,
                               almonds, family = binomial)
 
 summary(Regions.InterestCC.glm) # Significant?
+
+exp(-0.2120 ) # delta has 0.81 odds over central?
+
+
+# CC Interest with "Regions"
+Regions.InterestCC.glm2 <- glm(Q9 ~ Regions, 
+                              almonds, family = binomial)
+
+summary(Regions.InterestCC.glm2)
+
 
 
 # Chi-Square
@@ -274,13 +293,16 @@ almonds2$Q50 <- as.factor(almonds2$Q50)
 # Chi-Square
 
 
-Age.GrownCC.tbl = table(almonds2$Q50, almonds2$GrownCC) 
+Age.GrownCC.tbl = table(almonds2$Q50, almonds2$GrownCC) #almonds 2
 Age.GrownCC.tbl
 
 chisq.test(Age.GrownCC.tbl)
 
 
+Age.GrownCC.tbl2 = table(almonds$Q31, almonds$Q6) #almonds
+Age.GrownCC.tbl2
 
+chisq.test(Age.GrownCC.tbl2)
 
 # 8.plot: Age and CC Grown *****ARE these plots skewed because 25-34 was most prevalent age group?
 
@@ -305,7 +327,7 @@ print(Age.grown.plot)
 
 # 9: How does age affect whether or not a person is INTERESTED in growing CC?
 
-Age.CCinterested <- glm(Q15~Q31, almonds, family = binomial)
+Age.CCinterested <- glm(Q9~Q31, almonds, family = binomial)
 
 summary(Age.CCinterested)
 
@@ -313,11 +335,15 @@ exp(coef(Age.CCinterested)[2])
 
 # Chi-square
 
-Age.InterestCC.tbl = table(almonds2$Q50, almonds2$CC_Interest) 
+Age.InterestCC.tbl = table(almonds2$Q50, almonds2$CC_Interest) #almonds 2
 Age.InterestCC.tbl
 
 chisq.test(Age.InterestCC.tbl)
 
+Age.InterestCC.tbl2 = table(almonds$Q31, almonds$Q9) #almonds
+Age.InterestCC.tbl2
+
+chisq.test(Age.InterestCC.tbl2)
 
 # 9.plot: Age and Interest in Growing CC 
 
@@ -348,12 +374,16 @@ print(CC.age.plots)
 
 # 11: How does size of operation affect whether or not people have grown cover crop?
 
-farmsize.GrownCC <- glm(Q6 ~ Q3_1, almonds, family = binomial)
+farmsize.GrownCC <- glm(Q6 ~ Q3_1, almonds, family = binomial) # numeric entries
 summary(farmsize.GrownCC)
 
 exp(coef(farmsize.GrownCC)[2])
 
 
+farmsize.GrownCC2 <- glm(Q6~Acre.Ranges , almonds, family = binomial) # acre ranges
+summary(farmsize.GrownCC2)
+
+exp(coef(farmsize.GrownCC2)[2])
 
 # Chi-square
 
@@ -365,6 +395,7 @@ Size.GrownCC.tbl
 
 chisq.test(Size.GrownCC.tbl)
 
+summary(almonds$Acre.Ranges)
 
 # 11.Plot: Operation size and Grown CC (HOW DO I PLOT THIS??)
 
@@ -394,6 +425,14 @@ summary(farmsize.InterestCC)
 
 exp(coef(farmsize.InterestCC)[2])
 
+
+farmsize.InterestCC2 <- glm(Q9 ~ Q3_1, almonds, family = binomial) # numeric entries
+summary(farmsize.InterestCC2)
+
+exp(coef(farmsize.InterestCC2)[2])
+
+
+# Chi-square 
 almonds$Q9 <- as.factor(almonds$Q9)
 
 Size.InterestCC.tbl = table(almonds$Acre.Ranges, almonds$Q9) 
