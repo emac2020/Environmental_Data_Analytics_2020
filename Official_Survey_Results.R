@@ -8,6 +8,10 @@ library(nlme)
 library(nnet)
 library(MASS) 
 library(boot)
+library(devtools)
+library(carData)
+
+devtools::install_github("ewenharrison/finalfit")
 
 almonds <- read.csv("Almond_Survey_Cleaned_Official.csv")
 
@@ -40,10 +44,24 @@ print(locoplot)
 # What affects whether or not theyve grown CC?
 
 GrownCC <- glm(Q6 ~ as.factor(Regions) + as.factor(Q1) + as.factor(Q31)
-               + as.factor(Acre.Ranges), almonds, family = binomial )
+               + Q3_1, almonds, family = binomial )
 
-summary(GrownCC)
+summary(GrownCC) # owner operators are less likely than others to do CC (stat sig)
 
+
+summary_table_GrownCC <- coef(summary(GrownCC))
+
+
+# put in table of regression and use that to interpret things (what is affect of region when have also controlled for age, etc)
+
+
+
+
+# look up reporting binomial regressions
+
+class(almonds$Q3_1)
+class(almonds2$TotalYieldBearing)
+almonds2$TotalYieldBearing <- as.factor(almonds2$TotalYieldBearing)
 
 GrownCC.2 <- glm(GrownCC ~  as.factor(Regions) + as.factor(RoleOperation) + as.factor(Q50) +
                 as.factor(TotalYieldBearing), almonds2, family = binomial )
@@ -53,16 +71,30 @@ summary(GrownCC.2)
 # What affects whether or not they are interested in growing CC?
 
 InterestCC <- glm(Q9 ~ as.factor(Regions) + as.factor(Q1) + as.factor(Q31)
-                  + as.factor(Acre.Ranges), almonds, family = binomial )
+                  + Q3_1, almonds, family = binomial )
 
 summary(InterestCC)
+
+
+InterestCC.polr <- polr(Q9 ~ as.factor(Regions) + as.factor(Q1) + as.factor(Q31)
+                        + Q3_1, almonds, Hess = TRUE)
+
+summary(InterestCC.polr)
+
+summary_table_InterestCC <- coef(summary(InterestCC.polr))
+pval.InterestCC <- pnorm(abs(summary_table[, "t value"]),lower.tail = FALSE)* 2
+summary_table_InterestCC <- cbind(summary_table, "p value" = pval.InterestCC)
+summary_table_InterestCC
+
 
 # What affects whether or not they've grown PPH?
 
 GrownPPH <- glm(Q12 ~ as.factor(Regions) + as.factor(Q1) + as.factor(Q31)
-                + as.factor(Acre.Ranges), almonds, family = binomial )
+                + Q3_1, almonds, family = binomial )
 
 summary(GrownPPH)
+
+summary_table_GrownPPH <- coef(summary(GrownPPH))
 
 # What affects whether or not they are interested in growing PPH?
 
@@ -226,7 +258,7 @@ summary(Location.InterestCC)
 exp(coef(Location.InterestCC)[2]) ## Nothing sig
 
 Regions.InterestCC.glm <- glm(Q9 ~ Region.North + Region.South + Region.Delta, 
-                              almonds, family = binomial)
+                              almonds, family = binomial) # family may not be right
 
 summary(Regions.InterestCC.glm) # Significant?
 
@@ -235,7 +267,7 @@ exp(-0.2120 ) # delta has 0.81 odds over central?
 
 # CC Interest with "Regions"
 Regions.InterestCC.glm2 <- glm(Q9 ~ Regions, 
-                              almonds, family = binomial)
+                              almonds, family = binomial) # regression with 3 categorical variables as dependent variable 
 
 summary(Regions.InterestCC.glm2)
 
@@ -286,6 +318,10 @@ Age.CCgrown <- glm(Q6~Q31, almonds, family = binomial)
 
 summary(Age.CCgrown)
 
+
+
+summary_table_ageGrownC <- coef(summary(Age.CCgrown))
+
 exp(coef(Age.CCgrown)[2])
 
 almonds2$Q50 <- as.factor(almonds2$Q50)
@@ -332,6 +368,17 @@ Age.CCinterested <- glm(Q9~Q31, almonds, family = binomial)
 summary(Age.CCinterested)
 
 exp(coef(Age.CCinterested)[2])
+
+
+
+InterestCC.Age.polr <- polr(Q9~as.factor(Q31), almonds, Hess = TRUE)
+
+summary(InterestCC.Age.polr)
+
+summary_table_InterestCC.Age <- coef(summary(InterestCC.Age.polr))
+pval.Age <- pnorm(abs(summary_table_InterestCC.Age[, "t value"]),lower.tail = FALSE)* 2
+summary_table_InterestCC.Age <- cbind(summary_table_InterestCC.Age, "p value" = pval.Age)
+summary_table_InterestCC.Age
 
 # Chi-square
 
