@@ -39,3 +39,103 @@ Here are your three options:
 * Tabular data that correpond to one of the layers, specified as an aesthetic (e.g., total litter biomass at each trap, land cover class at each trap)
 
 Hint: One package that may come in handy here is the `maps` package, which contains several options for basemaps that cover political and geologic boundaries.
+
+```{r load.libraries, error=FALSE, message=FALSE, warning=FALSE}
+library("readr")
+library("dplyr")
+library("tidyr")
+library("ggplot2")
+library("purrr")
+library("sf")
+library("ggmap")
+library("here")
+```
+
+```{r check.pdf}
+pdf(here("outputs", "pdf_test.pdf"), width = 11, height = 8.5)
+ggplot(data = cars) +
+  geom_point(aes(x = dist, y = speed))
+dev.off()
+
+```
+
+```{r load.data}
+
+
+basins_nf_seplains_raw <- st_read(here("data", "spatial_data", "bas_nonref_SEPlains.shp"))
+
+gages_raw <- st_read(here("data", "spatial_data", "gagesII_9322_sept30_2011.shp"))
+
+southeast_state_bounds_raw <- st_read(here("data", "spatial_data", "southeast_state_bounds.shp"))
+
+my_tabular_data_raw <- read.csv(here("data", "tabular_data", "conterm_climate.txt"))
+
+```
+
+```{r check.data}
+
+st_crs(basins_nf_seplains)
+st_crs(gages)
+st_crs(southeast_state_bounds)
+st_crs(southeast_state_bounds_na_albers)
+
+```
+
+```{r activity.reproducing.figure1b}
+# select NC
+# add your code here
+
+nc_state_bounds_geom <- southeast_state_bounds %>%
+  filter(NAME == "North Carolina") %>%
+  st_geometry() 
+
+
+# make figure 1b
+# find watersheds that overlap with NC (want the whole watershed, not just the part of the watershe that's inside the NC bounds) *hint: different spatial operation than intsection or whatever was used for figure 1a
+# add your code here
+
+nc_basins_nf_seplains <- basins_nf_seplains %>%
+  st_intersection(nc_state_bounds_geom)
+
+# look at result
+# add your code here
+
+pdf(here("outputs", "nc_basins_nf_seplains.pdf"), width = 11, height = 8.5)
+ggplot() +
+  geom_sf(data = nc_state_bounds_geom) + # you can add color = "blue" to change outline color to blue or lwd = 2 to change the width of the lines
+  theme_bw() # add this to make the background white and not grey
+dev.off()
+
+
+# make a function to convert binary to logic
+# add your code here
+
+# map function on data and select only true values
+# add your code here
+
+# look at result
+# add your code here
+
+# use nc_basins_overlap_logic to select only watersheds that overlap
+# add your code here
+
+# check class
+# add your code here
+
+# select Southeast gages only
+# add your code here
+# stretch break...this might take a while to run
+
+# use nc_basins_overlap_sel to find gages inside
+# add your code here
+# stretch break...this might take a while to run
+
+# convert all to WGS84
+# add your code here
+
+# plot figure 1b
+# add your code here
+pdf(here("outputs", "figure_1b.pdf"), width = 11, height = 8.5)
+# add your code here
+dev.off()
+```
