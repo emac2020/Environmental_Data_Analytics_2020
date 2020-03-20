@@ -199,20 +199,26 @@ Location.GrownCC.tbl
 
 chisq.test(Location.GrownCC.tbl)
 
-
+# Regions GLM: CC grown
 
 regions.CCgrown.glm <- glm(Q6 ~  Region.North + Region.Delta + Region.Central, 
-                           data = almonds, family = binomial )
+                             data = almonds, family = binomial )
 
 summary(regions.CCgrown.glm)
 
 exp(coef(regions.CCgrown.glm)[2])
+
+summary_table_RegionGrownCC <- coef(summary(regions.CCgrown.glm))
+
+
 
 
 
 # just says which region has sig effect on cover
 
 exp(1.6854)
+
+exp( -1.0664  )
 
 exp(1.9136)
 
@@ -562,6 +568,9 @@ summary(Role.Operation.PPHplanted)
 
 exp(coef(Role.Operation.PPHplanted)[2])
 
+exp( -0.5206 )
+
+exp(  -0.5222)
 
 # Chi-Square
 
@@ -589,7 +598,7 @@ Role.PPHgrown.plot <-
   theme_classic() +
   labs(x = "Role in Operation", y = "Count", fill = "Grown Permenant Habitat") +
   scale_fill_manual(values = c("darkblue", "#E69F00", "#009E73", "#CC79A7"))  +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1, face = "bold", size = 12)) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, face = "bold", size = 10)) +
   theme(legend.position = "right")
 print(Role.PPHgrown.plot)
 
@@ -614,6 +623,10 @@ Role.InterestPPH.tbl
 
 chisq.test(Role.InterestPPH.tbl)
 
+exp(-0.9933)
+exp( -0.6658 )
+
+exp(   0.9361 )
 
 # Plot: Role in Operation and INTERESTED in planting PPH
 alm= almonds[almonds$Q1 != " " ,]
@@ -628,7 +641,7 @@ Role.PPHinterest.plot <-
   theme_classic() +
   labs(x = "Role in Operation", y = "Count", fill = "Interest in Growing PPH") +
   scale_fill_manual(values = c("darkblue", "#E69F00", "#009E73", "#CC79A7"))  +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1, face = "bold", size = 12)) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, face = "bold", size = 10)) +
   theme(legend.position = "right")
 print(Role.PPHinterest.plot)
 
@@ -672,6 +685,11 @@ Age.PPHgrown <- glm(Q12~Q31, almonds, family = binomial)
 summary(Age.PPHgrown)
 
 exp(coef(Age.PPHgrown)[2])
+
+Age.GrownPPH.tbl2 = table(almonds$Q31, almonds$Q12) #almonds
+Age.GrownPPH.tbl2
+
+chisq.test(Age.GrownPPH.tbl2)
 
 
 # 6: How does age affect whether or not a person is interested in planting PPH? 
