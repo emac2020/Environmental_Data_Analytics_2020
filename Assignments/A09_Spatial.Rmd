@@ -74,6 +74,7 @@ my_tabular_data_raw <- read.csv(here("data", "tabular_data", "conterm_climate.tx
 
 ```{r check.data}
 
+
 st_crs(basins_nf_seplains)
 st_crs(gages)
 st_crs(southeast_state_bounds)
@@ -94,21 +95,19 @@ nc_state_bounds_geom <- southeast_state_bounds %>%
 # find watersheds that overlap with NC (want the whole watershed, not just the part of the watershe that's inside the NC bounds) *hint: different spatial operation than intsection or whatever was used for figure 1a
 # add your code here
 
-nc_basins_nf_seplains <- basins_nf_seplains %>%
-  st_intersection(nc_state_bounds_geom)
+nc_watersheds_seplains <- basins_nf_seplains %>%
+  st_overlaps(nc_state_bounds_geom)
 
 # look at result
 # add your code here
 
-pdf(here("outputs", "nc_basins_nf_seplains.pdf"), width = 11, height = 8.5)
-ggplot() +
-  geom_sf(data = nc_state_bounds_geom) + # you can add color = "blue" to change outline color to blue or lwd = 2 to change the width of the lines
-  theme_bw() # add this to make the background white and not grey
-dev.off()
+head(nc_watersheds_seplains)
 
 
 # make a function to convert binary to logic
 # add your code here
+
+
 
 # map function on data and select only true values
 # add your code here
