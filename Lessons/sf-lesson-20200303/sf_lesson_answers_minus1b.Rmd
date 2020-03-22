@@ -777,9 +777,14 @@ names(my_tabular_data_raw)
 names(nc_gages)
 # use "STAID"
 
+
 # join the tabular data to nc_gages
 nc_gages_climate <- nc_gages %>%
   left_join(my_tabular_data_raw, by = "STAID")
+
+nc_gages$STAID <- as.factor(nc_gages$STAID) 
+my_tabular_data_raw$STAID <- as.factor(my_tabular_data_raw$STAID)
+
 
 # check that it worked
 names(nc_gages_climate)
