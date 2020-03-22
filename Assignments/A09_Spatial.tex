@@ -1,0 +1,642 @@
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage[]{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\PassOptionsToPackage{hyphens}{url} % url is loaded by hyperref
+\usepackage[unicode=true]{hyperref}
+\hypersetup{
+            pdftitle={Assignment 9: Spatial Analysis},
+            pdfauthor={Emily McNamara},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage[margin=2.54cm]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+% set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+
+
+\title{Assignment 9: Spatial Analysis}
+\author{Emily McNamara}
+\date{}
+
+\begin{document}
+\maketitle
+
+\subsection{OVERVIEW}\label{overview}
+
+This exercise accompanies the lessons in Environmental Data Analytics on
+spatial analysis.
+
+\subsection{Directions}\label{directions}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Use this document to create code for a map. You will \textbf{NOT} be
+  turning in the knitted Rmd file this time, only the pdf output for a
+  map.
+\item
+  When you have produced your output, submit \textbf{only} the pdf file
+  for the map, without any code. Please name your file
+  ``StudentName\_A09\_Spatial.pdf''.
+\end{enumerate}
+
+The completed exercise is due on Thursday, March 19 at 1:00 pm.
+
+\subsection{Create a map}\label{create-a-map}
+
+You have three options for this assignment, and you will turn in just
+\textbf{one} final product. Feel free to choose the option that will be
+most beneficial to you. For all options, to earn full points you should
+use best practices for data visualization that we have covered in
+previous assignments (e.g., relabeling axes and legends, choosing
+non-default color palettes, etc.).
+
+Here are your three options:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  Reproduce figure 1b from the spatial lesson, found in section 3.2.2.
+  You may choose a state other than North Carolina, but your map should
+  still contain the spatial features contained in figure 1b in the
+  ``img'' folder.
+\item
+  Create a new map that mixes spatial and tabular data, as in section
+  3.3 of the spatial lesson. You may use the maps created in the lesson
+  as an example, but your map should contain data other than
+  precipitation days per year. This map should include:
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  State boundary layer
+\item
+  Basin boundary layer
+\item
+  Gage layer
+\item
+  Tabular data (as an aesthetic for one of the layers)
+\end{itemize}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{2}
+\tightlist
+\item
+  Create a map of any other spatial data. This could be data from the
+  spatial lesson, data from our other course datasets (e.g., the Litter
+  dataset includes latitude and longitude of trap sites), or another
+  dataset of your choosing. Your map should include:
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  One or more layers with polygon features (e.g., country boundaries,
+  watersheds)
+\item
+  One or more layers with point and/or line features (e.g., sampling
+  sites, roads)
+\item
+  Tabular data that correpond to one of the layers, specified as an
+  aesthetic (e.g., total litter biomass at each trap, land cover class
+  at each trap)
+\end{itemize}
+
+Hint: One package that may come in handy here is the \texttt{maps}
+package, which contains several options for basemaps that cover
+political and geologic boundaries.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(}\StringTok{"readr"}\NormalTok{)}
+\KeywordTok{library}\NormalTok{(}\StringTok{"dplyr"}\NormalTok{)}
+\KeywordTok{library}\NormalTok{(}\StringTok{"tidyr"}\NormalTok{)}
+\KeywordTok{library}\NormalTok{(}\StringTok{"ggplot2"}\NormalTok{)}
+\KeywordTok{library}\NormalTok{(}\StringTok{"purrr"}\NormalTok{)}
+\KeywordTok{library}\NormalTok{(}\StringTok{"sf"}\NormalTok{)}
+\KeywordTok{library}\NormalTok{(}\StringTok{"ggmap"}\NormalTok{)}
+\KeywordTok{library}\NormalTok{(}\StringTok{"here"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{pdf}\NormalTok{(}\KeywordTok{here}\NormalTok{(}\StringTok{"outputs"}\NormalTok{, }\StringTok{"pdf_test.pdf"}\NormalTok{), }\DataTypeTok{width =} \DecValTok{11}\NormalTok{, }\DataTypeTok{height =} \FloatTok{8.5}\NormalTok{)}
+\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ cars) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ dist, }\DataTypeTok{y =}\NormalTok{ speed))}
+\KeywordTok{dev.off}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## pdf 
+##   2
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{basins_nf_seplains_raw <-}\StringTok{ }\KeywordTok{st_read}\NormalTok{(}\KeywordTok{here}\NormalTok{(}\StringTok{"data"}\NormalTok{, }\StringTok{"spatial_data"}\NormalTok{, }\StringTok{"bas_nonref_SEPlains.shp"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Reading layer `bas_nonref_SEPlains' from data source `/Users/emilymcnamara/Desktop/Env Data Analytics/Environmental_Data_Analytics_2020/Lessons/sf-lesson-20200303/data/spatial_data/bas_nonref_SEPlains.shp' using driver `ESRI Shapefile'
+## Simple feature collection with 1232 features and 3 fields
+## geometry type:  POLYGON
+## dimension:      XY
+## bbox:           xmin: -355995 ymin: 571965 xmax: 1812555 ymax: 2209485
+## epsg (SRID):    5070
+## proj4string:    +proj=aea +lat_1=29.5 +lat_2=45.5 +lat_0=23 +lon_0=-96 +x_0=0 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{gages_raw <-}\StringTok{ }\KeywordTok{st_read}\NormalTok{(}\KeywordTok{here}\NormalTok{(}\StringTok{"data"}\NormalTok{, }\StringTok{"spatial_data"}\NormalTok{, }\StringTok{"gagesII_9322_sept30_2011.shp"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Reading layer `gagesII_9322_sept30_2011' from data source `/Users/emilymcnamara/Desktop/Env Data Analytics/Environmental_Data_Analytics_2020/Lessons/sf-lesson-20200303/data/spatial_data/gagesII_9322_sept30_2011.shp' using driver `ESRI Shapefile'
+## Simple feature collection with 9322 features and 14 fields
+## geometry type:  POINT
+## dimension:      XY
+## bbox:           xmin: -6233389 ymin: -47038.1 xmax: 3271609 ymax: 6043894
+## epsg (SRID):    5070
+## proj4string:    +proj=aea +lat_1=29.5 +lat_2=45.5 +lat_0=23 +lon_0=-96 +x_0=0 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{southeast_state_bounds_raw <-}\StringTok{ }\KeywordTok{st_read}\NormalTok{(}\KeywordTok{here}\NormalTok{(}\StringTok{"data"}\NormalTok{, }\StringTok{"spatial_data"}\NormalTok{, }\StringTok{"southeast_state_bounds.shp"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Reading layer `southeast_state_bounds' from data source `/Users/emilymcnamara/Desktop/Env Data Analytics/Environmental_Data_Analytics_2020/Lessons/sf-lesson-20200303/data/spatial_data/southeast_state_bounds.shp' using driver `ESRI Shapefile'
+## Simple feature collection with 5 features and 17 fields
+## geometry type:  MULTIPOLYGON
+## dimension:      XY
+## bbox:           xmin: 796751.8 ymin: 269281.3 xmax: 1833737 ymax: 1966515
+## epsg (SRID):    5070
+## proj4string:    +proj=aea +lat_1=29.5 +lat_2=45.5 +lat_0=23 +lon_0=-96 +x_0=0 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{my_tabular_data_raw <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\KeywordTok{here}\NormalTok{(}\StringTok{"data"}\NormalTok{, }\StringTok{"tabular_data"}\NormalTok{, }\StringTok{"conterm_climate.txt"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{my_proj4 <-}\StringTok{ "+proj=aea +lat_1=29.5 +lat_2=45.5 +lat_0=23 +lon_0=-96 +x_0=0 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"}
+\NormalTok{my_epsg <-}\StringTok{ }\DecValTok{5070}
+
+\NormalTok{basins_nf_seplains <-}\StringTok{ }\NormalTok{basins_nf_seplains_raw}
+\KeywordTok{st_crs}\NormalTok{(basins_nf_seplains) <-}\StringTok{ }\NormalTok{my_proj4}
+\NormalTok{basins_nf_seplains <-}\StringTok{ }\NormalTok{basins_nf_seplains }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{st_set_crs}\NormalTok{(my_epsg)}
+\KeywordTok{st_crs}\NormalTok{(basins_nf_seplains)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Coordinate Reference System:
+##   EPSG: 5070 
+##   proj4string: "+proj=aea +lat_1=29.5 +lat_2=45.5 +lat_0=23 +lon_0=-96 +x_0=0 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{gages <-}\StringTok{ }\NormalTok{gages_raw}
+\KeywordTok{st_crs}\NormalTok{(gages) <-}\StringTok{ }\NormalTok{my_proj4}
+\NormalTok{gages <-}\StringTok{ }\NormalTok{gages }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{st_set_crs}\NormalTok{(my_epsg)}
+\KeywordTok{st_crs}\NormalTok{(gages)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Coordinate Reference System:
+##   EPSG: 5070 
+##   proj4string: "+proj=aea +lat_1=29.5 +lat_2=45.5 +lat_0=23 +lon_0=-96 +x_0=0 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{southeast_state_bounds <-}\StringTok{ }\NormalTok{southeast_state_bounds_raw}
+\KeywordTok{st_crs}\NormalTok{(southeast_state_bounds) <-}\StringTok{ }\NormalTok{my_proj4}
+\NormalTok{southeast_state_bounds <-}\StringTok{ }\NormalTok{southeast_state_bounds }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{st_set_crs}\NormalTok{(my_epsg)}
+\KeywordTok{st_crs}\NormalTok{(southeast_state_bounds)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Coordinate Reference System:
+##   EPSG: 5070 
+##   proj4string: "+proj=aea +lat_1=29.5 +lat_2=45.5 +lat_0=23 +lon_0=-96 +x_0=0 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{na_albers_proj4 <-}\StringTok{ "+proj=aea +lat_1=20 +lat_2=60 +lat_0=40 +lon_0=-96 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs"}
+\NormalTok{na_albers_epsg <-}\StringTok{ }\DecValTok{102008}
+
+\NormalTok{southeast_state_bounds_na_albers <-}\StringTok{  }\NormalTok{sf}\OperatorTok{::}\KeywordTok{st_transform}\NormalTok{(southeast_state_bounds, }\DataTypeTok{crs =}\NormalTok{ na_albers_proj4) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{st_set_crs}\NormalTok{(na_albers_epsg)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: st_crs<- : replacing crs does not reproject data; use st_transform for
+## that
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{st_crs}\NormalTok{(basins_nf_seplains)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Coordinate Reference System:
+##   EPSG: 5070 
+##   proj4string: "+proj=aea +lat_1=29.5 +lat_2=45.5 +lat_0=23 +lon_0=-96 +x_0=0 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{st_crs}\NormalTok{(gages)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Coordinate Reference System:
+##   EPSG: 5070 
+##   proj4string: "+proj=aea +lat_1=29.5 +lat_2=45.5 +lat_0=23 +lon_0=-96 +x_0=0 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{st_crs}\NormalTok{(southeast_state_bounds)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Coordinate Reference System:
+##   EPSG: 5070 
+##   proj4string: "+proj=aea +lat_1=29.5 +lat_2=45.5 +lat_0=23 +lon_0=-96 +x_0=0 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{st_crs}\NormalTok{(southeast_state_bounds_na_albers)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Coordinate Reference System:
+##   EPSG: 102008 
+##   proj4string: "+proj=aea +lat_1=20 +lat_2=60 +lat_0=40 +lon_0=-96 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs"
+\end{verbatim}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  Create a new map that mixes spatial and tabular data, as in section
+  3.3 of the spatial lesson. You may use the maps created in the lesson
+  as an example, but your map should contain data other than
+  precipitation days per year. This map should include:
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  State boundary layer
+\item
+  Basin boundary layer
+\item
+  Gage layer
+\item
+  Tabular data (as an aesthetic for one of the layers)
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# select North Carolina (NC)}
+\NormalTok{nc_state_bounds_geom <-}\StringTok{ }\NormalTok{southeast_state_bounds }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{filter}\NormalTok{(NAME }\OperatorTok{==}\StringTok{ "North Carolina"}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{st_geometry}\NormalTok{()}
+
+
+\CommentTok{# select watersheds that intersect with NC bounds}
+\NormalTok{nc_basins_nf_seplains <-}\StringTok{ }\NormalTok{basins_nf_seplains }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{st_intersection}\NormalTok{(nc_state_bounds_geom)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: attribute variables are assumed to be spatially constant throughout all
+## geometries
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# check}
+\CommentTok{# add your code here}
+\KeywordTok{head}\NormalTok{(nc_basins_nf_seplains)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Simple feature collection with 6 features and 3 fields
+## geometry type:  GEOMETRY
+## dimension:      XY
+## bbox:           xmin: 1367085 ymin: 1571355 xmax: 1494466 ymax: 1632983
+## epsg (SRID):    5070
+## proj4string:    +proj=aea +lat_1=29.5 +lat_2=45.5 +lat_0=23 +lon_0=-96 +x_0=0 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs
+##           AREA PERIMETER  GAGE_ID                       geometry
+## 231 1280290000    319620 02069000 POLYGON ((1392705 1615494, ...
+## 232 2706760000    404340 02071000 POLYGON ((1419434 1619895, ...
+## 236 1408740000    357180 02074000 MULTIPOLYGON (((1434765 162...
+## 237 5338250000    585840 02075000 POLYGON ((1459785 1626674, ...
+## 238 5483280000    604920 02075045 POLYGON ((1465965 1627822, ...
+## 239 6697800000    665040 02075500 POLYGON ((1494466 1632983, ...
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# select gages that fall within NC bounds}
+\CommentTok{# add your code here}
+\NormalTok{nc_gages <-}\StringTok{ }\NormalTok{gages }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{st_intersection}\NormalTok{(nc_state_bounds_geom)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: attribute variables are assumed to be spatially constant throughout all
+## geometries
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Use the NC state boundary we used earlier to select all the stream gages in NC}
+\NormalTok{nc_gages <-}\StringTok{ }\NormalTok{gages }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{st_intersection}\NormalTok{(nc_state_bounds_geom)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: attribute variables are assumed to be spatially constant throughout all
+## geometries
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# take a look at nc_gages}
+\KeywordTok{head}\NormalTok{(nc_gages)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Simple feature collection with 6 features and 14 fields
+## geometry type:  POINT
+## dimension:      XY
+## bbox:           xmin: 1386502 ymin: 1593294 xmax: 1733998 ymax: 1665913
+## epsg (SRID):    5070
+## proj4string:    +proj=aea +lat_1=29.5 +lat_2=45.5 +lat_0=23 +lon_0=-96 +x_0=0 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs
+##           STAID                               STANAME   CLASS  AGGECOREGI
+## 1219 0204382800 PASQUOTANK RIVER NEAR SOUTH MILLS, NC     Ref  SECstPlain
+## 1233   02053200         POTECASI CREEK NEAR UNION, NC     Ref  SECstPlain
+## 1234   02053500          AHOSKIE CREEK AT AHOSKIE, NC Non-ref  SECstPlain
+## 1254   02068500          DAN RIVER NEAR FRANCISCO, NC Non-ref EastHghlnds
+## 1255   02069000            DAN RIVER AT PINE HALL, NC Non-ref    SEPlains
+## 1258   02070500             MAYO RIVER NEAR PRICE, NC     Ref    SEPlains
+##      DRAIN_SQKM HUC02 LAT_GAGE  LNG_GAGE STATE HCDN_2009 ACTIVE09 FLYRS1900
+## 1219   160.7841    03 36.42139 -76.34250    NC      <NA>      yes         2
+## 1233   583.6599    03 36.37083 -77.02556    NC       yes      yes        51
+## 1234   165.8835    03 36.28028 -76.99944    NC      <NA>      yes        59
+## 1254   321.6789    03 36.51500 -80.30306    NC      <NA>      yes        78
+## 1255  1280.2920    03 36.31930 -80.05004    NC      <NA>      yes         6
+## 1258   672.6420    03 36.53389 -79.99139    NC      <NA>      yes        58
+##      FLYRS1950 FLYRS1990                geometry
+## 1219         2         2 POINT (1733998 1665913)
+## 1233        51        20 POINT (1675686 1648113)
+## 1234        59        20 POINT (1679975 1638632)
+## 1254        54        17 POINT (1386502 1611186)
+## 1255         4         1 POINT (1412304 1593294)
+## 1258        38        16 POINT (1413418 1617864)
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{names}\NormalTok{(nc_gages)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  [1] "STAID"      "STANAME"    "CLASS"      "AGGECOREGI" "DRAIN_SQKM"
+##  [6] "HUC02"      "LAT_GAGE"   "LNG_GAGE"   "STATE"      "HCDN_2009" 
+## [11] "ACTIVE09"   "FLYRS1900"  "FLYRS1950"  "FLYRS1990"  "geometry"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# take a look at my_tabular_data_raw}
+\KeywordTok{names}\NormalTok{(my_tabular_data_raw)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  [1] "STAID"            "PPTAVG_BASIN"     "PPTAVG_SITE"      "T_AVG_BASIN"     
+##  [5] "T_AVG_SITE"       "T_MAX_BASIN"      "T_MAXSTD_BASIN"   "T_MAX_SITE"      
+##  [9] "T_MIN_BASIN"      "T_MINSTD_BASIN"   "T_MIN_SITE"       "RH_BASIN"        
+## [13] "RH_SITE"          "FST32F_BASIN"     "LST32F_BASIN"     "FST32SITE"       
+## [17] "LST32SITE"        "WD_BASIN"         "WD_SITE"          "WDMAX_BASIN"     
+## [21] "WDMIN_BASIN"      "WDMAX_SITE"       "WDMIN_SITE"       "PET"             
+## [25] "SNOW_PCT_PRECIP"  "PRECIP_SEAS_IND"  "JAN_PPT7100_CM"   "FEB_PPT7100_CM"  
+## [29] "MAR_PPT7100_CM"   "APR_PPT7100_CM"   "MAY_PPT7100_CM"   "JUN_PPT7100_CM"  
+## [33] "JUL_PPT7100_CM"   "AUG_PPT7100_CM"   "SEP_PPT7100_CM"   "OCT_PPT7100_CM"  
+## [37] "NOV_PPT7100_CM"   "DEC_PPT7100_CM"   "JAN_TMP7100_DEGC" "FEB_TMP7100_DEGC"
+## [41] "MAR_TMP7100_DEGC" "APR_TMP7100_DEGC" "MAY_TMP7100_DEGC" "JUN_TMP7100_DEGC"
+## [45] "JUL_TMP7100_DEGC" "AUG_TMP7100_DEGC" "SEP_TMP7100_DEGC" "OCT_TMP7100_DEGC"
+## [49] "NOV_TMP7100_DEGC" "DEC_TMP7100_DEGC"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# check column names of nc_gages to look for joining key}
+\KeywordTok{names}\NormalTok{(nc_gages)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  [1] "STAID"      "STANAME"    "CLASS"      "AGGECOREGI" "DRAIN_SQKM"
+##  [6] "HUC02"      "LAT_GAGE"   "LNG_GAGE"   "STATE"      "HCDN_2009" 
+## [11] "ACTIVE09"   "FLYRS1900"  "FLYRS1950"  "FLYRS1990"  "geometry"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# use "STAID"}
+
+
+\NormalTok{nc_gages}\OperatorTok{$}\NormalTok{STAID <-}\StringTok{ }\KeywordTok{as.factor}\NormalTok{(nc_gages}\OperatorTok{$}\NormalTok{STAID) }
+\NormalTok{my_tabular_data_raw}\OperatorTok{$}\NormalTok{STAID <-}\StringTok{ }\KeywordTok{as.factor}\NormalTok{(my_tabular_data_raw}\OperatorTok{$}\NormalTok{STAID)}
+
+\CommentTok{# join the tabular data to nc_gages}
+\NormalTok{nc_gages_climate <-}\StringTok{ }\NormalTok{nc_gages }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{left_join}\NormalTok{(my_tabular_data_raw, }\DataTypeTok{by =} \StringTok{"STAID"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: Column `STAID` joining factors with different levels, coercing to
+## character vector
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# check that it worked}
+\KeywordTok{names}\NormalTok{(nc_gages_climate)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  [1] "STAID"            "STANAME"          "CLASS"            "AGGECOREGI"      
+##  [5] "DRAIN_SQKM"       "HUC02"            "LAT_GAGE"         "LNG_GAGE"        
+##  [9] "STATE"            "HCDN_2009"        "ACTIVE09"         "FLYRS1900"       
+## [13] "FLYRS1950"        "FLYRS1990"        "PPTAVG_BASIN"     "PPTAVG_SITE"     
+## [17] "T_AVG_BASIN"      "T_AVG_SITE"       "T_MAX_BASIN"      "T_MAXSTD_BASIN"  
+## [21] "T_MAX_SITE"       "T_MIN_BASIN"      "T_MINSTD_BASIN"   "T_MIN_SITE"      
+## [25] "RH_BASIN"         "RH_SITE"          "FST32F_BASIN"     "LST32F_BASIN"    
+## [29] "FST32SITE"        "LST32SITE"        "WD_BASIN"         "WD_SITE"         
+## [33] "WDMAX_BASIN"      "WDMIN_BASIN"      "WDMAX_SITE"       "WDMIN_SITE"      
+## [37] "PET"              "SNOW_PCT_PRECIP"  "PRECIP_SEAS_IND"  "JAN_PPT7100_CM"  
+## [41] "FEB_PPT7100_CM"   "MAR_PPT7100_CM"   "APR_PPT7100_CM"   "MAY_PPT7100_CM"  
+## [45] "JUN_PPT7100_CM"   "JUL_PPT7100_CM"   "AUG_PPT7100_CM"   "SEP_PPT7100_CM"  
+## [49] "OCT_PPT7100_CM"   "NOV_PPT7100_CM"   "DEC_PPT7100_CM"   "JAN_TMP7100_DEGC"
+## [53] "FEB_TMP7100_DEGC" "MAR_TMP7100_DEGC" "APR_TMP7100_DEGC" "MAY_TMP7100_DEGC"
+## [57] "JUN_TMP7100_DEGC" "JUL_TMP7100_DEGC" "AUG_TMP7100_DEGC" "SEP_TMP7100_DEGC"
+## [61] "OCT_TMP7100_DEGC" "NOV_TMP7100_DEGC" "DEC_TMP7100_DEGC" "geometry"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{pdf}\NormalTok{(}\KeywordTok{here}\NormalTok{(}\StringTok{"outputs"}\NormalTok{, }\StringTok{"spatial_operations_activity_2.pdf"}\NormalTok{), }\DataTypeTok{width =} \DecValTok{11}\NormalTok{, }\DataTypeTok{height =} \FloatTok{8.5}\NormalTok{) }
+\KeywordTok{ggplot}\NormalTok{() }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_sf}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ nc_state_bounds_geom, }\DataTypeTok{fill =} \OtherTok{NA}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_sf}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ nc_basins_nf_seplains, }\DataTypeTok{alpha =} \FloatTok{0.25}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_sf}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ nc_gages, }\DataTypeTok{lwd =} \DecValTok{1}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_sf}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ nc_gages_climate, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{color =}\NormalTok{ T_AVG_SITE), }\DataTypeTok{size =} \DecValTok{3}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{scale_color_gradient}\NormalTok{(}\DataTypeTok{low =} \StringTok{"white"}\NormalTok{, }\DataTypeTok{high =} \StringTok{"darkgreen"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{color =} \StringTok{"Gage Avg. Annual Air Temp (Celsius)"}\NormalTok{ ) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_sf}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ nc_state_bounds_geom, }\DataTypeTok{fill =} \OtherTok{NA}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme_bw}\NormalTok{()}
+\KeywordTok{dev.off}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## pdf 
+##   2
+\end{verbatim}
+
+\end{document}

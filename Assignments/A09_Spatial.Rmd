@@ -72,8 +72,38 @@ my_tabular_data_raw <- read.csv(here("data", "tabular_data", "conterm_climate.tx
 
 ```
 
-```{r check.data}
+```{r activity.setting.projecting}
+my_proj4 <- "+proj=aea +lat_1=29.5 +lat_2=45.5 +lat_0=23 +lon_0=-96 +x_0=0 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"
+my_epsg <- 5070
 
+basins_nf_seplains <- basins_nf_seplains_raw
+st_crs(basins_nf_seplains) <- my_proj4
+basins_nf_seplains <- basins_nf_seplains %>%
+  st_set_crs(my_epsg)
+st_crs(basins_nf_seplains)
+
+
+gages <- gages_raw
+st_crs(gages) <- my_proj4
+gages <- gages %>%
+  st_set_crs(my_epsg)
+st_crs(gages)
+
+southeast_state_bounds <- southeast_state_bounds_raw
+st_crs(southeast_state_bounds) <- my_proj4
+southeast_state_bounds <- southeast_state_bounds %>%
+  st_set_crs(my_epsg)
+st_crs(southeast_state_bounds)
+
+
+na_albers_proj4 <- "+proj=aea +lat_1=20 +lat_2=60 +lat_0=40 +lon_0=-96 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs"
+na_albers_epsg <- 102008
+
+southeast_state_bounds_na_albers <-  sf::st_transform(southeast_state_bounds, crs = na_albers_proj4) %>%
+  st_set_crs(na_albers_epsg)
+```
+
+```{r check.data}
 
 st_crs(basins_nf_seplains)
 st_crs(gages)
@@ -82,59 +112,91 @@ st_crs(southeast_state_bounds_na_albers)
 
 ```
 
-```{r activity.reproducing.figure1b}
-# select NC
-# add your code here
+2. Create a new map that mixes spatial and tabular data, as in section 3.3 of the spatial lesson. You may use the maps created in the lesson as an example, but your map should contain data other than precipitation days per year. This map should include: 
 
+* State boundary layer
+* Basin boundary layer
+* Gage layer
+* Tabular data (as an aesthetic for one of the layers)
+
+```{r activity.2}
+
+# select North Carolina (NC)
 nc_state_bounds_geom <- southeast_state_bounds %>%
   filter(NAME == "North Carolina") %>%
-  st_geometry() 
+  st_geometry()
 
 
-# make figure 1b
-# find watersheds that overlap with NC (want the whole watershed, not just the part of the watershe that's inside the NC bounds) *hint: different spatial operation than intsection or whatever was used for figure 1a
+# select watersheds that intersect with NC bounds
+nc_basins_nf_seplains <- basins_nf_seplains %>%
+  st_intersection(nc_state_bounds_geom)
+
+
+# check
 # add your code here
+head(nc_basins_nf_seplains)
 
-nc_watersheds_seplains <- basins_nf_seplains %>%
-  st_overlaps(nc_state_bounds_geom)
-
-# look at result
+# select gages that fall within NC bounds
 # add your code here
-
-head(nc_watersheds_seplains)
-
-
-# make a function to convert binary to logic
-# add your code here
+nc_gages <- gages %>%
+  st_intersection(nc_state_bounds_geom)
 
 
+# Use the NC state boundary we used earlier to select all the stream gages in NC
+nc_gages <- gages %>%
+  st_intersection(nc_state_bounds_geom)
 
-# map function on data and select only true values
-# add your code here
+# take a look at nc_gages
+head(nc_gages)
+names(nc_gages)
 
-# look at result
-# add your code here
+# take a look at my_tabular_data_raw
+names(my_tabular_data_raw)
 
-# use nc_basins_overlap_logic to select only watersheds that overlap
-# add your code here
+# check column names of nc_gages to look for joining key
+names(nc_gages)
+# use "STAID"
 
-# check class
-# add your code here
 
-# select Southeast gages only
-# add your code here
-# stretch break...this might take a while to run
+nc_gages$STAID <- as.factor(nc_gages$STAID) 
+my_tabular_data_raw$STAID <- as.factor(my_tabular_data_raw$STAID)
 
-# use nc_basins_overlap_sel to find gages inside
-# add your code here
-# stretch break...this might take a while to run
+# join the tabular data to nc_gages
+nc_gages_climate <- nc_gages %>%
+  left_join(my_tabular_data_raw, by = "STAID")
 
-# convert all to WGS84
-# add your code here
 
-# plot figure 1b
-# add your code here
-pdf(here("outputs", "figure_1b.pdf"), width = 11, height = 8.5)
-# add your code here
+# check that it worked
+names(nc_gages_climate)
+
+```
+
+```{r activity.map2}
+
+##Questions: How do I add a degree symbol in the legend? How do I make the map appear in the knitted PDF? How do I make it so all the data summaries doesn't appear in my knitted pdf?
+
+
+pdf(here("outputs", "spatial_operations_activity_2.pdf"), width = 11, height = 8.5) 
+ggplot() +
+  geom_sf(data = nc_state_bounds_geom, fill = NA) +
+  geom_sf(data = nc_basins_nf_seplains, alpha = 0.25) +
+  geom_sf(data = nc_gages, lwd = 1) +
+  geom_sf(data = nc_gages_climate, aes(color = T_AVG_SITE), size = 3) +
+  scale_color_gradient(low = "white", high = "darkgreen") +
+  labs(color = "Gage Avg. Annual Air Temp (Celsius)" ) +
+  geom_sf(data = nc_state_bounds_geom, fill = NA) +
+  theme_bw()
 dev.off()
 ```
+
+
+
+
+
+
+
+
+
+
+
+
