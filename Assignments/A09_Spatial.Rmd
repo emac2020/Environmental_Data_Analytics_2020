@@ -172,14 +172,13 @@ names(nc_gages_climate)
 ```
 
 ```{r activity.map2}
-
-##Questions: How do I add a degree symbol in the legend? How do I make the map appear in the knitted PDF? How do I make it so all the data summaries doesn't appear in my knitted pdf?
+# make outline gray
 
 
 pdf(here("outputs", "spatial_operations_activity_2.pdf"), width = 11, height = 8.5) 
 ggplot() +
   geom_sf(data = nc_state_bounds_geom, fill = NA) +
-  geom_sf(data = nc_basins_nf_seplains, alpha = 0.25) +
+  geom_sf(data = nc_basins_nf_seplains, alpha = 0.25, color = "gray") +
   geom_sf(data = nc_gages, lwd = 1) +
   geom_sf(data = nc_gages_climate, aes(color = T_AVG_SITE), size = 3) +
   scale_color_gradient(low = "white", high = "darkgreen") +
@@ -187,6 +186,26 @@ ggplot() +
   geom_sf(data = nc_state_bounds_geom, fill = NA) +
   theme_bw()
 dev.off()
+
+# Changed Size of Dots
+
+pdf(here("outputs", "spatial_operations_activity_2_Changes.pdf"), width = 11, height = 8.5) 
+ggplot() +
+  geom_sf(data = nc_state_bounds_geom, fill = NA) +
+  geom_sf(data = nc_basins_nf_seplains, alpha = 0.25, color = "gray") +
+  geom_sf(data = nc_gages, lwd = 1) +
+  scale_color_gradient(low = "white", high = "darkgreen", 
+                       labels = c("10 ° C", "12° C", "14° C ", "16° C")) +
+  geom_sf(data = nc_gages_climate, aes(color = T_AVG_SITE), size = 1) +
+  #scale_color_gradient(low = "white", high = "darkgreen") +
+  labs(color = "Gage Avg. Annual Air Temperature" ) +
+  geom_sf(data = nc_state_bounds_geom, fill = NA) +
+  theme_bw()
+dev.off()
+
+
+
+
 ```
 
 
