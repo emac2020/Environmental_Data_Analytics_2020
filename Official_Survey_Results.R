@@ -82,8 +82,8 @@ InterestCC.polr <- polr(Q9 ~ as.factor(Regions) + as.factor(Q1) + as.factor(Q31)
 summary(InterestCC.polr)
 
 summary_table_InterestCC <- coef(summary(InterestCC.polr))
-pval.InterestCC <- pnorm(abs(summary_table[, "t value"]),lower.tail = FALSE)* 2
-summary_table_InterestCC <- cbind(summary_table, "p value" = pval.InterestCC)
+pval.InterestCC <- pnorm(abs(summary_table_InterestCC[, "t value"]),lower.tail = FALSE)* 2
+summary_table_InterestCC <- cbind(summary_table_InterestCC, "p value" = pval.InterestCC)
 summary_table_InterestCC
 
 
