@@ -1,0 +1,376 @@
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage[]{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\PassOptionsToPackage{hyphens}{url} % url is loaded by hyperref
+\usepackage[unicode=true]{hyperref}
+\hypersetup{
+            pdftitle={17: Crafting Reports},
+            pdfauthor={Environmental Data Analytics \textbar{} Kateri Salk},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage[margin=2.54cm]{geometry}
+\usepackage{longtable,booktabs}
+% Fix footnotes in tables (requires footnote package)
+\IfFileExists{footnote.sty}{\usepackage{footnote}\makesavenoteenv{long table}}{}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+% set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+
+
+\title{17: Crafting Reports}
+\author{Environmental Data Analytics \textbar{} Kateri Salk}
+\date{Spring 2019}
+
+\begin{document}
+\maketitle
+
+\subsection{LESSON OBJECTIVES}\label{lesson-objectives}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Describe the purpose of using R Markdown as a communication and
+  workflow tool
+\item
+  Incorporate Markdown syntax into documents
+\item
+  Communicate the process and findings of an analysis session in the
+  style of a report
+\end{enumerate}
+
+\subsection{BASIC R MARKDOWN DOCUMENT
+STRUCTURE}\label{basic-r-markdown-document-structure}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{YAML Header} surrounded by --- on top and bottom
+
+  \begin{itemize}
+  \tightlist
+  \item
+    YAML templates include options for html, pdf, word, markdown, and
+    interactive
+  \item
+    More information on formatting the YAML header can be found in the
+    cheat sheet Header info:
+  \item
+    optional: author, date, geometry
+  \item
+    want to include specific output (pdf, html, word, interactive
+    options, more in cheatsheets below)
+  \end{itemize}
+\item
+  \textbf{R Code Chunks} surrounded by
+  ``\texttt{on\ top\ and\ bottom\ +\ Create\ using}Cmd/Ctrl\texttt{+}Alt\texttt{+}I`
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Can be named \{r name\} to facilitate navigation and autoreferencing
+  \item
+    Chunk options allow for flexibility when the code runs and when the
+    document is knitted Notes:
+  \end{itemize}
+\item
+  \textbf{Text} with formatting options for readability in knitted
+  document
+\end{enumerate}
+
+A handy cheat sheet for R markdown can be found
+\href{https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf}{here}.
+Another one can be found
+\href{https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf}{here}.
+
+\subsection{WHY R MARKDOWN?}\label{why-r-markdown}
+
+ ( anything in \textless{}\ldots{}\textgreater{} don't show up in
+knitted doc)
+
+\begin{itemize}
+\tightlist
+\item
+  \emph{italic} \# can see different color for italic vs.~bold
+\item
+  \textbf{bold}
+\item
+  \textbf{Documentation} of data pipeline steps
+\item
+  Store \emph{code}, \emph{visulations}, and \emph{text} in one place
+\item
+  \textbf{Organize} code into sections
+\item
+  Aesthetically pleasing
+\item
+  Manage changes in a \emph{reproducible} fashion
+\end{itemize}
+
+\subsection{TEXT EDITING CHALLENGE}\label{text-editing-challenge}
+
+Create a table below that details the example datasets we have been
+using in class. The first column should contain the names of the
+datasets and the second column should include some relevant information
+about the datasets. (Hint: use the cheat sheets to figure out how to
+make a table in Rmd)
+
+Dataset Name \textbar{} Dataset Notes
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\textbar{}\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+\textbar{} Peter Paul Lake \textbar{} Pollution Cell 3 \textbar{} Cell 4
+
+\subsection{R CHUNK EDITING CHALLENGE}\label{r-chunk-editing-challenge}
+
+\subsubsection{Installing packages}\label{installing-packages}
+
+Create an R chunk below that installs the package \texttt{knitr}.
+Instead of commenting out the code, customize the chunk options such
+that the code is not evaluated (i.e., not run).
+
+\begin{itemize}
+\item ~
+  \subsection{creates headings that can be
+  searched}\label{creates-headings-that-can-be-searched}
+\end{itemize}
+
+\subsubsection{Setup}\label{setup}
+
+Create an R chunk below called ``setup'' that checks your working
+directory, loads the packages \texttt{tidyverse} and \texttt{knitr}, and
+sets a ggplot theme. Remember that you need to disable R throwing a
+message, which containts a check mark that cannot be knitted.
+
+Load the NTL-LTER\_Lake\_Nutrients\_Raw dataset, display the head of the
+dataset, and set the date column to a date format.
+
+Customize the chunk options such that the code is run but is not
+displayed in the final document.
+
+\begin{verbatim}
+## [1] "/Users/emilymcnamara/Desktop/Env Data Analytics/Environmental_Data_Analytics_2020"
+\end{verbatim}
+
+\begin{verbatim}
+##   lakeid  lakename year4 daynum sampledate depth_id depth tn_ug tp_ug nh34 no23
+## 1      L Paul Lake  1991    140    5/20/91        1  0.00   538    25   NA   NA
+## 2      L Paul Lake  1991    140    5/20/91        2  0.85   285    14   NA   NA
+## 3      L Paul Lake  1991    140    5/20/91        3  1.75   399    14   NA   NA
+## 4      L Paul Lake  1991    140    5/20/91        4  3.00   453    14   NA   NA
+## 5      L Paul Lake  1991    140    5/20/91        5  4.00   363    13   NA   NA
+## 6      L Paul Lake  1991    140    5/20/91        6  6.00   583    37   NA   NA
+##   po4 comments
+## 1  NA         
+## 2  NA         
+## 3  NA         
+## 4  NA         
+## 5  NA         
+## 6  NA
+\end{verbatim}
+
+\subsubsection{Data Exploration, Wrangling, and
+Visualization}\label{data-exploration-wrangling-and-visualization}
+
+Create an R chunk below to create a processed dataset do the following
+operations:
+
+\begin{itemize}
+\tightlist
+\item
+  Include all columns except lakeid, depth\_id, and comments
+\item
+  Include only surface samples (depth = 0 m)
+\end{itemize}
+
+Create a second R chunk to create a summary dataset with the mean,
+minimum, maximum, and standard deviation of total nitrogen
+concentrations for each lake. Create a second summary dataset that is
+identical except that it evaluates total phosphorus. Customize the chunk
+options such that the code is run but not displayed in the final
+document.
+
+Create a third R chunk that uses the function \texttt{kable} in the
+knitr package to display two tables: one for the summary dataframe for
+total N and one for the summary dataframe of total P. Use the
+\texttt{caption\ =\ "\ "} code within that function to title your
+tables. Customize the chunk options such that the final table is
+displayed but not the code used to generate the table.
+
+\begin{longtable}[]{@{}lrrrr@{}}
+\caption{Total N Summary Data}\tabularnewline
+\toprule
+lakename & meanTN & minTN & maxTN & sdTN\tabularnewline
+\midrule
+\endfirsthead
+\toprule
+lakename & meanTN & minTN & maxTN & sdTN\tabularnewline
+\midrule
+\endhead
+Central Long Lake & 675.8338 & 343.020 & 953.063 &
+203.25838\tabularnewline
+Crampton Lake & 362.6813 & 353.380 & 376.304 & 12.05748\tabularnewline
+East Long Lake & 796.0141 & 299.310 & 3316.892 &
+413.16241\tabularnewline
+Hummingbird Lake & 1036.6695 & 779.053 & 1221.960 &
+204.36889\tabularnewline
+Paul Lake & 365.0679 & 45.670 & 628.625 & 107.31194\tabularnewline
+Peter Lake & 548.2733 & 131.830 & 2048.151 & 320.83105\tabularnewline
+Tuesday Lake & 410.2571 & 237.363 & 554.418 & 71.53021\tabularnewline
+West Long Lake & 737.5649 & 303.170 & 2950.343 &
+437.18914\tabularnewline
+\bottomrule
+\end{longtable}
+
+\begin{longtable}[]{@{}lrrrr@{}}
+\caption{Total P Summary Data}\tabularnewline
+\toprule
+lakename & meanTP & minTP & maxTP & sdTP\tabularnewline
+\midrule
+\endfirsthead
+\toprule
+lakename & meanTP & minTP & maxTP & sdTP\tabularnewline
+\midrule
+\endhead
+Central Long Lake & 21.59478 & 8.190 & 37.270 & 7.067785\tabularnewline
+Crampton Lake & 11.16033 & 5.803 & 15.555 & 4.946759\tabularnewline
+East Long Lake & 39.16260 & 7.160 & 136.671 & 29.814346\tabularnewline
+Hummingbird Lake & 36.21925 & 32.765 & 42.119 & 4.146717\tabularnewline
+Paul Lake & 10.27233 & 0.110 & 36.070 & 4.507096\tabularnewline
+Peter Lake & 21.33466 & 0.000 & 66.893 & 14.110973\tabularnewline
+Tuesday Lake & 11.37472 & 4.413 & 18.663 & 3.076367\tabularnewline
+West Long Lake & 22.34388 & 2.690 & 63.243 & 12.622100\tabularnewline
+\bottomrule
+\end{longtable}
+
+Create a fourth and fifth R chunk that generates two plots (one in each
+chunk): one for total N over time with different colors for each lake,
+and one with the same setup but for total P. Decide which geom option
+will be appropriate for your purpose, and select a color palette that is
+visually pleasing and accessible. Customize the chunk options such that
+the final figures are displayed but not the code used to generate the
+figures. In addition, customize the chunk options such that the figures
+are aligned on the left side of the page. Lastly, add a fig.cap chunk
+option to add a caption (title) to your plot that will display
+underneath the figure.
+
+\begin{figure}
+
+\includegraphics{18_CraftingReports_files/figure-latex/unnamed-chunk-3-1} \hfill{}
+
+\caption{Total N and Total P Plots}\label{fig:unnamed-chunk-31}
+\end{figure}\begin{figure}
+
+\includegraphics{18_CraftingReports_files/figure-latex/unnamed-chunk-3-2} \hfill{}
+
+\caption{Total N and Total P Plots}\label{fig:unnamed-chunk-32}
+\end{figure}
+
+\subsubsection{Other options}\label{other-options}
+
+What are the chunk options that will suppress the display of errors,
+warnings, and messages in the final document?
+
+\begin{quote}
+ANSWER:
+\end{quote}
+
+\subsubsection{Communicating results}\label{communicating-results}
+
+Write a paragraph describing your findings from the R coding challenge
+above. This should be geared toward an educated audience but one that is
+not necessarily familiar with the dataset. Then insert a horizontal rule
+below the paragraph. Below the horizontal rule, write another paragraph
+describing the next steps you might take in analyzing this dataset. What
+questions might you be able to answer, and what analyses would you
+conduct to answer those questions?
+
+\subsection{KNIT YOUR PDF}\label{knit-your-pdf}
+
+When you have completed the above steps, try knitting your PDF to see if
+all of the formatting options you specified turned out as planned. This
+may take some troubleshooting.
+
+\subsection{OTHER R MARKDOWN CUSTOMIZATION
+OPTIONS}\label{other-r-markdown-customization-options}
+
+We have covered the basics in class today, but R Markdown offers many
+customization options. A word of caution: customizing templates will
+often require more interaction with LaTeX and installations on your
+computer, so be ready to troubleshoot issues.
+
+Customization options for pdf output include:
+
+\begin{itemize}
+\tightlist
+\item
+  Table of contents
+\item
+  Number sections
+\item
+  Control default size of figures
+\item
+  Citations
+\item
+  Template (more info
+  \href{http://jianghao.wang/post/2017-12-08-rmarkdown-templates/}{here})
+\end{itemize}
+
+pdf\_document:\\
+toc: true\\
+number\_sections: true\\
+fig\_height: 3\\
+fig\_width: 4\\
+citation\_package: natbib\\
+template:
+
+\end{document}
