@@ -48,6 +48,13 @@ GrownCC <- glm(Q6 ~ as.factor(Regions) + as.factor(Q1) + as.factor(Q31)
 
 summary(GrownCC) # owner operators are less likely than others to do CC (stat sig)
 
+exp(1.682e+00) #Delta over san joaquin
+
+exp(  1.311e+00 ) #Sacramento over san joaquin
+
+exp(-4.018e-01 ) #Tulare has .66 less likelihood of growing CC over SJ
+
+exp(0.06736)
 
 summary_table_GrownCC <- coef(summary(GrownCC))
 
@@ -76,15 +83,20 @@ InterestCC <- glm(Q9 ~ as.factor(Regions) + as.factor(Q1) + as.factor(Q31)
 summary(InterestCC)
 
 
+summary_table_InterestCC <- coef(summary(InterestCC))
+pval.InterestCC <- pnorm(abs(summary_table_InterestCC[, "t value"]),lower.tail = FALSE)* 2
+summary_table_InterestCC <- cbind(summary_table_InterestCC, "p value" = pval.InterestCC)
+summary_table_InterestCC
+
 InterestCC.polr <- polr(Q9 ~ as.factor(Regions) + as.factor(Q1) + as.factor(Q31)
                         + Q3_1, almonds, Hess = TRUE)
 
 summary(InterestCC.polr)
 
-summary_table_InterestCC <- coef(summary(InterestCC.polr))
-pval.InterestCC <- pnorm(abs(summary_table_InterestCC[, "t value"]),lower.tail = FALSE)* 2
-summary_table_InterestCC <- cbind(summary_table_InterestCC, "p value" = pval.InterestCC)
-summary_table_InterestCC
+summary_table_InterestCC.polr <- coef(summary(InterestCC.polr))
+pval.InterestCC.polr <- pnorm(abs(summary_table_InterestCC[, "t value"]),lower.tail = FALSE)* 2
+summary_table_InterestCC.polr <- cbind(summary_table_InterestCC, "p value" = pval.InterestCC)
+summary_table_InterestCC.polr
 
 
 # What affects whether or not they've grown PPH?
@@ -94,14 +106,21 @@ GrownPPH <- glm(Q12 ~ as.factor(Regions) + as.factor(Q1) + as.factor(Q31)
 
 summary(GrownPPH)
 
+exp( 9.172e-01) # Delta over San Joaquin
+exp(-5.894e-01) # Owner/operator over farm manager
+
 summary_table_GrownPPH <- coef(summary(GrownPPH))
 
 # What affects whether or not they are interested in growing PPH?
 
 InterestPPH <- glm(Q15 ~ as.factor(Regions) + as.factor(Q1) + as.factor(Q31)
-                   + as.factor(Acre.Ranges), almonds, family = binomial )
+                   + Q3_1, almonds, family = binomial )
 
 summary(InterestPPH)
+
+summary_table_InterestPPH <- coef(summary(InterestPPH))
+
+exp(coef(InterestPPH)[2])
 
 # 2. How does Role in Operation affect whether or not a person has GROWN cover crop?
 
@@ -277,6 +296,7 @@ Regions.InterestCC.glm2 <- glm(Q9 ~ Regions,
 
 summary(Regions.InterestCC.glm2)
 
+summary_table_InterestCC.Regions <- coef(summary(Regions.InterestCC.glm2))
 
 
 # Chi-Square
@@ -712,7 +732,7 @@ exp(coef(farmsize.PPHgrown)[2])
 # Chi-square
 
 
-Size.PPHgrown.tbl = table(almonds$Regions, almonds$Q12)
+Size.PPHgrown.tbl = table(almonds$Acre.Ranges, almonds$Q12)
 Size.PPHgrown.tbl
 
 chisq.test(Size.PPHgrown.tbl)
@@ -725,6 +745,9 @@ summary(farmsize.PPHinterest)
 
 exp(coef(farmsize.PPHinterest)[2])
 
+
+Size.PPHinterest.tbl = table(almonds$Acre.Ranges, almonds$Q15)
+Size.PPHinterest.tbl
 
 # 9: How do concerns about PPH differ by location? Region? 
 
