@@ -153,7 +153,7 @@ knitr::kable(NTL.TotalP.summaries, caption = "Total P Summary Data")
 
 Create a fourth and fifth R chunk that generates two plots (one in each chunk): one for total N over time with different colors for each lake, and one with the same setup but for total P. Decide which geom option will be appropriate for your purpose, and select a color palette that is visually pleasing and accessible. Customize the chunk options such that the final figures are displayed but not the code used to generate the figures. In addition, customize the chunk options such that the figures are aligned on the left side of the page. Lastly, add a fig.cap chunk option to add a caption (title) to your plot that will display underneath the figure.
 
-```{r, echo = FALSE, eval = TRUE, warning=FALSE, fig.cap= 'Total N and Total P Plots', fig.align= 'left'}
+```{r Figure 1, fig.height = 4, fig.width = 10, fig.cap= 'Total N over time'}
 
 # Total N Plot
 
@@ -167,6 +167,9 @@ TNplot <-
   mytheme
 print(TNplot)
 
+```
+
+```{r Figure 2, fig.height = 4, fig.width = 10, fig.cap= 'Total P over time'}
 
 # Total P Plot
 
