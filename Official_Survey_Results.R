@@ -586,6 +586,8 @@ Role.Operation.PPHplanted <- glm(Q12~ Q1, almonds, family = binomial)
 summary(Role.Operation.PPHplanted)
 
 
+
+
 exp(coef(Role.Operation.PPHplanted)[2])
 
 exp( -0.5206 )
@@ -629,6 +631,8 @@ Role.Operation.PPHinterest <- glm(Q15~ Q1, almonds, family = binomial)
 
 summary(Role.Operation.PPHinterest)
 
+
+summary_table_InterestPPH.Role <- coef(summary(Role.Operation.PPHinterest))
 
 exp(coef(Role.Operation.PPHinterest)[2])
 
