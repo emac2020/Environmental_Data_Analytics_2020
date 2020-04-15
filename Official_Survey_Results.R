@@ -58,6 +58,8 @@ exp(0.06736)
 
 summary_table_GrownCC <- coef(summary(GrownCC))
 
+class(almonds$Q3_1)
+
 
 # put in table of regression and use that to interpret things (what is affect of region when have also controlled for age, etc)
 
